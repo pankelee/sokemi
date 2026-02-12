@@ -1,0 +1,506 @@
+<?php
+// PHP можно вообще убрать, если форма не нужна, но оставлю заготовку на будущее
+$success = "";
+?>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>О нас — Sokemi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ШРИФТЫ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Literata:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-cream: #EFECDD;
+            --color-light-blue: #8BA3C5;
+            --color-mid-blue: #485B7C;
+            --color-dark-blue: #23354D;
+            --color-navy: #03122F;
+            --radius-lg: 16px;
+            --shadow-sm: 0 10px 30px rgba(3, 18, 47, 0.15);
+            --layout-width: 1000px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(to bottom, #207AA6, #E3E7E6);
+            color: var(--color-dark-blue);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Literata', 'Times New Roman', serif;
+            color: var(--color-navy);
+        }
+
+        /* ФИКСИРОВАННЫЙ HEADER */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-cream);
+            padding: 12px 20px;
+            border-radius: var(--radius-lg);
+            margin: 16px auto;
+            width: 100%;
+            max-width: var(--layout-width);
+            box-shadow: var(--shadow-sm);
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: var(--layout-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-image {
+            width: 56px;  /* увеличил с 42px */
+            height: 56px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: 0.08em;
+            color: var(--color-navy);
+            line-height: 1;
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--color-mid-blue);
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+        .nav-link.active {
+            color: var(--color-navy);
+            border-bottom: 2px solid var(--color-navy);
+            padding-bottom: 2px;
+        }
+
+        .nav-link:hover {
+            color: var(--color-navy);
+            text-decoration: underline;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 8px 34px 8px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--color-light-blue);
+            font-size: 14px;
+            min-width: 160px;
+            background: rgba(255,255,255,0.7);
+            color: var(--color-dark-blue);
+        }
+
+        .search-input::placeholder {
+            color: var(--color-mid-blue);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            padding: 0;
+            cursor: pointer;
+            color: var(--color-mid-blue);
+        }
+
+        .icon-btn {
+            border: none;
+            background: var(--color-light-blue);
+            border-radius: 999px;
+            padding: 8px 10px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: var(--color-navy);
+        }
+
+        .icon-btn:hover {
+            background: var(--color-mid-blue);
+            transform: translateY(-1px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 3px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--color-navy);
+            border-radius: 999px;
+            transition: 0.2s;
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: var(--layout-width);
+            margin: 120px auto 40px;
+            background: var(--color-cream);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--color-navy);
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: var(--color-dark-blue);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .section p {
+            line-height: 1.7;
+            color: var(--color-dark-blue);
+            font-size: 1.1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--color-light-blue);
+            padding: 24px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139, 163, 197, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(3, 18, 47, 0.2);
+            background: rgba(139, 163, 197, 0.9);
+        }
+
+        ul {
+            padding-left: 20px;
+            line-height: 1.7;
+            color: var(--color-dark-blue);
+            font-size: 1.05rem;
+        }
+
+        ul li {
+            margin-bottom: 8px;
+        }
+        .footer {
+            background: var(--color-cream);
+            padding: 5px 0 20px;
+            margin-top: 0 px;
+        }
+
+        .newsletter {
+            background: var(--color-light-blue);
+            border-radius: 15px;
+            padding: 24px;        /* было 30px */
+            display: flex;
+            gap: 20px;            /* было 30px */
+            margin-bottom: 30px;  /* было 40px */
+            align-items: center;  /* выровнять по центру */
+        }
+
+        .newsletter-left h3 {
+            color: var(--color-navy);
+            margin-bottom: 10px;  /* было 15px */
+            font-size: 18px;      /* было 20px */
+            margin: 0 0 10px 0;
+        }
+
+        .newsletter form {
+            display: flex;
+            gap: 8px;             /* было 10px */
+            margin: 0;
+        }
+
+        .newsletter input {
+            flex: 1;
+            padding: 10px;        /* было 12px */
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;      /* чуть меньше */
+        }
+
+        .newsletter button {
+            padding: 10px 16px;   /* было 12px 20px */
+            background: var(--color-navy);
+            color: white;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;      /* чуть меньше */
+            white-space: nowrap;
+        }
+
+        .newsletter-right h4 {
+            color: var(--color-navy);
+            margin: 0 0 4px 0;    /* было 8px */
+            font-size: 16px;
+        }
+
+        .newsletter-right p {
+            color: var(--color-dark-blue);
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;            /* было 30px */
+            margin-bottom: 20px;  /* было 30px */
+        }
+
+        .footer-column h4 {
+            color: var(--color-navy);
+            margin-bottom: 10px;  /* было 15px */
+            font-size: 15px;
+        }
+
+        .footer-list li {
+            margin-bottom: 6px;   /* было 8px */
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 16px;    /* было 20px */
+            border-top: 1px solid rgba(139, 163, 197, 0.3);
+            color: var(--color-mid-blue);
+            font-size: 13px;      /* чуть меньше */
+            margin-top: 10px;
+        }
+
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .header {
+                border-radius: 0;
+                width: 100%;
+                left: 0;
+                transform: none;
+                margin: 0;
+            }
+
+            .header-container {
+                padding: 8px 16px;
+                max-width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .container {
+                margin: 90px 16px 24px;
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px 16px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="header-container">
+        <a href="./pages/admin/catalog.html" class="logo">
+            <img src="../../images/logo.svg" alt="Sokemi" class="logo-image">
+        </a>
+
+        <nav class="nav">
+            <a href="./about.html" class="nav-link active">О нас</a>
+            <a href="../../index.html" class="nav-link">Главная</a>
+            <a href="#" class="nav-link">Контакты</a>
+        </nav>
+
+        <div class="header-actions">
+            <!-- поиск и корзина без изменений -->
+        </div>
+    </div>
+</header>
+    
+<div class="container">
+    <h1>О нас</h1>
+
+    <div class="section">
+        <p>
+            <strong>Sokemi</strong> — это онлайн-пространство для кошек и их людей в Москве,
+            где каждый заказ мы собираем так, будто покупаем вещи для собственного хвоста.
+            Мы верим, что счастливая кошка — это не только миска с кормом,
+            но и когтеточка, которой не стыдно хвастаться, лежанка, в которую хочется нырнуть с разбега,
+            и игрушки, которые превращают обычный день в маленькое приключение.
+        </p>
+    </div>
+
+    <div class="section">
+        <h2>География и опыт</h2>
+        <div class="grid">
+            <div class="card">🐾 Работаем на рынке зоотоваров уже 5 лет.</div>
+            <div class="card">📍 Находимся в Москве и работаем по городу и области.</div>
+            <div class="card">🚚 Удобная доставка по Москве и ближайшим районам.</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Наши товары</h2>
+        <ul>
+            <li>Корма для кошек на каждый день и для особых случаев.</li>
+            <li>Когтеточки и игровые комплексы.</li>
+            <li>Лежанки и домики для сна и уединения.</li>
+            <li>Лотки и миски для удобного ухода.</li>
+            <li>Игрушки: мячи, дразнилки, интерактивные варианты.</li>
+            <li>Шампуни и средства ухода.</li>
+            <li>Аксессуары и полезные мелочи.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Почему выбирают Sokemi</h2>
+        <div class="grid">
+            <div class="card">✔ Всё для кошки в одном месте.</div>
+            <div class="card">✔ Удобный онлайн-каталог.</div>
+            <div class="card">✔ Понятная структура категорий.</div>
+            <div class="card">✔ Забота о каждом заказе.</div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="newsletter">
+            <div class="newsletter-left">
+                <h3>Готовы узнавать о новинках?</h3>
+                <form>
+                    <input type="email" placeholder="Ваш Email">
+                    <button>Отправить</button>
+                </form>
+            </div>
+            <div class="newsletter-right">
+                <h4>Товары для кошек</h4>
+                <p>Лучшее для вашего любимца в Москве</p>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <div class="footer-column">
+                <h4>О компании</h4>
+                <ul>
+                    <li><a href="about.php">О нас</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Поддержка</h4>
+                <ul>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#">Оплата</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Соцсети</h4>
+                <div class="socials">
+                    <a href="#" class="social-link">VK</a>
+                    <a href="#" class="social-link">Telegram</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Sokemi — Москва</p>
+        </div>
+    </div>
+</footer>
+
+
+</body>
+</html>
