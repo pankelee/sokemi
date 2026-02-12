@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Контакты — Sokemi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ШРИФТЫ -->
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Literata:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-cream: #EFECDD;
+            --color-light-blue: #8BA3C5;
+            --color-mid-blue: #485B7C;
+            --color-dark-blue: #23354D;
+            --color-navy: #03122F;
+            --radius-lg: 16px;
+            --shadow-sm: 0 10px 30px rgba(3, 18, 47, 0.15);
+            --layout-width: 1000px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(to bottom, #207AA6, #E3E7E6);
+            color: var(--color-dark-blue);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Literata', 'Times New Roman', serif;
+            color: var(--color-navy);
+        }
+
+        /* ФИКСИРОВАННЫЙ HEADER */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-cream);
+            padding: 12px 20px;
+            border-radius: var(--radius-lg);
+            margin: 16px auto;
+            width: 100%;
+            max-width: var(--layout-width);
+            box-shadow: var(--shadow-sm);
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: var(--layout-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-image {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none; /* убираем underline */
+            color: var(--color-mid-blue);
+            font-weight: 500;
+            font-size: 15px;
+            transition: color 0.2s;
+            position: relative; /* добавляем для подчеркивания */
+        }
+
+        .nav-link.active {
+            color: var(--color-navy);
+        }
+
+        .nav-link.active::after { /* голубое подчеркивание только для активной */
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--color-light-blue);
+            border-radius: 1px;
+        }
+
+        .nav-link:hover::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--color-light-blue);
+            border-radius: 1px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 8px 34px 8px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--color-light-blue);
+            font-size: 14px;
+            min-width: 160px;
+            background: rgba(255,255,255,0.7);
+            color: var(--color-dark-blue);
+        }
+
+        .search-input::placeholder {
+            color: var(--color-mid-blue);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            padding: 0;
+            cursor: pointer;
+            color: var(--color-mid-blue);
+        }
+
+        .icon-btn {
+            border: none;
+            background: var(--color-light-blue);
+            border-radius: 999px;
+            padding: 8px 10px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            color: var(--color-navy);
+        }
+
+        .icon-btn:hover {
+            background: var(--color-mid-blue);
+            transform: translateY(-1px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            gap: 3px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: var(--color-navy);
+            border-radius: 999px;
+            transition: 0.2s;
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: var(--layout-width);
+            margin: 120px auto 20px;
+            background: var(--color-cream);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--color-navy);
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: var(--color-dark-blue);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--color-light-blue);
+            padding: 24px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139, 163, 197, 0.2);
+            line-height: 1.6;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(3, 18, 47, 0.2);
+            background: rgba(139, 163, 197, 0.9);
+        }
+
+        .map-container {
+            background: var(--color-light-blue);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .map {
+            width: 100%;
+            height: 350px;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 8px 25px rgba(3, 18, 47, 0.15);
+        }
+
+        .form-block {
+            background: rgba(139, 163, 197, 0.1);
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid rgba(139, 163, 197, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(139, 163, 197, 0.3);
+            background: rgba(255,255,255,0.9);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            color: var(--color-dark-blue);
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--color-navy);
+            box-shadow: 0 0 0 4px rgba(3, 18, 47, 0.1);
+            background: white;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: var(--color-mid-blue);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--color-navy), var(--color-dark-blue));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(3, 18, 47, 0.3);
+        }
+
+        .success {
+            margin-top: 15px;
+            color: #10b981;
+            font-weight: 600;
+            padding: 15px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #10b981;
+        }
+
+        .error {
+            margin-top: 15px;
+            color: #ef4444;
+            font-weight: 600;
+            padding: 15px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #ef4444;
+        }
+
+        /* ФУТЕР */
+        .footer {
+            background: var(--color-cream);
+            padding: 30px 0 20px;
+            margin-top: 20px;
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .header {
+                border-radius: 0;
+                width: 100%;
+                left: 0;
+                transform: none;
+                margin: 0;
+            }
+
+            .header-container {
+                padding: 8px 16px;
+                max-width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .container {
+                margin: 90px 16px 20px;
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .newsletter form {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px 16px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+            <a href="/index.html" class="logo">
+                <img src="../../images/logo.svg" alt="Sokemi" class="logo-image">
+            </a>
+
+            <nav class="nav">
+                <a href="../index.html" class="nav-link">Главная</a>
+                <a href="about.html" class="nav-link">О нас</a>
+                <a href="contacts.html" class="nav-link active">Контакты</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="search-wrapper">
+                    <input type="text" placeholder="Поиск..." class="search-input">
+                    <button class="search-btn" aria-label="Поиск">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </div>
+                <button class="icon-btn cart-btn" aria-label="Корзина">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </button>
+                <button class="mobile-menu-btn" aria-label="Открыть меню">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Контакты</h1>
+
+        <div class="section">
+            <h2>Свяжитесь с нами</h2>
+            <div class="grid">
+                <div class="card">
+                    <strong>Телефон:</strong><br>
+                    <a href="tel:+79991234567" style="color: inherit; text-decoration: none; font-weight: 600; font-size: 18px;">+7 (999) 123-45-67</a>
+                </div>
+                <div class="card">
+                    <strong>Email:</strong><br>
+                    <a href="mailto:info@sokemi.ru" style="color: inherit; text-decoration: none; font-weight: 600; font-size: 18px;">info@sokemi.ru</a>
+                </div>
+                <div class="card">
+                    <strong>Адрес:</strong><br>
+                    г. Москва, ул. Кошачья, д. 7
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Мы на карте</h2>
+            <div class="map-container">
+                <iframe 
+                    src="https://yandex.ru/map-widget/v1/?um=constructor%3A4f3e0a7d4a2e1b9b5b1c7f2e1b9a4e3d&source=constructor"
+                    class="map" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Форма обратной связи</h2>
+            <div class="form-block">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <input type="text" id="name" placeholder="Ваше имя" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="Ваш Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" placeholder="Расскажите, чем можем помочь..." required></textarea>
+                    </div>
+                    <button type="submit">Отправить сообщение</button>
+                </form>
+                <div id="formMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER (компактный) -->
+    <footer class="footer">
+        <div class="container">
+            <div class="newsletter">
+                <div class="newsletter-left">
+                    <h3 class="newsletter-title">Готовы узнавать о новинках?</h3>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Ваш Email" class="newsletter-input">
+                        <button type="submit" class="btn btn-primary" onclick="getData()">Отправить</button>
+                    </form>
+                </div>
+                <div class="newsletter-right">
+                    <h4 class="newsletter-subtitle">Товары для дома и питомцев</h4>
+                    <p class="newsletter-text">Мы подберём лучшие решения для вашего любимца и создадим комфорт вместе с вами.</p>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4 class="footer-column-title">О компании</h4>
+                    <ul class="footer-list">
+                        <li><a href="#">Блог</a></li>
+                        <li><a href="#">Наша команда</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-column-title">Поддержка</h4>
+                    <ul class="footer-list">
+                        <li><a href="#">Связаться с нами</a></li>
+                        <li><a href="#">Доставка</a></li>
+                        <li><a href="#">Возврат</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-column-title">Социальные сети</h4>
+                    <div class="socials">
+                        <a href="#" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.673 4 8.231c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.814-.542 1.27-1.422 2.176-3.61 2.176-3.61.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/>
+                            </svg>
+                            VK
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                            Telegram
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 SOKEMI. Все права защищены.</p>
+                <div class="legal-links">
+                    <a href="#">Пользовательское соглашение</a>
+                    <a href="#">Политика конфиденциальности</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        document.getElementById("contactForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const message = document.getElementById("message").value.trim();
+            const output = document.getElementById("formMessage");
+
+            if (name === "" || email === "" || message === "") {
+                output.innerHTML = "<div class='error'>Пожалуйста, заполните все поля.</div>";
+                return;
+            }
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email.match(emailPattern)) {
+                output.innerHTML = "<div class='error'>Введите корректный Email.</div>";
+                return;
+            }
+
+            output.innerHTML = "<div class='success'>Спасибо, " + name + "! Ваше сообщение отправлено. Мы ответим в ближайшее время.</div>";
+
+            document.getElementById("contactForm").reset();
+        });
+    </script>
+</body>
+</html>
