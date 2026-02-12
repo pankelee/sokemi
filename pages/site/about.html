@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>О нас — Sokemi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="../../styles.css">
     <!-- ШРИФТЫ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,187 +23,20 @@
             --layout-width: 1000px;
         }
 
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(to bottom, #207AA6, #E3E7E6);
-            color: var(--color-dark-blue);
-        }
-        
-        a{
-            text-decoration: none;
-        }
-
-        h1, h2, h3 {
-            font-family: 'Literata', 'Times New Roman', serif;
-            color: var(--color-navy);
-        }
-
-        /* ФИКСИРОВАННЫЙ HEADER */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--color-cream);
-            padding: 12px 20px;
-            border-radius: var(--radius-lg);
-            margin: 16px auto;
-            width: 100%;
-            max-width: var(--layout-width);
-            box-shadow: var(--shadow-sm);
-            z-index: 100;
-        }
-
-        .header-container {
-            max-width: var(--layout-width);
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .logo-image {
-            width: 56px;  /* увеличил с 42px */
-            height: 56px;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-
-
-        .logo-text {
-            font-weight: 700;
-            font-size: 20px;
-            letter-spacing: 0.08em;
-            color: var(--color-navy);
-            line-height: 1;
-        }
-
-        .nav {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: var(--color-mid-blue);
-            font-weight: 500;
-            font-size: 15px;
-            transition: color 0.2s;
-        }
-
-        .nav-link.active {
-            color: var(--color-navy);
-            border-bottom: 2px solid var(--color-navy);
-            padding-bottom: 2px;
-        }
-
-        .nav-link:hover {
-            color: var(--color-navy);
-            text-decoration: underline;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .search-wrapper {
-            position: relative;
-        }
-
-        .search-input {
-            padding: 8px 34px 8px 10px;
-            border-radius: 999px;
-            border: 1px solid var(--color-light-blue);
-            font-size: 14px;
-            min-width: 160px;
-            background: rgba(255,255,255,0.7);
-            color: var(--color-dark-blue);
-        }
-
-        .search-input::placeholder {
-            color: var(--color-mid-blue);
-        }
-
-        .search-btn {
-            position: absolute;
-            right: 6px;
-            top: 50%;
-            transform: translateY(-50%);
-            border: none;
+    
+        .main {
+            padding: 120px 0;
             background: none;
-            padding: 0;
-            cursor: pointer;
-            color: var(--color-mid-blue);
+
         }
 
-        .icon-btn {
-            border: none;
-            background: var(--color-light-blue);
-            border-radius: 999px;
-            padding: 8px 10px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            color: var(--color-navy);
-        }
-
-        .icon-btn:hover {
-            background: var(--color-mid-blue);
-            transform: translateY(-1px);
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            flex-direction: column;
-            gap: 3px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 18px;
-            height: 2px;
-            background: var(--color-navy);
-            border-radius: 999px;
-            transition: 0.2s;
-        }
-
-        /* Основной контейнер */
-        .container {
-            max-width: var(--layout-width);
-            margin: 120px auto 40px;
+        .main_block {
             background: var(--color-cream);
-            padding: 50px;
             border-radius: 20px;
+            padding: 50px;
             box-shadow: var(--shadow-sm);
         }
 
-        h1 {
-            text-align: center;
-            color: var(--color-navy);
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
 
         .section {
             margin-bottom: 40px;
@@ -339,29 +172,8 @@
 
         /* Адаптив */
         @media (max-width: 768px) {
-            .header {
-                border-radius: 0;
-                width: 100%;
-                left: 0;
-                transform: none;
-                margin: 0;
-            }
 
-            .header-container {
-                padding: 8px 16px;
-                max-width: 100%;
-                flex-wrap: wrap;
-            }
-
-            .nav {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: flex;
-            }
-
-            .container {
+            main {
                 margin: 90px 16px 24px;
                 padding: 30px 20px;
             }
@@ -376,7 +188,7 @@
         }
 
         @media (max-width: 480px) {
-            .container {
+            main     {
                 padding: 24px 16px;
             }
             
@@ -391,67 +203,112 @@
 
 <body>
 
-<!-- HEADER -->
-<header class="header">
-    <div class="header-container">
-        <a href="./pages/admin/catalog.html" class="logo">
-            <img src="../../images/logo.svg" alt="Sokemi" class="logo-image">
-        </a>
-
-        <nav class="nav">
-            <a href="./about.html" class="nav-link active">О нас</a>
-            <a href="../../index.html" class="nav-link">Главная</a>
-            <a href="#" class="nav-link">Контакты</a>
-        </nav>
-
-        <div class="header-actions">
-            <!-- поиск и корзина без изменений -->
+<header>
+    <div class="header">
+        <div class="container header-container">
+            <a href="./pages/admin/catalog.html" class="logo">
+                <img src="../../images/logo.svg" alt="Sokemi" class="logo-image">
+            </a>
+            
+            <nav class="nav">
+                <a href="/pages/site/about.html" class="nav-link active">О нас</a>
+                <a href="/" class="nav-link ">Главная</a>
+                <a href="/pages/site/contacts.html" class="nav-link">Контакты</a>
+            </nav>
+            
+            <div class="header-actions">
+                <div class="search-wrapper">
+                    <input type="text" placeholder="Поиск..." class="search-input">
+                    <button class="search-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </div>
+                <a href="/pages/site/profile.html" class="profile-icon"></a>
+                <button class="icon-btn cart-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                </button>
+                <button class="mobile-menu-btn" aria-label="Открыть меню">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </div>
 </header>
-    
-<div class="container">
-    <h1>О нас</h1>
 
-    <div class="section">
-        <p>
-            <strong>Sokemi</strong> — это онлайн-пространство для кошек и их людей в Москве,
-            где каждый заказ мы собираем так, будто покупаем вещи для собственного хвоста.
-            Мы верим, что счастливая кошка — это не только миска с кормом,
-            но и когтеточка, которой не стыдно хвастаться, лежанка, в которую хочется нырнуть с разбега,
-            и игрушки, которые превращают обычный день в маленькое приключение.
-        </p>
+<!-- MOBILE MENU -->
+<div class="mobile-menu">
+    <div class="mobile-menu-header">
+        <a href="#" class="logo">
+            <img src="../../images/logo.svg" alt="Sokemi" class="logo-image">
+        </a>
+        <button class="mobile-menu-close" aria-label="Закрыть меню">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+            </svg>
+        </button>
     </div>
+    <nav class="mobile-nav">
+        <a href="#" class="mobile-nav-link">О нас</a>
+        <a href="#" class="mobile-nav-link active">Главная</a>
+        <a href="#" class="mobile-nav-link">Контакты</a>
+    </nav>
+</div>
+<div class="mobile-overlay"></div>
 
-    <div class="section">
-        <h2>География и опыт</h2>
-        <div class="grid">
-            <div class="card">🐾 Работаем на рынке зоотоваров уже 5 лет.</div>
-            <div class="card">📍 Находимся в Москве и работаем по городу и области.</div>
-            <div class="card">🚚 Удобная доставка по Москве и ближайшим районам.</div>
+<div class="main">
+    <div class="main_block container">
+        <h1>О нас</h1>
+
+        <div class="section">
+            <p>
+                <strong>Sokemi</strong> — это онлайн-пространство для кошек и их людей в Москве,
+                где каждый заказ мы собираем так, будто покупаем вещи для собственного хвоста.
+                Мы верим, что счастливая кошка — это не только миска с кормом,
+                но и когтеточка, которой не стыдно хвастаться, лежанка, в которую хочется нырнуть с разбега,
+                и игрушки, которые превращают обычный день в маленькое приключение.
+            </p>
         </div>
-    </div>
 
-    <div class="section">
-        <h2>Наши товары</h2>
-        <ul>
-            <li>Корма для кошек на каждый день и для особых случаев.</li>
-            <li>Когтеточки и игровые комплексы.</li>
-            <li>Лежанки и домики для сна и уединения.</li>
-            <li>Лотки и миски для удобного ухода.</li>
-            <li>Игрушки: мячи, дразнилки, интерактивные варианты.</li>
-            <li>Шампуни и средства ухода.</li>
-            <li>Аксессуары и полезные мелочи.</li>
-        </ul>
-    </div>
+        <div class="section">
+            <h2>География и опыт</h2>
+            <div class="grid">
+                <div class="card">🐾 Работаем на рынке зоотоваров уже 5 лет.</div>
+                <div class="card">📍 Находимся в Москве и работаем по городу и области.</div>
+                <div class="card">🚚 Удобная доставка по Москве и ближайшим районам.</div>
+            </div>
+        </div>
 
-    <div class="section">
-        <h2>Почему выбирают Sokemi</h2>
-        <div class="grid">
-            <div class="card">✔ Всё для кошки в одном месте.</div>
-            <div class="card">✔ Удобный онлайн-каталог.</div>
-            <div class="card">✔ Понятная структура категорий.</div>
-            <div class="card">✔ Забота о каждом заказе.</div>
+        <div class="section">
+            <h2>Наши товары</h2>
+            <ul>
+                <li>Корма для кошек на каждый день и для особых случаев.</li>
+                <li>Когтеточки и игровые комплексы.</li>
+                <li>Лежанки и домики для сна и уединения.</li>
+                <li>Лотки и миски для удобного ухода.</li>
+                <li>Игрушки: мячи, дразнилки, интерактивные варианты.</li>
+                <li>Шампуни и средства ухода.</li>
+                <li>Аксессуары и полезные мелочи.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Почему выбирают Sokemi</h2>
+            <div class="grid">
+                <div class="card">✔ Всё для кошки в одном месте.</div>
+                <div class="card">✔ Удобный онлайн-каталог.</div>
+                <div class="card">✔ Понятная структура категорий.</div>
+                <div class="card">✔ Забота о каждом заказе.</div>
+            </div>
         </div>
     </div>
 </div>

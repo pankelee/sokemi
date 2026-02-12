@@ -9,8 +9,8 @@
     --color-bg-gradient-end: #e9f0f5;
     --color-cream: #EFECDD;
     --color-cream-dark: #E5E2D3;
-    --color-card: #CFCBC6;
-    --color-card-hover: #C5C1BC;
+    --color-card: #8BA3C5;
+    --color-card-hover: #5a7dab;
     --color-text: #333333;
     --color-text-light: #666666;
     --color-accent: #5fa8d3;
@@ -86,15 +86,25 @@ button {
 /* ========================================
    HEADER
    ======================================== */
+
+header {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    width: 100%;
+}
 .header {
     background: var(--color-cream);
-    padding: 16px 0;
+    padding: 50px 0 16px 0;
     border-radius: var(--radius-lg);
     margin: 16px auto;
-    max-width: calc(100% - 32px);
     box-shadow: var(--shadow-sm);
     position: relative;
-    z-index: 100;
+    width: 80%;
+    transform: translateY(-50px);
+    
 }
 
 .header-container {
@@ -102,6 +112,14 @@ button {
     justify-content: space-between;
     align-items: center;
     gap: 24px;
+}
+
+.profile-icon {
+    text-decoration: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--color-white);
 }
 
 /* Logo */
@@ -337,7 +355,6 @@ button {
 .hero {
     position: relative;
     height: 450px;
-    overflow: hidden;
     margin-bottom: -40px;
 }
 
@@ -354,6 +371,12 @@ button {
     height: 100%;
     object-fit: cover;
     object-position: center;
+}
+
+.hero-clouds {
+    position: absolute;
+    bottom: -50%;
+    width: 100%;
 }
 
 .hero-content {
@@ -387,6 +410,8 @@ button {
     padding: 60px 0 80px;
     position: relative;
     z-index: 10;
+    max-width: 80%;
+    margin: 0 auto;
 }
 
 /* Section Header */
