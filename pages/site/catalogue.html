@@ -7,6 +7,26 @@
     <link rel="stylesheet" href="../../styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
+<!-- МОДАЛЬНОЕ ОКНО -->
+<div class="modal" id="product-modal">
+    <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        
+        <div class="modal-body">
+            <img id="modal-image" src="" alt="">
+            
+            <div class="modal-info">
+                <h2 id="modal-title"></h2>
+                <p id="modal-description"></p>
+                <p class="modal-price" id="modal-price"></p>
+                
+                <button class="btn btn-primary" id="add-to-cart">
+                    Добавить в корзину
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <body>
 
 <header>
@@ -35,7 +55,7 @@
                 <a href="/pages/site/profile.html" class="header-avatar">
                     <img src="https://basket-25.wbbasket.ru/vol4435/part443550/443550372/images/big/1.webp" alt="profile">
                 </a>
-                <a href="./pages/site/cart.html" class="icon-btn cart-btn">
+                <a href="../../pages/site/cart.html" class="icon-btn cart-btn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1"></circle>
                         <circle cx="20" cy="21" r="1"></circle>
@@ -87,26 +107,58 @@
 
                 <div class="products-grid">
 
-                    <div class="product-card" data-category="food">
-                        <img src="../../images/5a64ee2fc0a80bfcc41ab4890eb1ca12.jpg" alt="">
+                    <!-- 1 -->
+                    <div class="product-card"
+                        data-category="food"
+                        data-id="1"
+                        data-name="Корм премиум"
+                        data-price="1290"
+                        data-image="../../images/5a64ee2fc0a80bfcc41ab4890eb1ca12.jpg"
+                        data-description="Сбалансированный премиальный корм для взрослых кошек.">
+                        
+                        <img src="../../images/5a64ee2fc0a80bfcc41ab4890eb1ca12.jpg" alt="Корм премиум">
                         <h4>Корм премиум</h4>
                         <p class="price">1 290 ₽</p>
                     </div>
 
-                    <div class="product-card" data-category="toys">
-                        <img src="../../images/44a0c5bf0c9e30ff0bf79a0d184529cd.jpg" alt="">
+                    <!-- 2 -->
+                    <div class="product-card"
+                        data-category="toys"
+                        data-id="2"
+                        data-name="Игрушка-мышка"
+                        data-price="450"
+                        data-image="../../images/44a0c5bf0c9e30ff0bf79a0d184529cd.jpg"
+                        data-description="Мягкая игрушка-мышка с кошачьей мятой для активных игр.">
+                        
+                        <img src="../../images/44a0c5bf0c9e30ff0bf79a0d184529cd.jpg" alt="Игрушка-мышка">
                         <h4>Игрушка-мышка</h4>
                         <p class="price">450 ₽</p>
                     </div>
 
-                    <div class="product-card" data-category="care" >
-                        <img src="../../images/2de8c9e1e57e6d43e982767fddffdd62.jpg" alt="">
+                    <!-- 3 -->
+                    <div class="product-card"
+                        data-category="care"
+                        data-id="3"
+                        data-name="Когтеточка"
+                        data-price="2490"
+                        data-image="../../images/2de8c9e1e57e6d43e982767fddffdd62.jpg"
+                        data-description="Устойчивая когтеточка из сизаля для ухода за когтями.">
+                        
+                        <img src="../../images/2de8c9e1e57e6d43e982767fddffdd62.jpg" alt="Когтеточка">
                         <h4>Когтеточка</h4>
                         <p class="price">2 490 ₽</p>
                     </div>
 
-                    <div class="product-card" data-category="other">
-                        <img src="../../images/6bb2d6416478086488069231c055085a.jpg" alt="">
+                    <!-- 4 -->
+                    <div class="product-card"
+                        data-category="other"
+                        data-id="4"
+                        data-name="Лежанка"
+                        data-price="1890"
+                        data-image="../../images/6bb2d6416478086488069231c055085a.jpg"
+                        data-description="Мягкая и уютная лежанка для комфортного отдыха питомца.">
+                        
+                        <img src="../../images/6bb2d6416478086488069231c055085a.jpg" alt="Лежанка">
                         <h4>Лежанка</h4>
                         <p class="price">1 890 ₽</p>
                     </div>
@@ -114,6 +166,7 @@
                 </div>
 
             </section>
+
 
         </div>
 
@@ -184,31 +237,104 @@
 </footer>
 
 <script>
-    const checkboxes = document.querySelectorAll('.filters input[type="checkbox"]');
-    const products = document.querySelectorAll('.product-card');
+/* ======================
+   ФИЛЬТРЫ
+====================== */
+const checkboxes = document.querySelectorAll('.filters input[type="checkbox"]');
+const products = document.querySelectorAll('.product-card');
 
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', filterProducts);
+checkboxes.forEach(cb => cb.addEventListener('change', filterProducts));
+
+function filterProducts() {
+    const selected = Array.from(checkboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+    products.forEach(product => {
+        const category = product.dataset.category;
+
+        if (selected.length === 0 || selected.includes(category)) {
+            product.style.display = 'block';
+        } else {
+            product.style.display = 'none';
+        }
     });
+}
 
-    function filterProducts() {
-        const selected = Array.from(checkboxes)
-            .filter(cb => cb.checked)
-            .map(cb => cb.value);
+/* ======================
+   КОРЗИНА (МАССИВ)
+====================== */
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-        products.forEach(product => {
-            const category = product.getAttribute('data-category');
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
 
-            if (selected.length === 0) {
-                product.style.display = 'block';
-            } else if (selected.includes(category)) {
-                product.style.display = 'block';
-            } else {
-                product.style.display = 'none';
-            }
-        });
+/* ======================
+   МОДАЛКА
+====================== */
+const modal = document.getElementById('product-modal');
+const modalImage = document.getElementById('modal-image');
+const modalTitle = document.getElementById('modal-title');
+const modalDescription = document.getElementById('modal-description');
+const modalPrice = document.getElementById('modal-price');
+const addToCartBtn = document.getElementById('add-to-cart');
+const closeBtn = document.querySelector('.modal-close');
+
+let currentProduct = null;
+
+// Открытие модалки
+products.forEach(card => {
+    card.addEventListener('click', () => {
+        const product = {
+            id: Number(card.dataset.id),
+            name: card.dataset.name,
+            price: Number(card.dataset.price),
+            image: card.dataset.image,
+            description: card.dataset.description,
+            quantity: 1
+        };
+
+        currentProduct = product;
+
+        modalImage.src = product.image;
+        modalTitle.textContent = product.name;
+        modalDescription.textContent = product.description;
+        modalPrice.textContent = product.price + " ₽";
+
+        modal.classList.add('active');
+    });
+});
+
+// Закрытие
+closeBtn.addEventListener('click', () => {
+    modal.classList.remove('active');
+});
+
+window.addEventListener('click', e => {
+    if (e.target === modal) {
+        modal.classList.remove('active');
     }
+});
+
+/* ======================
+   ДОБАВЛЕНИЕ В КОРЗИНУ
+====================== */
+addToCartBtn.addEventListener('click', () => {
+    const existing = cart.find(item => item.id === currentProduct.id);
+
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push(currentProduct);
+    }
+
+    saveCart();
+    modal.classList.remove('active');
+    alert("Товар добавлен в корзину 🛒");
+});
 </script>
+
 
 </body>
 </html>

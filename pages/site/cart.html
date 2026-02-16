@@ -517,7 +517,13 @@
             </button>
             <button class="icon-btn" aria-label="Корзина" style="position: relative;">
                 <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                <span id="cart-badge" style="position: absolute; top: -5px; right: -5px; background: #e74c3c; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 700;">3</span>
+                <span id="cart-badge"
+                style="position:absolute; top:-5px; right:-5px;
+                background:#e74c3c; color:white; font-size:10px;
+                padding:2px 6px; border-radius:10px; font-weight:700;">
+                0
+                </span>
+
             </button>
             <div class="user-avatar"></div>
         </div>
@@ -557,138 +563,138 @@
         <span id="notification-text">Товар удален</span>
     </div>
 
-    <script>
-        // Данные корзины
-        let cart = [
-            {
-                id: 1,
-                name: "Сухой корм для кошек Eukanuba Top Condition с домашней птицей",
-                price: 1941,
-                quantity: 1,
-                image: "https://via.placeholder.com/60x80/5B9BD5/ffffff?text=Cat+Food"
-            },
-            {
-                id: 2,
-                name: "Сухой корм для кошек Eukanuba Top Condition с домашней птицей",
-                price: 1941,
-                quantity: 1,
-                image: "https://via.placeholder.com/60x80/5B9BD5/ffffff?text=Cat+Food"
-            },
-            {
-                id: 3,
-                name: "Сухой корм для кошек Eukanuba Top Condition с домашней птицей",
-                price: 1941,
-                quantity: 1,
-                image: "https://via.placeholder.com/60x80/5B9BD5/ffffff?text=Cat+Food"
-            }
-        ];
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
-        // Рендер корзины
-        function renderCart() {
-            const cartItems = document.getElementById('cart-items');
-            const cartContent = document.getElementById('cart-content');
-            const emptyCart = document.getElementById('empty-cart');
-            const cartBadge = document.getElementById('cart-badge');
+    const cartContainer = document.getElementById("cart-items");
+    const totalElement = document.getElementById("total-price");
+    const emptyCartBlock = document.getElementById("empty-cart");
+    const cartContent = document.getElementById("cart-content");
+    const badge = document.getElementById("cart-badge");
 
-            if (cart.length === 0) {
-                cartContent.style.display = 'none';
-                emptyCart.style.display = 'block';
-                cartBadge.style.display = 'none';
-                return;
-            }
+    // Загружаем корзину
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-            cartContent.style.display = 'block';
-            emptyCart.style.display = 'none';
-            cartBadge.style.display = 'block';
-            cartBadge.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    // =====================
+    // Сохранение
+    // =====================
+    function saveCart() {
+        localStorage.setItem("cart", JSON.stringify(cart));
+    }
 
-            cartItems.innerHTML = cart.map(item => `
-                <div class="cart-item" data-id="${item.id}">
-                    <div class="product-image">
-                        <img src="${item.image}" alt="${item.name}">
-                    </div>
-                    <div class="product-info">
-                        <div class="product-name">${item.name}</div>
-                    </div>
-                    <div class="product-price">${item.price * item.quantity} руб</div>
-                    <div class="quantity-control">
-                        <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
-                        <span class="qty-value">${item.quantity}</span>
-                        <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
-                    </div>
-                    <button class="remove-btn" onclick="removeItem(${item.id})" title="Удалить">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                        </svg>
-                    </button>
+    // =====================
+    // Отрисовка корзины
+    // =====================
+    function renderCart() {
+
+        cartContainer.innerHTML = "";
+
+        if (cart.length === 0) {
+            cartContent.style.display = "none";
+            emptyCartBlock.style.display = "block";
+            badge.textContent = "0";
+            return;
+        }
+
+        cartContent.style.display = "block";
+        emptyCartBlock.style.display = "none";
+
+        let total = 0;
+        let totalCount = 0;
+
+        cart.forEach(item => {
+
+            total += item.price * item.quantity;
+            totalCount += item.quantity;
+
+            const div = document.createElement("div");
+            div.classList.add("cart-item");
+
+            div.innerHTML = `
+                <div class="product-image">
+                    <img src="${item.image}" alt="${item.name}">
                 </div>
-            `).join('');
 
-            updateTotal();
+                <div class="product-info">
+                    <div class="product-name">${item.name}</div>
+                </div>
+
+                <div class="quantity-control">
+                    <button class="qty-btn minus">-</button>
+                    <div class="qty-value">${item.quantity}</div>
+                    <button class="qty-btn plus">+</button>
+                </div>
+
+                <div class="product-price">
+                    ${item.price * item.quantity} ₽
+                </div>
+
+                <button class="remove-btn">✕</button>
+            `;
+
+            // ===== обработчики =====
+
+            div.querySelector(".plus").addEventListener("click", () => {
+                changeQuantity(item.id, 1);
+            });
+
+            div.querySelector(".minus").addEventListener("click", () => {
+                changeQuantity(item.id, -1);
+            });
+
+            div.querySelector(".remove-btn").addEventListener("click", () => {
+                removeFromCart(item.id);
+            });
+
+            cartContainer.appendChild(div);
+        });
+
+        totalElement.textContent = total + " руб";
+        badge.textContent = totalCount;
+
+        saveCart();
+    }
+
+    // =====================
+    // Изменение количества
+    // =====================
+    function changeQuantity(id, delta) {
+
+        const item = cart.find(item => item.id === id);
+
+        if (!item) return;
+
+        item.quantity += delta;
+
+        if (item.quantity <= 0) {
+            cart = cart.filter(item => item.id !== id);
         }
 
-        // Обновление количества
-        function updateQuantity(id, change) {
-            const item = cart.find(i => i.id === id);
-            if (item) {
-                item.quantity += change;
-                if (item.quantity <= 0) {
-                    removeItem(id);
-                } else {
-                    renderCart();
-                    showNotification('Количество обновлено', '✓');
-                }
-            }
-        }
-
-        // Удаление товара
-        function removeItem(id) {
-            cart = cart.filter(i => i.id !== id);
-            renderCart();
-            showNotification('Товар удален из корзины', '🗑');
-        }
-
-        // Обновление итоговой суммы
-        function updateTotal() {
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            document.getElementById('total-price').textContent = total + ' руб';
-        }
-
-        // Оформление заказа
-        function checkout() {
-            if (cart.length === 0) return;
-            
-            const btn = document.querySelector('.checkout-btn');
-            const originalText = btn.textContent;
-            btn.textContent = 'Обработка...';
-            btn.disabled = true;
-            
-            setTimeout(() => {
-                showNotification('Заказ успешно оформлен! Перенаправление...', '✓');
-                btn.textContent = originalText;
-                btn.disabled = false;
-                
-                setTimeout(() => {
-                    cart = [];
-                    renderCart();
-                }, 2000);
-            }, 1500);
-        }
-
-        // Показ уведомления
-        function showNotification(text, icon) {
-            const notification = document.getElementById('notification');
-            document.getElementById('notification-text').textContent = text;
-            document.getElementById('notification-icon').textContent = icon;
-            
-            notification.classList.add('show');
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        // Инициализация
         renderCart();
-    </script>
+    }
+
+    // =====================
+    // Удаление
+    // =====================
+    function removeFromCart(id) {
+        cart = cart.filter(item => item.id !== id);
+        renderCart();
+    }
+
+    // =====================
+    // Оформление
+    // =====================
+    window.checkout = function () {
+        if (cart.length === 0) return;
+        alert("Заказ оформлен!");
+        cart = [];
+        renderCart();
+    };
+
+    renderCart();
+});
+</script>
+
+
 </body>
 </html>
