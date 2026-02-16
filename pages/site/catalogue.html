@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOKEMI - Магазин для кошек</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>SOKEMI - Каталог</title>
+    <link rel="stylesheet" href="../../styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
     <div class="header">
         <div class="container header-container">
@@ -20,9 +17,9 @@
             </a>
             
             <nav class="nav">
-                <a href="./pages/site/about.html" class="nav-link">О нас</a>
-                <a href="./index.html" class="nav-link active">Главная</a>
-                <a href="./pages/site/contacts.html" class="nav-link">Контакты</a>
+                <a href="../site/about.html" class="nav-link">О нас</a>
+                <a href="../../index.html" class="nav-link active">Главная</a>
+                <a href="../site/contacts.html"  class="nav-link">Контакты</a>
             </nav>
             
             <div class="header-actions">
@@ -53,131 +50,74 @@
     </div>
 </header>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu">
-    <div class="mobile-menu-header">
-        <a href="#" class="logo">
-            <img src="../../images/logo.svg" alt="Sokemi" class="logo-image">
-        </a>
-        <button class="mobile-menu-close" aria-label="Закрыть меню">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 6 6 18"></path>
-                <path d="m6 6 12 12"></path>
-            </svg>
-        </button>
-    </div>
-    <nav class="mobile-nav">
-        <a href="#" class="mobile-nav-link">О нас</a>
-        <a href="#" class="mobile-nav-link active">Главная</a>
-        <a href="#" class="mobile-nav-link">Контакты</a>
-    </nav>
-</div>
-<div class="mobile-overlay"></div>
-
 <!-- HERO -->
 <section class="hero">
     <div class="hero-bg">
-        <img src="./images/hero-cat.jpg" alt="Голубой котик" class="hero-img">
+        <img src="../../images/hero-cat.jpg" alt="Котик" class="hero-img">
     </div>
     <div class="hero-content">
-        <h1 class="hero-title">SHOP</h1>
-    </div>
-    <div class="hero-clouds">
-        <img src="./images/clouds.png" alt="Облачка" class="hero-img">
+        <h1 class="hero-title">CATALOG</h1>
     </div>
 </section>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
 <main class="main">
     <div class="container">
-        
-        <!-- КАТАЛОГ -->
-        <section class="catalog">
-            <div class="section-header">
-                <h2 class="section-title">КАТАЛОГ</h2>
-                <a href="/pages/site/catalogue.html" class="btn btn-outline">Подробнее</a>
-            </div>
-            <div class="catalog-grid">
-                <a href="#" class="card card-large">
-                    <span class="card-title">КОРМ</span>
-                    <div class="card-image">
-                        <img src="./images/02883cd920e3c0cd58c695fdfbe72102.png" alt="Корм для кошек">
-                    </div>
-                </a>
-                <a href="#" class="card card-large">
-                    <span class="card-title">УХОД</span>
-                    <div class="card-image">
-                        <img src="./images/b72c74f08c3e0085c9a9074f1b5a1f29.png" alt="Уход за кошками">
-                    </div>
-                </a>
-                <a href="#" class="card card-large">
-                    <span class="card-title">ИГРУШКИ</span>
-                    <div class="card-image">
-                        <img src="./images/822fb1233958fec7fce9f85f3ce3b922.png" alt="Игрушки для кошек">
-                    </div>
-                </a>
-                <a href="#" class="card card-wide">
-                    <span class="card-title">ДЛЯ КОТЯТ</span>
-                    <div class="card-image">
-                        <img src="./images/e47b7f155fbab00807d5b57bb1579c31.png" alt="Для котят">
-                    </div>
-                </a>
-                <a href="#" class="card card-wide">
-                    <span class="card-title">ДРУГОЕ</span>
-                    <div class="card-image">
-                        <img src="./images/defc504c9951b4ffe1c63f8acd032daa.png" alt="Другое">
-                    </div>
-                </a>
-            </div>
-        </section>
 
-        <!-- ПОПУЛЯРНОЕ -->
-        <section class="popular">
-            <h2 class="section-title">ПОПУЛЯРНОЕ</h2>
-            <div class="popular-grid">
-                <a href="#" class="popular-card">
-                    <div class="popular-card-image">
-                        <img src="./images/5a64ee2fc0a80bfcc41ab4890eb1ca12.jpg" alt="Популярный товар 1">
-                    </div>
-                    <div class="popular-card-info">
-                        <span class="popular-card-name">Корм премиум</span>
-                        <span class="popular-card-price">1 290 ₽</span>
-                    </div>
-                </a>
-                <a href="#" class="popular-card">
-                    <div class="popular-card-image">
-                        <img src="./images/44a0c5bf0c9e30ff0bf79a0d184529cd.jpg" alt="Популярный товар 2">
-                    </div>
-                    <div class="popular-card-info">
-                        <span class="popular-card-name">Игрушка-мышка</span>
-                        <span class="popular-card-price">450 ₽</span>
-                    </div>
-                </a>
-                <a href="#" class="popular-card">
-                    <div class="popular-card-image">
-                        <img src="./images/2de8c9e1e57e6d43e982767fddffdd62.jpg" alt="Популярный товар 3">
-                    </div>
-                    <div class="popular-card-info">
-                        <span class="popular-card-name">Когтеточка</span>
-                        <span class="popular-card-price">2 490 ₽</span>
-                    </div>
-                </a>
-                <a href="#" class="popular-card">
-                    <div class="popular-card-image">
-                        <img src="./images/6bb2d6416478086488069231c055085a.jpg" alt="Популярный товар 4">
-                    </div>
-                    <div class="popular-card-info">
-                        <span class="popular-card-name">Лежанка</span>
-                        <span class="popular-card-price">1 890 ₽</span>
-                    </div>
-                </a>
+        <div class="catalog-page">
+
+            <!-- FILTERS -->
+            <div class="filters">
+                <div class="filter-group">
+                <p class="filter-label">Тип товара</p>
+                <label><input type="checkbox" value="food"> Корм</label>
+                <label><input type="checkbox" value="care"> Уход</label>
+                <label><input type="checkbox" value="toys"> Игрушки</label>
+                <label><input type="checkbox" value="kittens"> Для котят</label>
+                <label><input type="checkbox" value="other"> Другое</label>
+                </div>
             </div>
-        </section>
+            
+
+
+            <!-- PRODUCTS -->
+            <section class="products">
+
+                <div class="products-grid">
+
+                    <div class="product-card" data-category="food">
+                        <img src="../../images/5a64ee2fc0a80bfcc41ab4890eb1ca12.jpg" alt="">
+                        <h4>Корм премиум</h4>
+                        <p class="price">1 290 ₽</p>
+                    </div>
+
+                    <div class="product-card" data-category="toys">
+                        <img src="../../images/44a0c5bf0c9e30ff0bf79a0d184529cd.jpg" alt="">
+                        <h4>Игрушка-мышка</h4>
+                        <p class="price">450 ₽</p>
+                    </div>
+
+                    <div class="product-card" data-category="care" >
+                        <img src="../../images/2de8c9e1e57e6d43e982767fddffdd62.jpg" alt="">
+                        <h4>Когтеточка</h4>
+                        <p class="price">2 490 ₽</p>
+                    </div>
+
+                    <div class="product-card" data-category="other">
+                        <img src="../../images/6bb2d6416478086488069231c055085a.jpg" alt="">
+                        <h4>Лежанка</h4>
+                        <p class="price">1 890 ₽</p>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
 
     </div>
 </main>
 
-<!-- FOOTER -->
 <footer class="footer">
     <div class="container">
         <div class="newsletter">
@@ -241,6 +181,32 @@
     </div>
 </footer>
 
-<script src="script.js"></script>
+<script>
+    const checkboxes = document.querySelectorAll('.filters input[type="checkbox"]');
+    const products = document.querySelectorAll('.product-card');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', filterProducts);
+    });
+
+    function filterProducts() {
+        const selected = Array.from(checkboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+
+        products.forEach(product => {
+            const category = product.getAttribute('data-category');
+
+            if (selected.length === 0) {
+                product.style.display = 'block';
+            } else if (selected.includes(category)) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    }
+</script>
+
 </body>
 </html>
