@@ -114,13 +114,28 @@ header {
     gap: 24px;
 }
 
-.profile-icon {
-    text-decoration: none;
-    width: 40px;
-    height: 40px;
+.header-avatar {
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    background-color: var(--color-white);
+    overflow: hidden;
+    display: block;
+    border: 2px solid #8BA3C5;
+    transition: 0.3s ease;
 }
+
+.header-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.header-avatar:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 3px rgba(139,163,197,0.3);
+}
+
 
 /* Logo */
 .logo {
