@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -37,9 +37,10 @@
             </a>
             
             <nav class="nav">
-                <a href="../site/about.html" class="nav-link">О нас</a>
-                <a href="../../index.html" class="nav-link active">Главная</a>
-                <a href="../site/contacts.html"  class="nav-link">Контакты</a>
+                <a href="/pages/site/about.html" class="nav-link">&#1054; &#1085;&#1072;&#1089;</a>
+                <a href="/index.html" class="nav-link">&#1043;&#1083;&#1072;&#1074;&#1085;&#1072;&#1103;</a>
+                <a href="/pages/site/catalogue.html" class="nav-link active">&#1050;&#1072;&#1090;&#1072;&#1083;&#1086;&#1075;</a>
+                <a href="/pages/site/contacts.html"  class="nav-link">&#1050;&#1086;&#1085;&#1090;&#1072;&#1082;&#1090;&#1099;</a>
             </nav>
             
             <div class="header-actions">
@@ -71,25 +72,60 @@
         </div>
     </div>
 </header>
+<!-- MOBILE MENU -->
+<div class="mobile-menu">
+    <div class="mobile-menu-header">
+        <a href="/index.html" class="logo">
+            <img src="../../images/logo.svg" alt="Sokemi" class="logo-image">
+        </a>
+        <button class="mobile-menu-close" aria-label="Закрыть меню">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+            </svg>
+        </button>
+    </div>
+    <nav class="mobile-nav">
+        <a href="/pages/site/about.html" class="mobile-nav-link">&#1054; &#1085;&#1072;&#1089;</a>
+        <a href="/index.html" class="mobile-nav-link">&#1043;&#1083;&#1072;&#1074;&#1085;&#1072;&#1103;</a>
+        <a href="/pages/site/catalogue.html" class="mobile-nav-link active">&#1050;&#1072;&#1090;&#1072;&#1083;&#1086;&#1075;</a>
+        <a href="/pages/site/contacts.html" class="mobile-nav-link">&#1050;&#1086;&#1085;&#1090;&#1072;&#1082;&#1090;&#1099;</a>
+    </nav>
+</div>
+<div class="mobile-overlay"></div>
 
 <!-- HERO -->
 <section class="hero">
     <div class="hero-bg">
-        <img src="../../images/hero-cat.jpg" alt="Котик" class="hero-img">
+        <img src="../../images/hero-cat.jpg" alt="Голубой котик" class="hero-img">
     </div>
     <div class="hero-content">
-        <h1 class="hero-title">CATALOG</h1>
+        <h1 class="hero-title">SHOP</h1>
+    </div>
+    <div class="hero-clouds">
+        <img src="../../images/clouds.png" alt="Облачка" class="hero-img">
     </div>
 </section>
 
 <!-- MAIN -->
 <main class="main">
     <div class="container">
+        <div class="filters-mobile-controls">
+            <button
+                type="button"
+                class="filters-toggle-btn"
+                id="filters-toggle"
+                aria-expanded="false"
+                aria-controls="catalog-filters"
+            >
+                Показать фильтры
+            </button>
+        </div>
 
         <div class="catalog-page">
 
             <!-- FILTERS -->
-            <div class="filters">
+            <div class="filters" id="catalog-filters">
                 <div class="filter-group">
                 <p class="filter-label">Тип товара</p>
                 <label><input type="checkbox" value="food"> Корм</label>
@@ -98,72 +134,65 @@
                 <label><input type="checkbox" value="kittens"> Для котят</label>
                 <label><input type="checkbox" value="other"> Другое</label>
                 </div>
+
+                <div class="filter-group">
+                    <p class="filter-label">Возраст</p>
+                    <select id="age-filter" class="filter-select">
+                        <option value="">Любой</option>
+                        <option value="Для котят">Для котят</option>
+                        <option value="Для взрослых">Для взрослых</option>
+                        <option value="Для пожилых">Для пожилых</option>
+                        <option value="Для всех возрастов">Для всех возрастов</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <p class="filter-label">Вес упаковки</p>
+                    <select id="weight-filter" class="filter-select">
+                        <option value="">Любой</option>
+                        <option value="100">от 100 г</option>
+                        <option value="400">от 400 г</option>
+                        <option value="1000">от 1 кг</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <p class="filter-label">Цена, ₽</p>
+                    <div class="price-range">
+                        <input id="price-min" type="number" min="0" step="1" placeholder="От">
+                        <input id="price-max" type="number" min="0" step="1" placeholder="До">
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-outline filter-reset-btn" id="reset-filters">Сбросить</button>
             </div>
             
 
 
             <!-- PRODUCTS -->
             <section class="products">
+                <div class="catalog-toolbar">
+                    <p class="catalog-stats" id="catalog-stats"></p>
+                    <div class="catalog-toolbar-controls">
+                        <label class="toolbar-label" for="sort-select">Сортировка</label>
+                        <select id="sort-select" class="toolbar-select">
+                            <option value="default">По умолчанию</option>
+                            <option value="price-asc">Сначала дешевле</option>
+                            <option value="price-desc">Сначала дороже</option>
+                            <option value="name-asc">По названию</option>
+                        </select>
 
-                <div class="products-grid">
-
-                    <!-- 1 -->
-                    <div class="product-card"
-                        data-category="food"
-                        data-id="1"
-                        data-name="Корм премиум"
-                        data-price="1290"
-                        data-image="../../images/5a64ee2fc0a80bfcc41ab4890eb1ca12.jpg"
-                        data-description="Сбалансированный премиальный корм для взрослых кошек.">
-                        
-                        <img src="../../images/5a64ee2fc0a80bfcc41ab4890eb1ca12.jpg" alt="Корм премиум">
-                        <h4>Корм премиум</h4>
-                        <p class="price">1 290 ₽</p>
+                        <label class="toolbar-label" for="page-size-select">На странице</label>
+                        <select id="page-size-select" class="toolbar-select">
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
                     </div>
-
-                    <!-- 2 -->
-                    <div class="product-card"
-                        data-category="toys"
-                        data-id="2"
-                        data-name="Игрушка-мышка"
-                        data-price="450"
-                        data-image="../../images/44a0c5bf0c9e30ff0bf79a0d184529cd.jpg"
-                        data-description="Мягкая игрушка-мышка с кошачьей мятой для активных игр.">
-                        
-                        <img src="../../images/44a0c5bf0c9e30ff0bf79a0d184529cd.jpg" alt="Игрушка-мышка">
-                        <h4>Игрушка-мышка</h4>
-                        <p class="price">450 ₽</p>
-                    </div>
-
-                    <!-- 3 -->
-                    <div class="product-card"
-                        data-category="care"
-                        data-id="3"
-                        data-name="Когтеточка"
-                        data-price="2490"
-                        data-image="../../images/2de8c9e1e57e6d43e982767fddffdd62.jpg"
-                        data-description="Устойчивая когтеточка из сизаля для ухода за когтями.">
-                        
-                        <img src="../../images/2de8c9e1e57e6d43e982767fddffdd62.jpg" alt="Когтеточка">
-                        <h4>Когтеточка</h4>
-                        <p class="price">2 490 ₽</p>
-                    </div>
-
-                    <!-- 4 -->
-                    <div class="product-card"
-                        data-category="other"
-                        data-id="4"
-                        data-name="Лежанка"
-                        data-price="1890"
-                        data-image="../../images/6bb2d6416478086488069231c055085a.jpg"
-                        data-description="Мягкая и уютная лежанка для комфортного отдыха питомца.">
-                        
-                        <img src="../../images/6bb2d6416478086488069231c055085a.jpg" alt="Лежанка">
-                        <h4>Лежанка</h4>
-                        <p class="price">1 890 ₽</p>
-                    </div>
-
                 </div>
+
+                <p class="products-empty" id="products-empty">Товары пока не найдены.</p>
+                <div class="products-grid" id="products-grid"></div>
+                <div class="catalog-pagination" id="catalog-pagination"></div>
 
             </section>
 
@@ -237,104 +266,634 @@
 </footer>
 
 <script>
-/* ======================
-   ФИЛЬТРЫ
-====================== */
-const checkboxes = document.querySelectorAll('.filters input[type="checkbox"]');
-const products = document.querySelectorAll('.product-card');
+const STORAGE_KEY = "sokemi.catalog.v2";
+const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><rect width='100%' height='100%' fill='%23e5e2d3'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23666' font-family='Arial' font-size='20'>No Image</text></svg>";
+const MIN_AUTO_PRODUCTS = 60;
+const TABLET_MAX_WIDTH = 1023;
+const IMAGE_POOL = [
+    "../../images/02883cd920e3c0cd58c695fdfbe72102.png",
+    "../../images/5a64ee2fc0a80bfcc41ab4890eb1ca12.jpg",
+    "../../images/44a0c5bf0c9e30ff0bf79a0d184529cd.jpg",
+    "../../images/2de8c9e1e57e6d43e982767fddffdd62.jpg",
+    "../../images/6bb2d6416478086488069231c055085a.jpg",
+    "../../images/b72c74f08c3e0085c9a9074f1b5a1f29.png"
+];
 
-checkboxes.forEach(cb => cb.addEventListener('change', filterProducts));
+const categoryTemplates = [
+    { id: "cat-food", name: "Корм", filterKey: "food", types: ["Сухой корм", "Влажный корм", "Лакомство"] },
+    { id: "cat-care", name: "Уход", filterKey: "care", types: ["Шампунь", "Спрей", "Гигиена"] },
+    { id: "cat-toys", name: "Игрушки", filterKey: "toys", types: ["Мячик", "Дразнилка", "Интерактив"] },
+    { id: "cat-kittens", name: "Для котят", filterKey: "kittens", types: ["Стартовый набор", "Корм для котят", "Аксессуар"] },
+    { id: "cat-other", name: "Другое", filterKey: "other", types: ["Лежанка", "Миска", "Переноска"] }
+];
+const flavorPool = ["Курица", "Лосось", "Индейка", "Тунец", "Без вкуса"];
+const agePool = ["Для котят", "Для взрослых", "Для пожилых", "Для всех возрастов"];
+const brandPool = ["Sokemi", "Murly", "CatJoy", "LunaPaws", "MiauLife"];
 
-function filterProducts() {
-    const selected = Array.from(checkboxes)
-        .filter(cb => cb.checked)
-        .map(cb => cb.value);
+const typeCheckboxes = Array.from(document.querySelectorAll(".filters input[type='checkbox']"));
+const searchInput = document.querySelector(".search-wrapper .search-input");
+const searchButton = document.querySelector(".search-wrapper .search-btn");
+const catalogPage = document.querySelector(".catalog-page");
+const filtersPanel = document.getElementById("catalog-filters");
+const filtersToggleBtn = document.getElementById("filters-toggle");
+const ageFilter = document.getElementById("age-filter");
+const weightFilter = document.getElementById("weight-filter");
+const priceMinInput = document.getElementById("price-min");
+const priceMaxInput = document.getElementById("price-max");
+const resetFiltersBtn = document.getElementById("reset-filters");
+const sortSelect = document.getElementById("sort-select");
+const pageSizeSelect = document.getElementById("page-size-select");
+const stats = document.getElementById("catalog-stats");
+const grid = document.getElementById("products-grid");
+const emptyState = document.getElementById("products-empty");
+const pagination = document.getElementById("catalog-pagination");
 
-    products.forEach(product => {
-        const category = product.dataset.category;
+const modal = document.getElementById("product-modal");
+const modalImage = document.getElementById("modal-image");
+const modalTitle = document.getElementById("modal-title");
+const modalDescription = document.getElementById("modal-description");
+const modalPrice = document.getElementById("modal-price");
+const addToCartBtn = document.getElementById("add-to-cart");
+const closeBtn = document.querySelector(".modal-close");
 
-        if (selected.length === 0 || selected.includes(category)) {
-            product.style.display = 'block';
-        } else {
-            product.style.display = 'none';
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let allProducts = [];
+let filteredProducts = [];
+let currentPage = 1;
+let pageSize = Number(pageSizeSelect?.value || 15);
+let currentProduct = null;
+let filtersOpen = false;
+let wasCompactLayout = false;
+
+initCatalogPage();
+
+function initCatalogPage() {
+    initFiltersToggle();
+
+    const catalog = ensureCatalogData();
+    allProducts = flattenProducts(catalog);
+    filteredProducts = [...allProducts];
+
+    typeCheckboxes.forEach((cb) =>
+        cb.addEventListener("change", () => {
+            currentPage = 1;
+            applyFilters();
+        })
+    );
+    if (searchInput) {
+        searchInput.addEventListener("input", () => {
+            currentPage = 1;
+            applyFilters();
+        });
+    }
+    searchButton?.addEventListener("click", () => {
+        currentPage = 1;
+        applyFilters();
+    });
+    ageFilter?.addEventListener("change", () => {
+        currentPage = 1;
+        applyFilters();
+    });
+    weightFilter?.addEventListener("change", () => {
+        currentPage = 1;
+        applyFilters();
+    });
+    priceMinInput?.addEventListener("input", () => {
+        currentPage = 1;
+        applyFilters();
+    });
+    priceMaxInput?.addEventListener("input", () => {
+        currentPage = 1;
+        applyFilters();
+    });
+    sortSelect?.addEventListener("change", () => {
+        currentPage = 1;
+        applyFilters();
+    });
+    pageSizeSelect?.addEventListener("change", () => {
+        const next = Number(pageSizeSelect.value);
+        pageSize = Number.isFinite(next) && next > 0 ? next : 15;
+        currentPage = 1;
+        renderProducts();
+        renderPagination();
+        updateStats();
+    });
+    resetFiltersBtn?.addEventListener("click", resetFilters);
+
+    grid.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+
+        const card = target.closest(".product-card");
+        if (!card) return;
+
+        const key = card.dataset.key || "";
+        const product = allProducts.find((item) => item.key === key);
+        if (!product) return;
+
+        openModal(product);
+    });
+
+    pagination.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+
+        const btn = target.closest("button[data-page]");
+        if (!btn) return;
+
+        const nextPage = Number(btn.dataset.page);
+        if (!Number.isInteger(nextPage) || nextPage < 1) return;
+
+        currentPage = nextPage;
+        renderProducts();
+        renderPagination();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    closeBtn.addEventListener("click", closeModal);
+    window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            closeModal();
         }
     });
-}
 
-/* ======================
-   КОРЗИНА (МАССИВ)
-====================== */
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    addToCartBtn.addEventListener("click", () => {
+        if (!currentProduct) return;
 
-function saveCart() {
-    localStorage.setItem('cart', JSON.stringify(cart));
-}
+        const existing = cart.find((item) => item.id === currentProduct.id);
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({ ...currentProduct, quantity: 1 });
+        }
 
-/* ======================
-   МОДАЛКА
-====================== */
-const modal = document.getElementById('product-modal');
-const modalImage = document.getElementById('modal-image');
-const modalTitle = document.getElementById('modal-title');
-const modalDescription = document.getElementById('modal-description');
-const modalPrice = document.getElementById('modal-price');
-const addToCartBtn = document.getElementById('add-to-cart');
-const closeBtn = document.querySelector('.modal-close');
-
-let currentProduct = null;
-
-// Открытие модалки
-products.forEach(card => {
-    card.addEventListener('click', () => {
-        const product = {
-            id: Number(card.dataset.id),
-            name: card.dataset.name,
-            price: Number(card.dataset.price),
-            image: card.dataset.image,
-            description: card.dataset.description,
-            quantity: 1
-        };
-
-        currentProduct = product;
-
-        modalImage.src = product.image;
-        modalTitle.textContent = product.name;
-        modalDescription.textContent = product.description;
-        modalPrice.textContent = product.price + " ₽";
-
-        modal.classList.add('active');
+        localStorage.setItem("cart", JSON.stringify(cart));
+        closeModal();
+        alert("Товар добавлен в корзину");
     });
-});
 
-// Закрытие
-closeBtn.addEventListener('click', () => {
-    modal.classList.remove('active');
-});
+    applyFilters();
+}
 
-window.addEventListener('click', e => {
-    if (e.target === modal) {
-        modal.classList.remove('active');
+function initFiltersToggle() {
+    if (!catalogPage || !filtersPanel || !filtersToggleBtn) return;
+
+    filtersToggleBtn.addEventListener("click", () => {
+        if (!isCompactLayout()) return;
+        filtersOpen = !filtersOpen;
+        applyFiltersPanelState();
+    });
+
+    window.addEventListener("resize", handleLayoutChange);
+    handleLayoutChange();
+}
+
+function isCompactLayout() {
+    return window.matchMedia(`(max-width: ${TABLET_MAX_WIDTH}px)`).matches;
+}
+
+function handleLayoutChange() {
+    const compact = isCompactLayout();
+
+    if (compact !== wasCompactLayout) {
+        filtersOpen = compact ? false : true;
+        wasCompactLayout = compact;
     }
-});
 
-/* ======================
-   ДОБАВЛЕНИЕ В КОРЗИНУ
-====================== */
-addToCartBtn.addEventListener('click', () => {
-    const existing = cart.find(item => item.id === currentProduct.id);
+    applyFiltersPanelState();
+}
 
-    if (existing) {
-        existing.quantity += 1;
-    } else {
-        cart.push(currentProduct);
+function applyFiltersPanelState() {
+    if (!catalogPage || !filtersToggleBtn) return;
+
+    if (isCompactLayout()) {
+        catalogPage.classList.toggle("filters-open", filtersOpen);
+        filtersToggleBtn.hidden = false;
+        filtersToggleBtn.setAttribute("aria-expanded", String(filtersOpen));
+        filtersToggleBtn.textContent = filtersOpen ? "Скрыть фильтры" : "Показать фильтры";
+        return;
     }
 
-    saveCart();
-    modal.classList.remove('active');
-    alert("Товар добавлен в корзину 🛒");
-});
+    catalogPage.classList.add("filters-open");
+    filtersToggleBtn.hidden = true;
+    filtersToggleBtn.setAttribute("aria-expanded", "true");
+    filtersToggleBtn.textContent = "Скрыть фильтры";
+}
+
+function ensureCatalogData() {
+    const catalog = readCatalog();
+    const count = flattenProducts(catalog).length;
+    if (count >= MIN_AUTO_PRODUCTS) {
+        return catalog;
+    }
+
+    const generated = generateCatalogWithMinimum(catalog, MIN_AUTO_PRODUCTS);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(generated));
+    return generated;
+}
+
+function readCatalog() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return { version: 3, categories: [] };
+
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== "object") return { version: 3, categories: [] };
+
+        return {
+            version: Number(parsed.version) || 3,
+            categories: Array.isArray(parsed.categories) ? parsed.categories : []
+        };
+    } catch {
+        return { version: 3, categories: [] };
+    }
+}
+
+function flattenProducts(catalog) {
+    const categories = Array.isArray(catalog.categories) ? catalog.categories : [];
+    const products = [];
+
+    categories.forEach((category, categoryIndex) => {
+        const categoryId = String(category.id || `cat-${categoryIndex + 1}`).trim();
+        const categoryName = String(category.name || "").trim();
+        const categoryKey = mapCategoryToFilterKey(categoryId, categoryName);
+        const categoryImage = String(category.imageUrl || "").trim();
+        const items = Array.isArray(category.products) ? category.products : [];
+
+        items.forEach((product, productIndex) => {
+            const productId = String(product.id || `${categoryId}-prod-${productIndex + 1}`).trim();
+            const key = `${categoryId}::${productId}::${productIndex}`;
+
+            products.push({
+                key,
+                id: productId,
+                name: String(product.name || "Товар без названия").trim(),
+                description: String(product.description || "").trim(),
+                price: normalizePrice(product.price),
+                type: String(product.type || "").trim(),
+                flavor: String(product.flavor || "").trim(),
+                age: String(product.age || "").trim(),
+                weights: normalizeWeights(product.weights),
+                brand: String(product.brand || "").trim(),
+                categoryName,
+                categoryKey,
+                image: pickImage(product, categoryImage)
+            });
+        });
+    });
+
+    return products;
+}
+
+function mapCategoryToFilterKey(categoryId, categoryName) {
+    const value = `${categoryId} ${categoryName}`.toLowerCase();
+
+    if (value.includes("food") || value.includes("корм")) return "food";
+    if (value.includes("care") || value.includes("уход")) return "care";
+    if (value.includes("toy") || value.includes("игруш")) return "toys";
+    if (value.includes("kitten") || value.includes("котят")) return "kittens";
+    return "other";
+}
+
+function pickImage(product, categoryImage) {
+    if (product && Array.isArray(product.images) && product.images.length > 0) {
+        const first = String(product.images[0] || "").trim();
+        if (first) return first;
+    }
+
+    if (categoryImage) return categoryImage;
+    return PLACEHOLDER_IMAGE;
+}
+
+function normalizePrice(value) {
+    const numeric = Number(value);
+    return Number.isFinite(numeric) && numeric >= 0 ? Math.round(numeric) : 0;
+}
+
+function normalizeWeights(weights) {
+    if (!Array.isArray(weights)) return [];
+    return weights
+        .map((item) => Number(item))
+        .filter((item) => Number.isFinite(item) && item > 0)
+        .map((item) => Math.round(item));
+}
+
+function applyFilters() {
+    const selectedTypes = typeCheckboxes.filter((cb) => cb.checked).map((cb) => cb.value);
+    const term = String(searchInput?.value || "").trim().toLowerCase();
+    const selectedAge = String(ageFilter?.value || "").trim().toLowerCase();
+    const minWeight = Number(weightFilter?.value || 0);
+    const minPrice = Number(priceMinInput?.value || 0);
+    const maxPrice = Number(priceMaxInput?.value || 0);
+    const hasMinPrice = Number.isFinite(minPrice) && minPrice > 0;
+    const hasMaxPrice = Number.isFinite(maxPrice) && maxPrice > 0;
+
+    filteredProducts = allProducts.filter((product) => {
+        if (selectedTypes.length > 0 && !selectedTypes.includes(product.categoryKey)) {
+            return false;
+        }
+
+        if (selectedAge && String(product.age || "").toLowerCase() !== selectedAge) {
+            return false;
+        }
+
+        if (minWeight > 0) {
+            const maxWeight = product.weights.length ? Math.max(...product.weights) : 0;
+            if (maxWeight < minWeight) return false;
+        }
+
+        if (hasMinPrice && product.price < minPrice) return false;
+        if (hasMaxPrice && product.price > maxPrice) return false;
+
+        if (term) {
+            const haystack = [
+                product.name,
+                product.description,
+                product.categoryName,
+                product.type,
+                product.flavor,
+                product.age,
+                product.brand
+            ]
+                .join(" ")
+                .toLowerCase();
+
+            if (!haystack.includes(term)) return false;
+        }
+
+        return true;
+    });
+
+    const sortMode = String(sortSelect?.value || "default");
+    filteredProducts = sortProducts(filteredProducts, sortMode);
+
+    const totalPages = getTotalPages();
+    if (currentPage > totalPages) {
+        currentPage = totalPages || 1;
+    }
+
+    renderProducts();
+    renderPagination();
+    updateStats();
+}
+
+function getTotalPages() {
+    return Math.ceil(filteredProducts.length / pageSize);
+}
+
+function renderProducts() {
+    if (!grid || !emptyState) return;
+
+    grid.innerHTML = "";
+    emptyState.classList.remove("is-visible");
+
+    if (!filteredProducts.length) {
+        emptyState.classList.add("is-visible");
+        return;
+    }
+
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    const pageItems = filteredProducts.slice(start, end);
+
+    const fragment = document.createDocumentFragment();
+    pageItems.forEach((product) => {
+        fragment.appendChild(createProductCard(product));
+    });
+
+    grid.appendChild(fragment);
+}
+
+function createProductCard(product) {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.dataset.key = product.key;
+
+    const image = document.createElement("img");
+    image.src = product.image;
+    image.alt = product.name || "Product";
+
+    const title = document.createElement("h4");
+    title.textContent = product.name;
+
+    const meta = document.createElement("p");
+    meta.className = "product-meta";
+    meta.textContent = [
+        product.categoryName ? `Категория: ${product.categoryName}` : "",
+        product.brand ? `Бренд: ${product.brand}` : ""
+    ]
+        .filter(Boolean)
+        .join(" • ");
+
+    const description = document.createElement("p");
+    description.className = "product-description";
+    description.textContent = product.description || "Описание пока не добавлено.";
+
+    const price = document.createElement("p");
+    price.className = "price";
+    price.textContent = formatPrice(product.price);
+
+    card.appendChild(image);
+    card.appendChild(title);
+    if (meta.textContent) {
+        card.appendChild(meta);
+    }
+    card.appendChild(description);
+    card.appendChild(price);
+
+    return card;
+}
+
+function renderPagination() {
+    if (!pagination) return;
+
+    const totalPages = getTotalPages();
+
+    if (totalPages <= 1) {
+        pagination.innerHTML = "";
+        return;
+    }
+
+    const fragment = document.createDocumentFragment();
+
+    const prev = document.createElement("button");
+    prev.type = "button";
+    prev.className = "pagination-btn";
+    prev.textContent = "<";
+    prev.dataset.page = String(Math.max(1, currentPage - 1));
+    prev.disabled = currentPage === 1;
+    fragment.appendChild(prev);
+
+    for (let page = 1; page <= totalPages; page += 1) {
+        if (page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1) {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = `pagination-btn${page === currentPage ? " is-active" : ""}`;
+            btn.textContent = String(page);
+            btn.dataset.page = String(page);
+            fragment.appendChild(btn);
+            continue;
+        }
+
+        const last = fragment.lastChild;
+        if (last instanceof HTMLElement && last.classList.contains("pagination-dots")) {
+            continue;
+        }
+
+        const dots = document.createElement("span");
+        dots.className = "pagination-dots";
+        dots.textContent = "...";
+        fragment.appendChild(dots);
+    }
+
+    const next = document.createElement("button");
+    next.type = "button";
+    next.className = "pagination-btn";
+    next.textContent = ">";
+    next.dataset.page = String(Math.min(totalPages, currentPage + 1));
+    next.disabled = currentPage === totalPages;
+    fragment.appendChild(next);
+
+    pagination.innerHTML = "";
+    pagination.appendChild(fragment);
+}
+
+function openModal(product) {
+    currentProduct = product;
+    modalImage.src = product.image;
+    modalTitle.textContent = product.name;
+    modalDescription.textContent = product.description;
+    modalPrice.textContent = formatPrice(product.price);
+    modal.classList.add("active");
+}
+
+function closeModal() {
+    modal.classList.remove("active");
+}
+
+function formatPrice(value) {
+    return `${new Intl.NumberFormat("ru-RU").format(normalizePrice(value))} ₽`;
+}
+
+function updateStats() {
+    if (!stats) return;
+
+    if (!filteredProducts.length) {
+        stats.textContent = "Ничего не найдено";
+        return;
+    }
+
+    const from = (currentPage - 1) * pageSize + 1;
+    const to = Math.min(currentPage * pageSize, filteredProducts.length);
+    stats.textContent = `Показано ${from}-${to} из ${filteredProducts.length}`;
+}
+
+function resetFilters() {
+    typeCheckboxes.forEach((cb) => {
+        cb.checked = false;
+    });
+    if (searchInput) searchInput.value = "";
+    if (ageFilter) ageFilter.value = "";
+    if (weightFilter) weightFilter.value = "";
+    if (priceMinInput) priceMinInput.value = "";
+    if (priceMaxInput) priceMaxInput.value = "";
+    if (sortSelect) sortSelect.value = "default";
+    if (pageSizeSelect) pageSizeSelect.value = "15";
+    pageSize = 15;
+    currentPage = 1;
+    applyFilters();
+}
+
+function sortProducts(items, mode) {
+    const result = [...items];
+
+    if (mode === "price-asc") {
+        result.sort((a, b) => a.price - b.price);
+    } else if (mode === "price-desc") {
+        result.sort((a, b) => b.price - a.price);
+    } else if (mode === "name-asc") {
+        result.sort((a, b) => a.name.localeCompare(b.name, "ru"));
+    }
+
+    return result;
+}
+
+function generateCatalogWithMinimum(baseCatalog, targetCount) {
+    const existingCategories = Array.isArray(baseCatalog.categories) ? [...baseCatalog.categories] : [];
+    const categoryById = new Map(existingCategories.map((category) => [String(category.id || "").trim(), category]));
+
+    categoryTemplates.forEach((template, index) => {
+        if (categoryById.has(template.id)) return;
+
+        const category = {
+            id: template.id,
+            name: template.name,
+            imageUrl: IMAGE_POOL[index % IMAGE_POOL.length],
+            products: []
+        };
+        existingCategories.push(category);
+        categoryById.set(template.id, category);
+    });
+
+    let counter = flattenProducts({ categories: existingCategories }).length;
+    let index = 0;
+
+    while (counter < targetCount) {
+        const template = categoryTemplates[index % categoryTemplates.length];
+        const category = categoryById.get(template.id);
+        if (!category) break;
+        if (!Array.isArray(category.products)) {
+            category.products = [];
+        }
+
+        const localNumber = category.products.length + 1;
+        const product = generateProduct(template, localNumber, counter + 1);
+        category.products.push(product);
+
+        counter += 1;
+        index += 1;
+    }
+
+    return {
+        version: 3,
+        categories: existingCategories
+    };
+}
+
+function generateProduct(template, localNumber, absoluteNumber) {
+    const type = template.types[absoluteNumber % template.types.length];
+    const flavor = flavorPool[absoluteNumber % flavorPool.length];
+    const age = agePool[absoluteNumber % agePool.length];
+    const brand = brandPool[absoluteNumber % brandPool.length];
+    const image = IMAGE_POOL[absoluteNumber % IMAGE_POOL.length];
+    const basePrice = 320 + (absoluteNumber % 25) * 85 + localNumber * 9;
+    const weights = pickWeights(absoluteNumber);
+    const productId = `${template.id}-auto-${String(localNumber).padStart(3, "0")}`;
+    const title = `${template.name} ${brand} ${localNumber}`;
+
+    return {
+        id: productId,
+        name: title,
+        description: `Практичный товар: ${type.toLowerCase()}, вкус ${flavor.toLowerCase()}, серия ${Math.ceil(absoluteNumber / 5)}.`,
+        type,
+        flavor,
+        age,
+        brand,
+        price: basePrice,
+        weights,
+        images: [image]
+    };
+}
+
+function pickWeights(index) {
+    if (index % 4 === 0) return [100, 400];
+    if (index % 4 === 1) return [400, 1000];
+    if (index % 4 === 2) return [200, 800];
+    return [500, 1500];
+}
 </script>
 
 
 </body>
 </html>
+
