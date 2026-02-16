@@ -1205,6 +1205,36 @@ input:focus-visible {
     color: var(--color-accent);
 }
 
+.products-section {
+    margin-bottom: 40px;
+}
+
+.product-meta {
+    font-size: 12px;
+    color: var(--color-text-light);
+    margin-top: 6px;
+}
+
+.product-description {
+    font-size: 13px;
+    color: var(--color-text-light);
+    margin-top: 6px;
+}
+
+.products-empty {
+    display: none;
+    margin-bottom: 20px;
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    background: var(--color-card);
+    color: var(--color-text);
+    text-align: center;
+}
+
+.products-empty.is-visible {
+    display: block;
+}
+
 /* Responsive */
 
 @media (max-width: 1023px) {
