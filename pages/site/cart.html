@@ -241,6 +241,12 @@
             max-width: 400px;
         }
 
+        .product-weight {
+            margin-top: 4px;
+            font-size: 13px;
+            color: #61707f;
+        }
+
         .product-price {
             font-size: 18px;
             color: #2c3e50;
@@ -604,9 +610,14 @@ document.addEventListener("DOMContentLoaded", function () {
         let totalCount = 0;
 
         cart.forEach(item => {
+            const itemKey = getItemKey(item);
+            const qty = Math.max(1, Number(item.quantity) || 1);
+            const price = Math.max(0, Number(item.price) || 0);
+            const selectedWeight = Number(item.selectedWeight);
+            const hasWeight = Number.isFinite(selectedWeight) && selectedWeight > 0;
 
-            total += item.price * item.quantity;
-            totalCount += item.quantity;
+            total += price * qty;
+            totalCount += qty;
 
             const div = document.createElement("div");
             div.classList.add("cart-item");
@@ -618,16 +629,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <div class="product-info">
                     <div class="product-name">${item.name}</div>
+                    ${hasWeight ? `<div class="product-weight">Вес: ${selectedWeight} г</div>` : ""}
                 </div>
 
                 <div class="quantity-control">
                     <button class="qty-btn minus">-</button>
-                    <div class="qty-value">${item.quantity}</div>
+                    <div class="qty-value">${qty}</div>
                     <button class="qty-btn plus">+</button>
                 </div>
 
                 <div class="product-price">
-                    ${item.price * item.quantity} ₽
+                    ${formatPrice(price * qty)}
                 </div>
 
                 <button class="remove-btn">✕</button>
@@ -636,21 +648,21 @@ document.addEventListener("DOMContentLoaded", function () {
             // ===== обработчики =====
 
             div.querySelector(".plus").addEventListener("click", () => {
-                changeQuantity(item.id, 1);
+                changeQuantity(itemKey, 1);
             });
 
             div.querySelector(".minus").addEventListener("click", () => {
-                changeQuantity(item.id, -1);
+                changeQuantity(itemKey, -1);
             });
 
             div.querySelector(".remove-btn").addEventListener("click", () => {
-                removeFromCart(item.id);
+                removeFromCart(itemKey);
             });
 
             cartContainer.appendChild(div);
         });
 
-        totalElement.textContent = total + " руб";
+        totalElement.textContent = formatPrice(total);
         badge.textContent = totalCount;
 
         saveCart();
@@ -661,14 +673,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // =====================
     function changeQuantity(id, delta) {
 
-        const item = cart.find(item => item.id === id);
+        const item = cart.find(item => getItemKey(item) === id);
 
         if (!item) return;
 
-        item.quantity += delta;
+        item.quantity = (Number(item.quantity) || 1) + delta;
 
         if (item.quantity <= 0) {
-            cart = cart.filter(item => item.id !== id);
+            cart = cart.filter(item => getItemKey(item) !== id);
         }
 
         renderCart();
@@ -678,8 +690,19 @@ document.addEventListener("DOMContentLoaded", function () {
     // Удаление
     // =====================
     function removeFromCart(id) {
-        cart = cart.filter(item => item.id !== id);
+        cart = cart.filter(item => getItemKey(item) !== id);
         renderCart();
+    }
+
+    function getItemKey(item) {
+        if (item && item.id) return String(item.id);
+        if (item && item.baseId) return String(item.baseId);
+        return String(item?.name || "");
+    }
+
+    function formatPrice(value) {
+        const safeValue = Math.max(0, Number(value) || 0);
+        return `${new Intl.NumberFormat("ru-RU").format(safeValue)} ₽`;
     }
 
     // =====================

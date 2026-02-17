@@ -18,11 +18,29 @@
             <div class="modal-info">
                 <h2 id="modal-title"></h2>
                 <p id="modal-description"></p>
+                <p class="modal-meta" id="modal-meta"></p>
                 <p class="modal-price" id="modal-price"></p>
-                
-                <button class="btn btn-primary" id="add-to-cart">
-                    Добавить в корзину
-                </button>
+
+                <div class="modal-controls">
+                    <label class="modal-control-label" for="modal-weight">Вес</label>
+                    <select id="modal-weight" class="modal-weight-select"></select>
+
+                    <label class="modal-control-label">Количество</label>
+                    <div class="card-qty-control">
+                        <button type="button" class="card-qty-btn" id="modal-qty-minus" aria-label="Уменьшить количество">-</button>
+                        <span class="card-qty-value" id="modal-qty-value">1</span>
+                        <button type="button" class="card-qty-btn" id="modal-qty-plus" aria-label="Увеличить количество">+</button>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="add-to-cart">
+                        Добавить в корзину
+                    </button>
+                    <button type="button" class="btn btn-outline" id="add-to-favorites">
+                        В избранное
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -312,16 +330,25 @@ const modal = document.getElementById("product-modal");
 const modalImage = document.getElementById("modal-image");
 const modalTitle = document.getElementById("modal-title");
 const modalDescription = document.getElementById("modal-description");
+const modalMeta = document.getElementById("modal-meta");
 const modalPrice = document.getElementById("modal-price");
+const modalWeight = document.getElementById("modal-weight");
+const modalQtyValue = document.getElementById("modal-qty-value");
+const modalQtyMinus = document.getElementById("modal-qty-minus");
+const modalQtyPlus = document.getElementById("modal-qty-plus");
 const addToCartBtn = document.getElementById("add-to-cart");
+const addToFavoritesBtn = document.getElementById("add-to-favorites");
 const closeBtn = document.querySelector(".modal-close");
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let favorites = new Set(readFavorites());
 let allProducts = [];
 let filteredProducts = [];
 let currentPage = 1;
 let pageSize = Number(pageSizeSelect?.value || 15);
 let currentProduct = null;
+let currentModalQty = 1;
+const cardStateByKey = new Map();
 let filtersOpen = false;
 let wasCompactLayout = false;
 
@@ -391,7 +418,60 @@ function initCatalogPage() {
         const product = allProducts.find((item) => item.key === key);
         if (!product) return;
 
+        const actionButton = target.closest("button[data-action]");
+        if (actionButton instanceof HTMLElement) {
+            const action = String(actionButton.dataset.action || "");
+            if (action === "toggle-favorite") {
+                event.preventDefault();
+                toggleFavorite(product.id);
+                renderProducts();
+                return;
+            }
+
+            if (action === "qty-minus" || action === "qty-plus") {
+                event.preventDefault();
+                const delta = action === "qty-plus" ? 1 : -1;
+                changeCardQuantity(product, delta);
+                renderProducts();
+                return;
+            }
+
+            if (action === "add-to-cart") {
+                event.preventDefault();
+                const state = ensureCardState(product);
+                addProductToCart(product, state.quantity, state.weight);
+                return;
+            }
+
+            if (action === "open-modal") {
+                event.preventDefault();
+                openModal(product);
+                return;
+            }
+        }
+
+        if (target.closest(".card-control")) {
+            return;
+        }
+
         openModal(product);
+    });
+    grid.addEventListener("change", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLSelectElement)) return;
+        if (!target.classList.contains("card-weight-select")) return;
+
+        const card = target.closest(".product-card");
+        if (!card) return;
+
+        const key = card.dataset.key || "";
+        const product = allProducts.find((item) => item.key === key);
+        if (!product) return;
+
+        const parsedWeight = Number(target.value);
+        const state = ensureCardState(product);
+        state.weight = Number.isFinite(parsedWeight) && parsedWeight > 0 ? parsedWeight : null;
+        cardStateByKey.set(product.key, state);
     });
 
     pagination.addEventListener("click", (event) => {
@@ -417,22 +497,28 @@ function initCatalogPage() {
         }
     });
 
+    modalQtyMinus?.addEventListener("click", () => updateModalQty(-1));
+    modalQtyPlus?.addEventListener("click", () => updateModalQty(1));
+
     addToCartBtn.addEventListener("click", () => {
         if (!currentProduct) return;
-
-        const existing = cart.find((item) => item.id === currentProduct.id);
-        if (existing) {
-            existing.quantity += 1;
-        } else {
-            cart.push({ ...currentProduct, quantity: 1 });
-        }
-
-        localStorage.setItem("cart", JSON.stringify(cart));
+        const selectedWeight = normalizeSelectedWeight(currentProduct, Number(modalWeight?.value));
+        const state = ensureCardState(currentProduct);
+        state.weight = selectedWeight;
+        state.quantity = currentModalQty;
+        cardStateByKey.set(currentProduct.key, state);
+        addProductToCart(currentProduct, currentModalQty, selectedWeight);
         closeModal();
-        alert("Товар добавлен в корзину");
+    });
+    addToFavoritesBtn?.addEventListener("click", () => {
+        if (!currentProduct) return;
+        toggleFavorite(currentProduct.id);
+        updateModalFavoriteButton(currentProduct.id);
+        renderProducts();
     });
 
     applyFilters();
+    openProductFromHash();
 }
 
 function initFiltersToggle() {
@@ -668,6 +754,8 @@ function createProductCard(product) {
     const card = document.createElement("div");
     card.className = "product-card";
     card.dataset.key = product.key;
+    const state = ensureCardState(product);
+    const isFavorite = favorites.has(product.id);
 
     const image = document.createElement("img");
     image.src = product.image;
@@ -693,6 +781,90 @@ function createProductCard(product) {
     price.className = "price";
     price.textContent = formatPrice(product.price);
 
+    const controls = document.createElement("div");
+    controls.className = "product-card-controls";
+
+    const topRow = document.createElement("div");
+    topRow.className = "product-controls-top";
+
+    const weightSelect = document.createElement("select");
+    weightSelect.className = "card-weight-select card-control";
+    weightSelect.setAttribute("aria-label", `Вес товара ${product.name}`);
+    if (product.weights.length) {
+        product.weights.forEach((weight) => {
+            const option = document.createElement("option");
+            option.value = String(weight);
+            option.textContent = `${weight} г`;
+            weightSelect.appendChild(option);
+        });
+        if (state.weight) {
+            weightSelect.value = String(state.weight);
+        }
+    } else {
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "Вес не указан";
+        weightSelect.appendChild(option);
+        weightSelect.disabled = true;
+    }
+
+    const favoriteBtn = document.createElement("button");
+    favoriteBtn.type = "button";
+    favoriteBtn.className = `favorite-btn card-control${isFavorite ? " is-active" : ""}`;
+    favoriteBtn.dataset.action = "toggle-favorite";
+    favoriteBtn.setAttribute("aria-label", isFavorite ? "Убрать из избранного" : "Добавить в избранное");
+    favoriteBtn.textContent = "♥";
+
+    topRow.appendChild(weightSelect);
+    topRow.appendChild(favoriteBtn);
+
+    const bottomRow = document.createElement("div");
+    bottomRow.className = "product-controls-bottom";
+
+    const qtyControl = document.createElement("div");
+    qtyControl.className = "card-qty-control";
+
+    const qtyMinus = document.createElement("button");
+    qtyMinus.type = "button";
+    qtyMinus.className = "card-qty-btn";
+    qtyMinus.dataset.action = "qty-minus";
+    qtyMinus.setAttribute("aria-label", "Уменьшить количество");
+    qtyMinus.textContent = "-";
+
+    const qtyValue = document.createElement("span");
+    qtyValue.className = "card-qty-value";
+    qtyValue.textContent = String(state.quantity);
+
+    const qtyPlus = document.createElement("button");
+    qtyPlus.type = "button";
+    qtyPlus.className = "card-qty-btn";
+    qtyPlus.dataset.action = "qty-plus";
+    qtyPlus.setAttribute("aria-label", "Увеличить количество");
+    qtyPlus.textContent = "+";
+
+    qtyControl.appendChild(qtyMinus);
+    qtyControl.appendChild(qtyValue);
+    qtyControl.appendChild(qtyPlus);
+
+    const addButton = document.createElement("button");
+    addButton.type = "button";
+    addButton.className = "btn btn-primary card-add-btn";
+    addButton.dataset.action = "add-to-cart";
+    addButton.textContent = "В корзину";
+
+    const detailsButton = document.createElement("button");
+    detailsButton.type = "button";
+    detailsButton.className = "btn btn-outline card-details-btn";
+    detailsButton.dataset.action = "open-modal";
+    detailsButton.textContent = "Подробнее";
+
+    bottomRow.appendChild(qtyControl);
+    bottomRow.appendChild(addButton);
+    bottomRow.appendChild(detailsButton);
+
+    controls.appendChild(topRow);
+    controls.appendChild(bottomRow);
+
     card.appendChild(image);
     card.appendChild(title);
     if (meta.textContent) {
@@ -700,6 +872,7 @@ function createProductCard(product) {
     }
     card.appendChild(description);
     card.appendChild(price);
+    card.appendChild(controls);
 
     return card;
 }
@@ -760,15 +933,63 @@ function renderPagination() {
 
 function openModal(product) {
     currentProduct = product;
+    currentModalQty = 1;
     modalImage.src = product.image;
     modalTitle.textContent = product.name;
     modalDescription.textContent = product.description;
+    modalMeta.textContent = [
+        product.categoryName ? `Категория: ${product.categoryName}` : "",
+        product.type ? `Тип: ${product.type}` : "",
+        product.flavor ? `Вкус: ${product.flavor}` : "",
+        product.age ? `Возраст: ${product.age}` : "",
+        product.brand ? `Бренд: ${product.brand}` : ""
+    ]
+        .filter(Boolean)
+        .join(" • ");
     modalPrice.textContent = formatPrice(product.price);
+    fillModalWeights(product);
+    syncModalQty();
+    updateModalFavoriteButton(product.id);
     modal.classList.add("active");
 }
 
 function closeModal() {
     modal.classList.remove("active");
+}
+
+function fillModalWeights(product) {
+    if (!modalWeight) return;
+
+    modalWeight.innerHTML = "";
+    if (!product.weights.length) {
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "Вес не указан";
+        modalWeight.appendChild(option);
+        modalWeight.disabled = true;
+        return;
+    }
+
+    const state = ensureCardState(product);
+    product.weights.forEach((weight) => {
+        const option = document.createElement("option");
+        option.value = String(weight);
+        option.textContent = `${weight} г`;
+        modalWeight.appendChild(option);
+    });
+    modalWeight.disabled = false;
+    modalWeight.value = String(state.weight || product.weights[0]);
+}
+
+function updateModalQty(delta) {
+    currentModalQty = Math.max(1, Math.min(99, currentModalQty + delta));
+    syncModalQty();
+}
+
+function syncModalQty() {
+    if (modalQtyValue) {
+        modalQtyValue.textContent = String(currentModalQty);
+    }
 }
 
 function formatPrice(value) {
@@ -802,6 +1023,110 @@ function resetFilters() {
     pageSize = 15;
     currentPage = 1;
     applyFilters();
+}
+
+function readFavorites() {
+    try {
+        const raw = localStorage.getItem("favorites");
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed.map((item) => String(item)) : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveFavorites() {
+    localStorage.setItem("favorites", JSON.stringify([...favorites]));
+}
+
+function toggleFavorite(productId) {
+    const id = String(productId || "").trim();
+    if (!id) return;
+
+    if (favorites.has(id)) {
+        favorites.delete(id);
+    } else {
+        favorites.add(id);
+    }
+
+    saveFavorites();
+}
+
+function updateModalFavoriteButton(productId) {
+    if (!addToFavoritesBtn) return;
+    const active = favorites.has(String(productId || ""));
+    addToFavoritesBtn.textContent = active ? "Убрать из избранного" : "В избранное";
+}
+
+function ensureCardState(product) {
+    const existing = cardStateByKey.get(product.key);
+    if (existing) return existing;
+
+    const next = {
+        quantity: 1,
+        weight: product.weights.length ? product.weights[0] : null
+    };
+    cardStateByKey.set(product.key, next);
+    return next;
+}
+
+function changeCardQuantity(product, delta) {
+    const state = ensureCardState(product);
+    state.quantity = Math.max(1, Math.min(99, state.quantity + delta));
+    cardStateByKey.set(product.key, state);
+}
+
+function normalizeSelectedWeight(product, maybeWeight) {
+    if (!product.weights.length) return null;
+    const numeric = Number(maybeWeight);
+    if (Number.isFinite(numeric) && product.weights.includes(numeric)) {
+        return numeric;
+    }
+    return product.weights[0];
+}
+
+function makeCartItemId(productId, selectedWeight) {
+    if (!selectedWeight) return String(productId);
+    return `${productId}::${selectedWeight}`;
+}
+
+function addProductToCart(product, quantity, selectedWeight) {
+    const safeQty = Math.max(1, Math.min(99, Number(quantity) || 1));
+    const normalizedWeight = normalizeSelectedWeight(product, selectedWeight);
+    const cartItemId = makeCartItemId(product.id, normalizedWeight);
+    const existing = cart.find((item) => item.id === cartItemId);
+
+    if (existing) {
+        existing.quantity += safeQty;
+    } else {
+        cart.push({
+            id: cartItemId,
+            baseId: product.id,
+            key: product.key,
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            image: product.image,
+            quantity: safeQty,
+            selectedWeight: normalizedWeight
+        });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("Товар добавлен в корзину");
+}
+
+function openProductFromHash() {
+    const hash = String(window.location.hash || "");
+    if (!hash.startsWith("#product=")) return;
+
+    const productId = decodeURIComponent(hash.slice("#product=".length)).trim();
+    if (!productId) return;
+
+    const product = allProducts.find((item) => item.id === productId);
+    if (!product) return;
+
+    openModal(product);
 }
 
 function sortProducts(items, mode) {

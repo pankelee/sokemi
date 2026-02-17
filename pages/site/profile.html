@@ -115,6 +115,52 @@
     font-size: 12px;
 }
 
+.favorites-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.favorite-row {
+    display: grid;
+    grid-template-columns: 88px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    background: rgba(255,255,255,0.2);
+    border-radius: 18px;
+    padding: 10px;
+}
+
+.favorite-thumb {
+    width: 88px;
+    height: 88px;
+    border-radius: 14px;
+    object-fit: cover;
+    background: rgba(255,255,255,0.75);
+}
+
+.favorite-title {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.favorite-meta {
+    margin: 0;
+    opacity: 0.95;
+    font-size: 13px;
+}
+
+.favorite-link {
+    min-width: 120px;
+    text-align: center;
+}
+
+.favorites-empty {
+    margin: 0;
+    opacity: 0.95;
+}
+
 /* HIDE TABS */
 .hidden {
     display: none;
@@ -128,6 +174,30 @@
 
     .profile-layout {
         grid-template-columns: 1fr;
+    }
+
+    .profile-content {
+        padding: 32px 24px;
+    }
+}
+
+@media (max-width: 639px) {
+    .profile-sidebar {
+        padding: 28px 20px;
+    }
+
+    .favorite-row {
+        grid-template-columns: 72px 1fr;
+    }
+
+    .favorite-thumb {
+        width: 72px;
+        height: 72px;
+    }
+
+    .favorite-link {
+        grid-column: 1 / -1;
+        width: 100%;
     }
 }
 
@@ -222,6 +292,7 @@
             <div class="profile-menu">
                 <button class="tab-btn active" data-tab="info">Личные данные</button>
                 <button class="tab-btn" data-tab="orders">История заказов</button>
+                <button class="tab-btn" data-tab="favorites">Избранное</button>
                 <button class="tab-btn" data-tab="settings">Настройки</button>
             </div>
 
@@ -269,6 +340,14 @@
                 </div>
             </div>
 
+            <div id="favorites" class="tab-content hidden">
+                <div class="profile-card">
+                    <h3>Избранные товары</h3>
+                    <div class="favorites-list" id="favorites-list"></div>
+                    <p class="favorites-empty hidden" id="favorites-empty">Пока нет избранных товаров. Добавьте их в каталоге через сердечко.</p>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -285,6 +364,11 @@
 <script>
 const buttons = document.querySelectorAll('.tab-btn');
 const tabs = document.querySelectorAll('.tab-content');
+const favoritesList = document.getElementById('favorites-list');
+const favoritesEmpty = document.getElementById('favorites-empty');
+
+const CATALOG_STORAGE_KEY = 'sokemi.catalog.v2';
+const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><rect width='100%' height='100%' fill='%23e5e2d3'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23666' font-family='Arial' font-size='20'>No Image</text></svg>";
 
 buttons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -295,6 +379,120 @@ buttons.forEach(btn => {
         document.getElementById(btn.dataset.tab).classList.remove('hidden');
     });
 });
+
+renderFavorites();
+
+function renderFavorites() {
+    if (!favoritesList || !favoritesEmpty) return;
+
+    const favoriteIds = readFavoriteIds();
+    const items = findFavoriteProducts(favoriteIds);
+
+    favoritesList.innerHTML = '';
+    favoritesEmpty.classList.add('hidden');
+
+    if (!items.length) {
+        favoritesEmpty.classList.remove('hidden');
+        return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    items.forEach((item) => {
+        const row = document.createElement('article');
+        row.className = 'favorite-row';
+        row.innerHTML = `
+            <img class="favorite-thumb" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}">
+            <div>
+                <p class="favorite-title">${escapeHtml(item.name)}</p>
+                <p class="favorite-meta">${escapeHtml(item.meta)}</p>
+            </div>
+            <a class="btn btn-outline favorite-link" href="/pages/site/catalogue.html#product=${encodeURIComponent(item.id)}">Перейти к товару</a>
+        `;
+        fragment.appendChild(row);
+    });
+
+    favoritesList.appendChild(fragment);
+}
+
+function readFavoriteIds() {
+    try {
+        const raw = localStorage.getItem('favorites');
+        const parsed = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(parsed)) return [];
+        return parsed.map((item) => String(item || '').trim()).filter(Boolean);
+    } catch {
+        return [];
+    }
+}
+
+function findFavoriteProducts(favoriteIds) {
+    const ids = new Set(favoriteIds);
+    if (!ids.size) return [];
+
+    const products = readCatalogProducts();
+    return products
+        .filter((item) => ids.has(item.id))
+        .map((item) => ({
+            id: item.id,
+            name: item.name,
+            image: item.image,
+            meta: `${item.categoryName ? `Категория: ${item.categoryName}` : 'Категория: не указана'} • ${formatPrice(item.price)}`
+        }));
+}
+
+function readCatalogProducts() {
+    try {
+        const raw = localStorage.getItem(CATALOG_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : null;
+        const categories = Array.isArray(parsed?.categories) ? parsed.categories : [];
+        const items = [];
+
+        categories.forEach((category) => {
+            const categoryName = String(category?.name || '').trim();
+            const categoryImage = String(category?.imageUrl || '').trim();
+            const products = Array.isArray(category?.products) ? category.products : [];
+
+            products.forEach((product, index) => {
+                const id = String(product?.id || `prod-${index + 1}`).trim();
+                const image = pickProductImage(product, categoryImage);
+                items.push({
+                    id,
+                    name: String(product?.name || 'Товар без названия').trim(),
+                    price: Number(product?.price) || 0,
+                    categoryName,
+                    image
+                });
+            });
+        });
+
+        return items;
+    } catch {
+        return [];
+    }
+}
+
+function pickProductImage(product, categoryImage) {
+    if (Array.isArray(product?.images) && product.images.length) {
+        const first = String(product.images[0] || '').trim();
+        if (first) return first;
+    }
+
+    return categoryImage || PLACEHOLDER_IMAGE;
+}
+
+function formatPrice(value) {
+    const safe = Math.max(0, Number(value) || 0);
+    return `${new Intl.NumberFormat('ru-RU').format(safe)} ₽`;
+}
+
+function escapeHtml(value) {
+    return String(value || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+}
 </script>
 
 </body>
