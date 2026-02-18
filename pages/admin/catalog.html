@@ -15,7 +15,8 @@
         <h2 class="menu-group-title">Разделы</h2>
         <ul class="menu">
           <!-- <li><a href="#">Главная</a></li> -->
-          <li><a class="active" href="#">Каталог</a></li>
+          <li><a class="active" href="#" data-tab="catalog">Каталог</a></li>
+                  <li><a href="#" data-tab="orders">Заказы</a></li>
         </ul>
       </section>
 
@@ -26,14 +27,21 @@
     </aside>
 
     <main class="content">
-      <div class="content-header">Каталог</div>
+      <div class="content-header" id="contentTitle">Каталог</div>
 
+      <section class="admin-tab" id="tab-catalog">
       <section class="catalog-block" aria-label="Категории">
         <h2 class="catalog-title">Категории</h2>
 
         <button class="add-category-btn" type="button">+ Добавить категорию</button>
 
         <div class="category-list" id="categoryList"></div>
+      </section>
+      </section>
+
+      <section class="admin-tab hidden" id="tab-orders">
+        <h2 class="catalog-title">Заказы</h2>
+        <div class="orders-list" id="ordersList"></div>
       </section>
     </main>
   </div>

@@ -52,6 +52,24 @@ export const DEFAULT_CATALOG = {
           images: ["../../images/2de8c9e1e57e6d43e982767fddffdd62.jpg"]
         }
       ]
+    },
+    {
+      id: "cat-other",
+      name: "Другое",
+      imageUrl: "../../images/defc504c9951b4ffe1c63f8acd032daa.png",
+      products: [
+        {
+          id: "prod-other-1",
+          name: "Лежанка",
+          description: "Мягкая лежанка с бортиками для сна.",
+          type: "Другое",
+          flavor: "",
+          age: "Для всех возрастов",
+          price: 1890,
+          weights: [1000],
+          images: ["../../images/6bb2d6416478086488069231c055085a.jpg"]
+        }
+      ]
     }
   ]
 };

@@ -429,6 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let favorites = readFavoriteIds();
     let products = readCatalogProducts();
+    const favoritesMeta = readFavoritesMeta();
 
     list.addEventListener("click", (event) => {
         const target = event.target;
@@ -450,7 +451,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!favorites.length) return;
         favorites = [];
         saveFavorites();
+        saveFavoritesMeta({});
         render();
+        if (typeof showNotification === "function") {
+            showNotification("Избранное очищено", "info");
+        }
     });
 
     render();
@@ -510,7 +515,14 @@ document.addEventListener("DOMContentLoaded", () => {
     function removeFavorite(id) {
         favorites = favorites.filter((itemId) => itemId !== id);
         saveFavorites();
+        if (favoritesMeta[id]) {
+            delete favoritesMeta[id];
+            saveFavoritesMeta(favoritesMeta);
+        }
         render();
+        if (typeof showNotification === "function") {
+            showNotification("Удалено из избранного", "info");
+        }
     }
 
     function readFavoriteIds() {
@@ -528,17 +540,33 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("favorites", JSON.stringify(favorites));
     }
 
+function readFavoritesMeta() {
+        try {
+            const raw = localStorage.getItem("favorites.meta");
+            const parsed = raw ? JSON.parse(raw) : {};
+            return parsed && typeof parsed === "object" ? parsed : {};
+        } catch {
+            return {};
+        }
+    }
+
+function saveFavoritesMeta(meta) {
+        localStorage.setItem("favorites.meta", JSON.stringify(meta || {}));
+    }
+
     function findFavoriteProducts(favoriteIds, productsList) {
         const lookup = new Map(productsList.map((item) => [item.id, item]));
         return favoriteIds
-            .map((id) => lookup.get(id))
+            .map((id) => lookup.get(id) || favoritesMeta[id])
             .filter(Boolean)
             .map((item) => ({
                 id: item.id,
                 name: item.name,
                 image: item.image,
                 price: item.price,
-                meta: `${item.categoryName ? `Категория: ${item.categoryName}` : "Категория: не указана"}`
+                meta: item.meta
+                     ? item.meta
+                    : `${item.categoryName ? `Категория: ${item.categoryName}` : "Категория: не указана"}`
             }));
     }
 

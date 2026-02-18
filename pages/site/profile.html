@@ -104,6 +104,7 @@
     border-radius: 20px;
     margin-bottom: 15px;
     backdrop-filter: blur(4px);
+    cursor: pointer;
 }
 
 .order-status {
@@ -113,6 +114,76 @@
     padding: 4px 10px;
     border-radius: 20px;
     font-size: 12px;
+}
+
+.order-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.order-modal.active {
+    display: flex;
+}
+
+.order-modal-card {
+    background: white;
+    color: #2b2b2b;
+    border-radius: 20px;
+    width: min(720px, 100%);
+    max-height: 80vh;
+    overflow: auto;
+    padding: 24px;
+    box-shadow: var(--shadow-lg);
+}
+
+.order-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.order-modal-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+}
+
+.order-modal-close {
+    border: none;
+    background: #eef1f6;
+    border-radius: 12px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.order-modal-section {
+    margin-bottom: 16px;
+}
+
+.order-items-list {
+    display: grid;
+    gap: 10px;
+}
+
+.order-item-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    border: 1px solid #e6e6e6;
+    border-radius: 12px;
+    padding: 10px 12px;
+}
+
+.order-item-row strong {
+    display: block;
+    margin-bottom: 4px;
 }
 
 /* HIDE TABS */
@@ -218,6 +289,15 @@
 </div>
 <div class="mobile-overlay"></div>
 
+<div class="order-modal" id="order-modal" aria-hidden="true">
+    <div class="order-modal-card" role="dialog" aria-modal="true" aria-labelledby="order-modal-title">
+        <div class="order-modal-header">
+            <div class="order-modal-title" id="order-modal-title">Детали заказа</div>
+            <button type="button" class="order-modal-close" id="order-modal-close">Закрыть</button>
+        </div>
+        <div id="order-modal-content"></div>
+    </div>
+</div>
 
 <main class="main">
 
@@ -263,22 +343,7 @@
             <div id="orders" class="tab-content hidden">
                 <div class="profile-card">
                     <h3>История заказов</h3>
-
-                    <div class="order-item">
-                        Заказ №1042 — Когтеточка
-                        <span class="order-status">Доставлен</span>
-                    </div>
-
-                    <div class="order-item">
-                        Заказ №1051 — Корм Royal Canin
-                        <span class="order-status">В пути</span>
-                    </div>
-
-                    <div class="order-item">
-                        Заказ №1063 — Игрушки
-                        <span class="order-status">Обработка</span>
-                    </div>
-
+                    <div id="orders-list"></div>
                 </div>
             </div>
 
@@ -371,6 +436,127 @@ buttons.forEach(btn => {
         tabs.forEach(tab => tab.classList.add('hidden'));
         document.getElementById(btn.dataset.tab).classList.remove('hidden');
     });
+});
+
+
+function renderOrders() {
+    const list = document.getElementById("orders-list");
+    if (!list) return;
+
+    let orders = [];
+    try {
+        const raw = localStorage.getItem("sokemi.orders");
+        const parsed = raw ? JSON.parse(raw) : [];
+        orders = Array.isArray(parsed) ? parsed : [];
+    } catch {
+        orders = [];
+    }
+
+    if (!orders.length) {
+        list.innerHTML = '<p>Заказов пока нет</p>';
+        return;
+    }
+
+    list.innerHTML = orders
+        .map((order) => {
+            const itemsCount = Array.isArray(order.items) ? order.items.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0) : 0;
+            const total = Number(order.total) || 0;
+            const status = order.status || "Обработка";
+            return `
+                <div class="order-item" data-order-id="${order.id}">
+                    Заказ №${order.id} — ${itemsCount} товаров на ${new Intl.NumberFormat("ru-RU").format(total)} ₽
+                    <span class="order-status">${status}</span>
+                </div>
+            `;
+        })
+        .join("");
+}
+
+renderOrders();
+
+const ordersList = document.getElementById("orders-list");
+const orderModal = document.getElementById("order-modal");
+const orderModalContent = document.getElementById("order-modal-content");
+const orderModalClose = document.getElementById("order-modal-close");
+
+function readOrders() {
+    try {
+        const raw = localStorage.getItem("sokemi.orders");
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+}
+
+function openOrderModal(order) {
+    if (!orderModal || !orderModalContent) return;
+    const items = Array.isArray(order.items) ? order.items : [];
+    const total = Number(order.total) || 0;
+    const createdAt = order.createdAt ? new Date(order.createdAt) : null;
+    const dateText = createdAt && !Number.isNaN(createdAt.getTime())
+        ? createdAt.toLocaleString("ru-RU")
+        : "—";
+
+    orderModalContent.innerHTML = `
+        <div class="order-modal-section">
+            <strong>Статус:</strong> ${order.status || "Обработка"}
+        </div>
+        <div class="order-modal-section">
+            <strong>Дата:</strong> ${dateText}
+        </div>
+        <div class="order-modal-section">
+            <strong>Контакты:</strong> ${order.customer?.name || "—"}, ${order.customer?.phone || "—"}, ${order.customer?.email || "—"}
+        </div>
+        <div class="order-modal-section">
+            <strong>Адрес:</strong> ${order.customer?.address || "—"}
+        </div>
+        <div class="order-modal-section">
+            <strong>Состав заказа:</strong>
+            <div class="order-items-list">
+                ${items.map((item) => `
+                    <div class="order-item-row">
+                        <div>
+                            <strong>${item.name || "Товар"}</strong>
+                            Кол-во: ${Number(item.quantity) || 1}
+                        </div>
+                        <div>${new Intl.NumberFormat("ru-RU").format((Number(item.price) || 0) * (Number(item.quantity) || 1))} ₽</div>
+                    </div>
+                `).join("")}
+            </div>
+        </div>
+        <div class="order-modal-section">
+            <strong>Итого:</strong> ${new Intl.NumberFormat("ru-RU").format(total)} ₽
+        </div>
+    `;
+    orderModal.classList.add("active");
+    orderModal.setAttribute("aria-hidden", "false");
+}
+
+function closeOrderModal() {
+    if (!orderModal) return;
+    orderModal.classList.remove("active");
+    orderModal.setAttribute("aria-hidden", "true");
+}
+
+ordersList?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const item = target.closest(".order-item");
+    if (!item) return;
+    const id = item.getAttribute("data-order-id");
+    if (!id) return;
+    const orders = readOrders();
+    const order = orders.find((o) => o.id === id);
+    if (order) openOrderModal(order);
+});
+
+orderModalClose?.addEventListener("click", closeOrderModal);
+orderModal?.addEventListener("click", (event) => {
+    if (event.target === orderModal) closeOrderModal();
+});
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeOrderModal();
 });
 </script>
 

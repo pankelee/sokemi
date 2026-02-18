@@ -27,6 +27,11 @@ let expandedCategoryIds = new Set(catalog.categories.map((category) => category.
 
 const categoryList = document.getElementById("categoryList");
 const addCategoryButton = document.querySelector(".add-category-btn");
+const ordersList = document.getElementById("ordersList");
+const contentTitle = document.getElementById("contentTitle");
+const tabLinks = Array.from(document.querySelectorAll(".menu a[data-tab]"));
+const tabCatalog = document.getElementById("tab-catalog");
+const tabOrders = document.getElementById("tab-orders");
 
 const modals = {
   delete: document.getElementById("deleteModal"),
@@ -66,6 +71,9 @@ const addWeightInput = document.getElementById("addWeightInput");
 let deleteState = null;
 let categoryEditorState = null;
 let productEditorState = null;
+
+const ORDER_STATUSES = ["Обработка", "В пути", "Доставлено"];
+const ORDERS_KEY = "sokemi.orders";
 
 function createId(prefix) {
   if (window.crypto && typeof window.crypto.randomUUID === "function") {
@@ -228,6 +236,125 @@ function renderCategory(category) {
 function renderCatalog() {
   categoryList.innerHTML = catalog.categories.map(renderCategory).join("");
   bindAccordions();
+}
+
+function readOrders() {
+  try {
+    const raw = localStorage.getItem(ORDERS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveOrders(orders) {
+  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+}
+
+function updateOrderById(orderId, updater) {
+  const orders = readOrders();
+  const next = orders.map((order) => (order.id === orderId ? updater(order) : order));
+  saveOrders(next);
+  renderOrders();
+}
+
+function normalizeOrderItems(items) {
+  const safeItems = Array.isArray(items) ? items : [];
+  return safeItems.map((item) => ({
+    id: String(item?.id || ""),
+    name: String(item?.name || "Товар"),
+    quantity: Math.max(1, Number(item?.quantity) || 1),
+    price: Math.max(0, Number(item?.price) || 0),
+    image: String(item?.image || "")
+  }));
+}
+
+function calcOrderTotal(items) {
+  return normalizeOrderItems(items).reduce((sum, item) => sum + item.quantity * item.price, 0);
+}
+
+function renderOrders() {
+  if (!ordersList) return;
+
+  const orders = readOrders();
+  if (!orders.length) {
+    ordersList.innerHTML = "<p>Заказов пока нет</p>";
+    return;
+  }
+
+  ordersList.innerHTML = orders
+    .map((order) => {
+      const itemsCount = Array.isArray(order.items)
+        ? order.items.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0)
+        : 0;
+      const total = Number(order.total) || 0;
+      const status = order.status || "Обработка";
+      const customer = order.customer || {};
+      const items = Array.isArray(order.items) ? order.items : [];
+      const options = ORDER_STATUSES.map(
+        (value) => `<option value="${value}" ${value === status ? "selected" : ""}>${value}</option>`
+      ).join("");
+
+      return `
+        <div class="order-row">
+          <div>
+            <h4>Заказ №${order.id}</h4>
+            <p>Клиент: ${escapeHtml(customer.name || "Не указан")}</p>
+            <p>Телефон: ${escapeHtml(customer.phone || "Не указан")}</p>
+            <p>Товаров: ${itemsCount} • Сумма: ${new Intl.NumberFormat("ru-RU").format(total)} ₽</p>
+            <div class="order-items-edit" data-order-id="${order.id}">
+              ${items
+                .map(
+                  (item, index) => `
+                  <div class="order-item-edit" data-item-index="${index}">
+                    <input type="text" class="order-item-name" value="${escapeHtml(item.name || "Товар")}">
+                    <input type="number" class="order-item-qty" min="1" value="${Number(item.quantity) || 1}">
+                    <input type="number" class="order-item-price" min="0" value="${Number(item.price) || 0}">
+                    <button type="button" class="btn btn-danger order-item-remove">Удалить</button>
+                  </div>
+                `
+                )
+                .join("")}
+              <button type="button" class="btn order-item-add">+ Добавить товар</button>
+            </div>
+          </div>
+          <div>
+            <label for="status-${order.id}">Статус</label>
+            <select class="order-status-select" id="status-${order.id}" data-order-id="${order.id}">
+              ${options}
+            </select>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+}
+
+function switchTab(target) {
+  const isOrders = target === "orders";
+  tabCatalog?.classList.toggle("hidden", isOrders);
+  tabOrders?.classList.toggle("hidden", !isOrders);
+  if (contentTitle) {
+    contentTitle.textContent = isOrders ? "Заказы" : "Каталог";
+  }
+  if (isOrders) {
+    renderOrders();
+  }
+}
+
+function initTabs() {
+  if (!tabLinks.length) return;
+  tabLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      const target = link.getAttribute("data-tab");
+      if (!target) return;
+      tabLinks.forEach((item) => item.classList.remove("active"));
+      link.classList.add("active");
+      switchTab(target);
+    });
+  });
 }
 
 function bindAccordions() {
@@ -638,4 +765,77 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+ordersList?.addEventListener("change", (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLSelectElement)) return;
+  const orderId = String(target.dataset.orderId || "");
+  if (!orderId) return;
+  const nextStatus = String(target.value || "");
+  if (!ORDER_STATUSES.includes(nextStatus)) return;
+
+  updateOrderById(orderId, (order) => ({ ...order, status: nextStatus }));
+});
+
+ordersList?.addEventListener("click", (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLElement)) return;
+
+  const wrapper = target.closest(".order-items-edit");
+  if (!(wrapper instanceof HTMLElement)) return;
+  const orderId = String(wrapper.dataset.orderId || "");
+  if (!orderId) return;
+
+  if (target.classList.contains("order-item-add")) {
+    updateOrderById(orderId, (order) => {
+      const items = normalizeOrderItems(order.items);
+      items.push({ id: "", name: "Новый товар", quantity: 1, price: 0, image: "" });
+      return { ...order, items, total: calcOrderTotal(items) };
+    });
+    return;
+  }
+
+  if (target.classList.contains("order-item-remove")) {
+    const itemRow = target.closest(".order-item-edit");
+    if (!itemRow) return;
+    const index = Number(itemRow.getAttribute("data-item-index"));
+    if (!Number.isInteger(index)) return;
+    updateOrderById(orderId, (order) => {
+      const items = normalizeOrderItems(order.items).filter((_, idx) => idx !== index);
+      return { ...order, items, total: calcOrderTotal(items) };
+    });
+  }
+});
+
+ordersList?.addEventListener("input", (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLElement)) return;
+  const row = target.closest(".order-item-edit");
+  if (!row) return;
+  const wrapper = target.closest(".order-items-edit");
+  if (!(wrapper instanceof HTMLElement)) return;
+  const orderId = String(wrapper.dataset.orderId || "");
+  const index = Number(row.getAttribute("data-item-index"));
+  if (!orderId || !Number.isInteger(index)) return;
+
+  const nameInput = row.querySelector(".order-item-name");
+  const qtyInput = row.querySelector(".order-item-qty");
+  const priceInput = row.querySelector(".order-item-price");
+  if (!(nameInput instanceof HTMLInputElement)) return;
+  if (!(qtyInput instanceof HTMLInputElement)) return;
+  if (!(priceInput instanceof HTMLInputElement)) return;
+
+  updateOrderById(orderId, (order) => {
+    const items = normalizeOrderItems(order.items);
+    if (!items[index]) return order;
+    items[index] = {
+      ...items[index],
+      name: String(nameInput.value || "Товар"),
+      quantity: Math.max(1, Number(qtyInput.value) || 1),
+      price: Math.max(0, Number(priceInput.value) || 0)
+    };
+    return { ...order, items, total: calcOrderTotal(items) };
+  });
+});
+
+initTabs();
 renderCatalog();

@@ -195,10 +195,12 @@ function initHomeProductCards() {
     const cards = document.querySelectorAll(".product-card");
     if (!cards.length) return;
 
+    const catalogProducts = readCatalogProductsSafe();
     const favorites = readFavoritesSafe();
+    const favoritesMeta = readFavoritesMeta();
 
     cards.forEach((card, index) => {
-        const product = buildHomeProductFromCard(card, index);
+        const product = buildHomeProductFromCard(card, index, catalogProducts);
         if (!product) return;
 
         const qtyValue = card.querySelector(".card-qty-value");
@@ -209,6 +211,10 @@ function initHomeProductCards() {
         const weightSelect = card.querySelector(".card-weight-select");
         const favoriteBtn = card.querySelector(".favorite-btn");
 
+        if (weightSelect) {
+            applyHomeWeights(weightSelect, product.weights);
+        }
+
         if (favoriteBtn) {
             if (favorites.has(product.id)) {
                 favoriteBtn.classList.add("is-active");
@@ -217,9 +223,29 @@ function initHomeProductCards() {
                 if (favorites.has(product.id)) {
                     favorites.delete(product.id);
                     favoriteBtn.classList.remove("is-active");
+                    if (product.source === "home") {
+                        delete favoritesMeta[product.id];
+                        saveFavoritesMeta(favoritesMeta);
+                    }
+                    if (typeof showNotification === "function") {
+                        showNotification("Удалено из избранного", "info");
+                    }
                 } else {
                     favorites.add(product.id);
                     favoriteBtn.classList.add("is-active");
+                    if (product.source === "home") {
+                        favoritesMeta[product.id] = {
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            image: normalizeImagePath(product.image),
+                            meta: buildHomeMetaText(card)
+                        };
+                        saveFavoritesMeta(favoritesMeta);
+                    }
+                    if (typeof showNotification === "function") {
+                        showNotification("Добавлено в избранное", "success");
+                    }
                 }
                 saveFavoritesSafe(favorites);
             });
@@ -252,28 +278,50 @@ function initHomeProductCards() {
     });
 }
 
-function buildHomeProductFromCard(card, index) {
+function buildHomeProductFromCard(card, index, catalogProducts) {
     const nameEl = card.querySelector("h4");
     const descEl = card.querySelector(".product-description");
     const imgEl = card.querySelector("img");
     const priceEl = card.querySelector(".price");
     const weightSelect = card.querySelector(".card-weight-select");
 
-    const id = String(card.dataset.productId || "").trim() || `home-product-${index + 1}`;
-    const name = String(nameEl?.textContent || "").trim() || "Товар";
+    const fallbackId = `home-product-${index + 1}`;
+    const cardId = String(card.dataset.productId || "").trim();
+    const cardName = String(nameEl?.textContent || "").trim() || "Товар";
+
+    const catalogMatch = resolveHomeProductFromCatalog(
+        catalogProducts,
+        cardId,
+        cardName,
+        extractCardCategory(card)
+    );
+    if (catalogMatch) {
+        const selectWeights = readWeightsFromSelect(weightSelect);
+        const catalogWeights = Array.isArray(catalogMatch.weights)
+            ? catalogMatch.weights.map((w) => Number(w)).filter((w) => Number.isFinite(w) && w > 0)
+            : [];
+        return {
+            id: String(catalogMatch.id || fallbackId),
+            baseId: String(catalogMatch.id || fallbackId),
+            key: String(catalogMatch.key || catalogMatch.id || fallbackId),
+            name: String(catalogMatch.name || cardName),
+            description: String(catalogMatch.description || String(descEl?.textContent || "").trim()),
+            price: Number(catalogMatch.price) || 0,
+            image: String(catalogMatch.image || catalogMatch.images?.[0] || normalizeImagePath(imgEl?.getAttribute("src")) || ""),
+            weights: catalogWeights.length ? catalogWeights : selectWeights,
+            source: "catalog"
+        };
+    }
+
+    const id = cardId || fallbackId;
+    const name = cardName;
     const description = String(descEl?.textContent || "").trim();
-    const image = String(imgEl?.getAttribute("src") || "").trim();
+    const image = normalizeImagePath(imgEl?.getAttribute("src"));
 
     const priceRaw = card.dataset.productPrice || priceEl?.textContent || "0";
     const price = Number(String(priceRaw).replace(/[^\d.]/g, "")) || 0;
 
-    const weights = [];
-    if (weightSelect) {
-        Array.from(weightSelect.options).forEach((opt) => {
-            const val = Number(opt.value);
-            if (Number.isFinite(val) && val > 0) weights.push(val);
-        });
-    }
+    const weights = readWeightsFromSelect(weightSelect);
 
     return {
         id,
@@ -283,13 +331,127 @@ function buildHomeProductFromCard(card, index) {
         description,
         price,
         image,
-        weights
+        weights,
+        source: "home"
     };
 }
 
 function getQtyFromNode(node) {
     const value = Number(String(node.textContent || "").trim());
     return Number.isFinite(value) && value > 0 ? value : 1;
+}
+
+function readCatalogProductsSafe() {
+    try {
+        const raw = localStorage.getItem("sokemi.catalog.v2");
+        const parsed = raw ? JSON.parse(raw) : null;
+        const categories = Array.isArray(parsed?.categories) ? parsed.categories : [];
+        const products = [];
+
+        categories.forEach((category) => {
+            const categoryName = String(category?.name || "").trim();
+            const categoryImage = String(category?.imageUrl || "").trim();
+            const list = Array.isArray(category?.products) ? category.products : [];
+            list.forEach((product) => {
+                if (!product || (!product.id && !product.name)) return;
+                const image =
+                    String(product?.image || "").trim() ||
+                    (Array.isArray(product?.images) && product.images.length
+                        ? String(product.images[0] || "").trim()
+                        : "") ||
+                    categoryImage;
+                products.push({
+                    ...product,
+                    categoryName,
+                    image
+                });
+            });
+        });
+
+        return products;
+    } catch {
+        return [];
+    }
+}
+
+function resolveHomeProductFromCatalog(catalogProducts, cardId, cardName, cardCategory) {
+    if (!Array.isArray(catalogProducts) || !catalogProducts.length) return null;
+
+    if (cardId) {
+        const byId = catalogProducts.find((item) => String(item?.id || "") === cardId);
+        if (byId) return byId;
+    }
+
+    const normalized = normalizeTitle(cardName);
+    if (!normalized) return null;
+
+    const byName = catalogProducts.find((item) => normalizeTitle(String(item?.name || "")) === normalized);
+    if (byName) return byName;
+
+    if (cardCategory) {
+        const categoryMatch = catalogProducts.find(
+            (item) => normalizeTitle(String(item?.categoryName || "")) === normalizeTitle(cardCategory)
+        );
+        if (categoryMatch) return categoryMatch;
+    }
+
+    return null;
+}
+
+function normalizeTitle(value) {
+    return String(value || "").trim().toLowerCase();
+}
+
+function extractCardCategory(card) {
+    const meta = String(card.querySelector(".product-meta")?.textContent || "");
+    const parts = meta.split("•").map((item) => item.trim());
+    const categoryPart = parts.find((item) => item.toLowerCase().startsWith("категория"));
+    if (!categoryPart) return "";
+    return categoryPart.replace(/категория\\s*:\\s*/i, "").trim();
+}
+
+function readWeightsFromSelect(select) {
+    const weights = [];
+    if (!select) return weights;
+    Array.from(select.options).forEach((opt) => {
+        const val = Number(opt.value);
+        if (Number.isFinite(val) && val > 0) weights.push(val);
+    });
+    return weights;
+}
+
+function normalizeImagePath(value) {
+    const raw = String(value || "").trim();
+    if (!raw) return "";
+    if (raw.startsWith("http") || raw.startsWith("/")) return raw;
+    if (raw.startsWith("./")) return `/${raw.slice(2)}`;
+    return `/${raw}`;
+}
+
+function buildHomeMetaText(card) {
+    const meta = String(card.querySelector(".product-meta")?.textContent || "").trim();
+    return meta || "Категория: не указана";
+}
+
+function applyHomeWeights(select, weights) {
+    const normalized = Array.isArray(weights)
+        ? weights.map((item) => Number(item)).filter((item) => Number.isFinite(item) && item > 0)
+        : [];
+
+    const unique = Array.from(new Set(normalized));
+    if (!unique.length) {
+        select.innerHTML = '<option value="">Вес не указан</option>';
+        select.disabled = true;
+        return;
+    }
+
+    select.innerHTML = unique
+        .map((weight, index) => {
+            const selected = index === 0 ? "selected" : "";
+            return `<option value="${weight}" ${selected}>${weight} г</option>`;
+        })
+        .join("");
+    select.disabled = false;
 }
 
 function readFavoritesSafe() {
@@ -304,6 +466,20 @@ function readFavoritesSafe() {
 
 function saveFavoritesSafe(favorites) {
     localStorage.setItem("favorites", JSON.stringify([...favorites]));
+}
+
+function readFavoritesMeta() {
+    try {
+        const raw = localStorage.getItem("favorites.meta");
+        const parsed = raw ? JSON.parse(raw) : {};
+        return parsed && typeof parsed === "object" ? parsed : {};
+    } catch {
+        return {};
+    }
+}
+
+function saveFavoritesMeta(meta) {
+    localStorage.setItem("favorites.meta", JSON.stringify(meta || {}));
 }
 
 function normalizeSelectedWeight(weights, maybeWeight) {
@@ -337,7 +513,7 @@ function addHomeProductToCart(product, quantity, selectedWeight) {
             name: product.name,
             description: product.description,
             price: product.price,
-            image: product.image,
+            image: normalizeImagePath(product.image),
             quantity: safeQty,
             selectedWeight: normalizedWeight
         });

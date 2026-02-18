@@ -418,8 +418,11 @@ function initCatalogPage() {
             const action = String(actionButton.dataset.action || "");
             if (action === "toggle-favorite") {
                 event.preventDefault();
-                toggleFavorite(product.id);
+                const added = toggleFavorite(product.id);
                 renderProducts();
+                if (typeof showNotification === "function" && added !== null) {
+                    showNotification("Товар добавлен в корзину", "success");
+                }
                 return;
             }
 
@@ -507,9 +510,12 @@ function initCatalogPage() {
     });
     addToFavoritesBtn?.addEventListener("click", () => {
         if (!currentProduct) return;
-        toggleFavorite(currentProduct.id);
+        const added = toggleFavorite(currentProduct.id);
         updateModalFavoriteButton(currentProduct.id);
         renderProducts();
+        if (typeof showNotification === "function" && added !== null) {
+            showNotification("Товар добавлен в корзину", "success");
+        }
     });
 
     applyTypeFilterFromUrl();
@@ -1059,16 +1065,21 @@ function saveFavorites() {
 
 function toggleFavorite(productId) {
     const id = String(productId || "").trim();
-    if (!id) return;
+    if (!id) return null;
+
+    let added = false;
 
     if (favorites.has(id)) {
         favorites.delete(id);
     } else {
         favorites.add(id);
+        added = true;
     }
 
     saveFavorites();
+    return added;
 }
+
 
 function updateModalFavoriteButton(productId) {
     if (!addToFavoritesBtn) return;
@@ -1131,7 +1142,11 @@ function addProductToCart(product, quantity, selectedWeight) {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
-    alert("Товар добавлен в корзину");
+    if (typeof showNotification === "function") {
+        showNotification("Товар добавлен в корзину", "success");
+    } else {
+        alert("Товар добавлен в корзину");
+    }
 
 
 }

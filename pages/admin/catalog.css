@@ -579,3 +579,61 @@ body {
     justify-content: flex-end;
   }
 }
+
+.admin-tab.hidden {
+  display: none;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.order-row {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  gap: 12px;
+}
+
+.order-row h4 {
+  margin: 0 0 6px;
+  font-size: 15px;
+}
+
+.order-row p {
+  margin: 4px 0;
+  color: #444;
+  font-size: 14px;
+}
+
+.order-status-select {
+  width: 100%;
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+  padding: 8px;
+  background: #fff;
+}
+
+.order-items-edit {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.order-item-edit {
+  display: grid;
+  grid-template-columns: 1fr 80px 120px auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.order-item-edit input {
+  padding: 6px 8px;
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+}
