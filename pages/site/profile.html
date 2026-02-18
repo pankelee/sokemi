@@ -11,7 +11,7 @@
 
 .profile-container {
     width: 80%;
-    margin: 80px auto;
+    margin: 0 auto;
 }
 
 .profile-layout {
@@ -115,52 +115,6 @@
     font-size: 12px;
 }
 
-.favorites-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.favorite-row {
-    display: grid;
-    grid-template-columns: 88px 1fr auto;
-    gap: 14px;
-    align-items: center;
-    background: rgba(255,255,255,0.2);
-    border-radius: 18px;
-    padding: 10px;
-}
-
-.favorite-thumb {
-    width: 88px;
-    height: 88px;
-    border-radius: 14px;
-    object-fit: cover;
-    background: rgba(255,255,255,0.75);
-}
-
-.favorite-title {
-    margin: 0 0 4px;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.favorite-meta {
-    margin: 0;
-    opacity: 0.95;
-    font-size: 13px;
-}
-
-.favorite-link {
-    min-width: 120px;
-    text-align: center;
-}
-
-.favorites-empty {
-    margin: 0;
-    opacity: 0.95;
-}
-
 /* HIDE TABS */
 .hidden {
     display: none;
@@ -185,20 +139,6 @@
     .profile-sidebar {
         padding: 28px 20px;
     }
-
-    .favorite-row {
-        grid-template-columns: 72px 1fr;
-    }
-
-    .favorite-thumb {
-        width: 72px;
-        height: 72px;
-    }
-
-    .favorite-link {
-        grid-column: 1 / -1;
-        width: 100%;
-    }
 }
 
 </style>
@@ -206,42 +146,49 @@
 
 <body>
 
-<!-- HEADER -->
-<header class="header">
-    <div class="container header-container">
-        <a href="./pages/admin/catalog.html" class="logo">
-            <img src="../../images/logo.svg" alt="Sokemi" class="logo-image">
-        </a>
-        
-        <nav class="nav">
-            <a href="/pages/site/about.html" class="nav-link">&#1054; &#1085;&#1072;&#1089;</a>
-            <a href="/index.html" class="nav-link active">&#1043;&#1083;&#1072;&#1074;&#1085;&#1072;&#1103;</a>
-            <a href="/pages/site/catalogue.html" class="nav-link">&#1050;&#1072;&#1090;&#1072;&#1083;&#1086;&#1075;</a>
-            <a href="/pages/site/contacts.html" class="nav-link">&#1050;&#1086;&#1085;&#1090;&#1072;&#1082;&#1090;&#1099;</a>
-        </nav>
-        
-        <div class="header-actions">
-            <div class="search-wrapper">
-                <input type="text" placeholder="Поиск..." class="search-input">
-                <button class="search-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
+<header>
+    <div class="header">
+        <div class="container header-container">
+            <a href="/index.html" class="logo">
+                <img src="/images/logo.svg" alt="Sokemi" class="logo-image">
+            </a>
+            
+            <nav class="nav">
+                <a href="/pages/site/about.html" class="nav-link">&#1054; &#1085;&#1072;&#1089;</a>
+                <a href="/index.html" class="nav-link">&#1043;&#1083;&#1072;&#1074;&#1085;&#1072;&#1103;</a>
+                <a href="/pages/site/catalogue.html" class="nav-link">&#1050;&#1072;&#1090;&#1072;&#1083;&#1086;&#1075;</a>
+                <a href="/pages/site/contacts.html" class="nav-link">&#1050;&#1086;&#1085;&#1090;&#1072;&#1082;&#1090;&#1099;</a>
+            </nav>
+            
+            <div class="header-actions">
+                <div class="search-wrapper">
+                    <input type="text" placeholder="Поиск..." class="search-input">
+                    <button class="search-btn" type="button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </div>
+                <a href="/pages/site/profile.html" class="header-avatar">
+                    <img src="https://basket-25.wbbasket.ru/vol4435/part443550/443550372/images/big/1.webp" alt="profile">
+                </a>
+                <a href="/pages/site/favorites.html" class="icon-btn favorites-btn" aria-label="Избранное">
+                    <span class="icon-like" aria-hidden="true"></span>
+                </a>
+                <a href="/pages/site/cart.html" class="icon-btn cart-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
+                </a>
+                <button class="mobile-menu-btn" aria-label="Открыть меню" type="button">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
             </div>
-            <button class="icon-btn cart-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-            </button>
-            <button class="mobile-menu-btn" aria-label="Открыть меню">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
         </div>
     </div>
 </header>
@@ -249,8 +196,8 @@
 <!-- MOBILE MENU -->
 <div class="mobile-menu">
     <div class="mobile-menu-header">
-        <a href="#" class="logo">
-            <img src="../../images/logo.svg" alt="Sokemi" class="logo-image">
+        <a href="/index.html" class="logo">
+            <img src="/images/logo.svg" alt="Sokemi" class="logo-image">
         </a>
         <button class="mobile-menu-close" aria-label="Закрыть меню">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -261,7 +208,7 @@
     </div>
     <nav class="mobile-nav">
         <a href="/pages/site/about.html" class="mobile-nav-link">&#1054; &#1085;&#1072;&#1089;</a>
-        <a href="/index.html" class="mobile-nav-link active">&#1043;&#1083;&#1072;&#1074;&#1085;&#1072;&#1103;</a>
+        <a href="/index.html" class="mobile-nav-link">&#1043;&#1083;&#1072;&#1074;&#1085;&#1072;&#1103;</a>
         <a href="/pages/site/catalogue.html" class="mobile-nav-link">&#1050;&#1072;&#1090;&#1072;&#1083;&#1086;&#1075;</a>
         <a href="/pages/site/contacts.html" class="mobile-nav-link">&#1050;&#1086;&#1085;&#1090;&#1072;&#1082;&#1090;&#1099;</a>
     </nav>
@@ -292,7 +239,6 @@
             <div class="profile-menu">
                 <button class="tab-btn active" data-tab="info">Личные данные</button>
                 <button class="tab-btn" data-tab="orders">История заказов</button>
-                <button class="tab-btn" data-tab="favorites">Избранное</button>
                 <button class="tab-btn" data-tab="settings">Настройки</button>
             </div>
 
@@ -340,35 +286,79 @@
                 </div>
             </div>
 
-            <div id="favorites" class="tab-content hidden">
-                <div class="profile-card">
-                    <h3>Избранные товары</h3>
-                    <div class="favorites-list" id="favorites-list"></div>
-                    <p class="favorites-empty hidden" id="favorites-empty">Пока нет избранных товаров. Добавьте их в каталоге через сердечко.</p>
-                </div>
-            </div>
-
         </div>
     </div>
 </div>
 
 </main>
 
-<!-- ТВОЙ ФУТЕР БЕЗ ИЗМЕНЕНИЙ -->
 <footer class="footer">
     <div class="container">
-        <!-- сюда вставь полностью тот footer, который ты прислала -->
+        <div class="newsletter">
+            <div class="newsletter-left">
+                <h3 class="newsletter-title">Готовы узнавать о новинках?</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Ваш Email" class="newsletter-input">
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
+            </div>
+            <div class="newsletter-right">
+                <h4 class="newsletter-subtitle">Товары для дома и питомцев</h4>
+                <p class="newsletter-text">Мы подберём лучшие решения для вашего любимца и создадим комфорт вместе с вами.</p>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <div class="footer-column">
+                <h4 class="footer-column-title">О компании</h4>
+                <ul class="footer-list">
+                    <li><a href="#">Блог</a></li>
+                    <li><a href="#">Наша команда</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 class="footer-column-title">Поддержка</h4>
+                <ul class="footer-list">
+                    <li><a href="#">Связаться с нами</a></li>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#">Возврат</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 class="footer-column-title">Социальные сети</h4>
+                <div class="socials">
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.673 4 8.231c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.814-.542 1.27-1.422 2.176-3.61 2.176-3.61.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/>
+                        </svg>
+                        VK
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                        Telegram
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="copyright">© 2026 SOKEMI. Все права защищены.</p>
+            <div class="legal-links">
+                <a href="#">Пользовательское соглашение</a>
+                <a href="#">Политика конфиденциальности</a>
+            </div>
+        </div>
     </div>
 </footer>
 
+<script src="/script.js"></script>
 <script>
 const buttons = document.querySelectorAll('.tab-btn');
 const tabs = document.querySelectorAll('.tab-content');
-const favoritesList = document.getElementById('favorites-list');
-const favoritesEmpty = document.getElementById('favorites-empty');
-
-const CATALOG_STORAGE_KEY = 'sokemi.catalog.v2';
-const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><rect width='100%' height='100%' fill='%23e5e2d3'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23666' font-family='Arial' font-size='20'>No Image</text></svg>";
 
 buttons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -379,122 +369,9 @@ buttons.forEach(btn => {
         document.getElementById(btn.dataset.tab).classList.remove('hidden');
     });
 });
-
-renderFavorites();
-
-function renderFavorites() {
-    if (!favoritesList || !favoritesEmpty) return;
-
-    const favoriteIds = readFavoriteIds();
-    const items = findFavoriteProducts(favoriteIds);
-
-    favoritesList.innerHTML = '';
-    favoritesEmpty.classList.add('hidden');
-
-    if (!items.length) {
-        favoritesEmpty.classList.remove('hidden');
-        return;
-    }
-
-    const fragment = document.createDocumentFragment();
-    items.forEach((item) => {
-        const row = document.createElement('article');
-        row.className = 'favorite-row';
-        row.innerHTML = `
-            <img class="favorite-thumb" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}">
-            <div>
-                <p class="favorite-title">${escapeHtml(item.name)}</p>
-                <p class="favorite-meta">${escapeHtml(item.meta)}</p>
-            </div>
-            <a class="btn btn-outline favorite-link" href="/pages/site/catalogue.html#product=${encodeURIComponent(item.id)}">Перейти к товару</a>
-        `;
-        fragment.appendChild(row);
-    });
-
-    favoritesList.appendChild(fragment);
-}
-
-function readFavoriteIds() {
-    try {
-        const raw = localStorage.getItem('favorites');
-        const parsed = raw ? JSON.parse(raw) : [];
-        if (!Array.isArray(parsed)) return [];
-        return parsed.map((item) => String(item || '').trim()).filter(Boolean);
-    } catch {
-        return [];
-    }
-}
-
-function findFavoriteProducts(favoriteIds) {
-    const ids = new Set(favoriteIds);
-    if (!ids.size) return [];
-
-    const products = readCatalogProducts();
-    return products
-        .filter((item) => ids.has(item.id))
-        .map((item) => ({
-            id: item.id,
-            name: item.name,
-            image: item.image,
-            meta: `${item.categoryName ? `Категория: ${item.categoryName}` : 'Категория: не указана'} • ${formatPrice(item.price)}`
-        }));
-}
-
-function readCatalogProducts() {
-    try {
-        const raw = localStorage.getItem(CATALOG_STORAGE_KEY);
-        const parsed = raw ? JSON.parse(raw) : null;
-        const categories = Array.isArray(parsed?.categories) ? parsed.categories : [];
-        const items = [];
-
-        categories.forEach((category) => {
-            const categoryName = String(category?.name || '').trim();
-            const categoryImage = String(category?.imageUrl || '').trim();
-            const products = Array.isArray(category?.products) ? category.products : [];
-
-            products.forEach((product, index) => {
-                const id = String(product?.id || `prod-${index + 1}`).trim();
-                const image = pickProductImage(product, categoryImage);
-                items.push({
-                    id,
-                    name: String(product?.name || 'Товар без названия').trim(),
-                    price: Number(product?.price) || 0,
-                    categoryName,
-                    image
-                });
-            });
-        });
-
-        return items;
-    } catch {
-        return [];
-    }
-}
-
-function pickProductImage(product, categoryImage) {
-    if (Array.isArray(product?.images) && product.images.length) {
-        const first = String(product.images[0] || '').trim();
-        if (first) return first;
-    }
-
-    return categoryImage || PLACEHOLDER_IMAGE;
-}
-
-function formatPrice(value) {
-    const safe = Math.max(0, Number(value) || 0);
-    return `${new Intl.NumberFormat('ru-RU').format(safe)} ₽`;
-}
-
-function escapeHtml(value) {
-    return String(value || '')
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#39;');
-}
 </script>
 
 </body>
 </html>
+
 

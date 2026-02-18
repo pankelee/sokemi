@@ -1,52 +1,52 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOKEMI - Корзина</title>
+    <title>SOKEMI - Избранное</title>
     <link rel="stylesheet" href="/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        .cart-main {
+        .favorites-main {
             padding-top: 8px;
         }
 
-        .cart-empty {
+        .favorites-empty {
             text-align: center;
             padding: 34px 18px;
             border-radius: var(--radius-md);
             background: rgba(139, 163, 197, 0.16);
         }
 
-        .cart-empty h3 {
+        .favorites-empty h3 {
             margin: 0 0 10px;
             font-family: var(--font-display);
         }
 
-        .cart-empty p {
+        .favorites-empty p {
             margin: 0 0 16px;
             color: var(--color-text-light);
         }
 
-        .cart-list {
+        .favorites-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
-        .cart-item {
+        .favorites-item {
             display: grid;
-            grid-template-columns: 96px minmax(200px, 1.2fr) minmax(150px, 0.7fr) minmax(140px, 0.7fr) minmax(140px, 0.7fr) minmax(150px, 0.8fr) 44px;
-            grid-template-areas: "image info weight unit qty total remove";
+            grid-template-columns: 96px minmax(220px, 1.3fr) minmax(140px, 0.7fr) 44px;
+            grid-template-areas: "image info price remove";
             gap: 14px;
             align-items: center;
             border: 1px solid rgba(0, 0, 0, 0.09);
             border-radius: 18px;
             background: rgba(255, 255, 255, 0.2);
-            padding: 14px;
+            padding: 10px;
         }
 
-        .cart-item-image {
+        .favorites-item-image {
             width: 96px;
             height: 96px;
             border-radius: 14px;
@@ -56,7 +56,22 @@
             grid-area: image;
         }
 
-        .cart-item-info {
+        .favorites-item-title {
+            margin: 0 0 6px;
+            font-size: 16px;
+            line-height: 1.3;
+        }
+
+        .favorites-item-title-link {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .favorites-item-title-link:hover {
+            text-decoration: underline;
+        }
+
+        .favorites-item-info {
             display: flex;
             flex-direction: column;
             gap: 6px;
@@ -66,148 +81,40 @@
             grid-area: info;
         }
 
-        .cart-item-title-link {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .cart-item-title-link:hover {
-            text-decoration: underline;
-        }
-
-        .cart-item-title {
+        .favorites-item-meta {
             margin: 0;
-            font-size: 17px;
-            line-height: 1.3;
-        }
-
-        .cart-item-meta {
-            display: none;
             font-size: 13px;
             color: var(--color-text-light);
         }
 
-        .cart-item-meta-row {
-            display: inline-flex;
-            gap: 6px;
-            align-items: center;
-        }
-
-        .cart-meta-label {
-            opacity: 0.75;
-        }
-
-        .cart-meta-value {
-            color: var(--color-text);
-            font-weight: 600;
-        }
-
-        .cart-item-weight {
+        .favorites-item-price {
             display: grid;
             gap: 6px;
-            justify-items: start;
-            text-align: left;
-            justify-self: start;
-            grid-area: weight;
-        }
-
-        .cart-item-weight .cart-item-label {
-            text-align: left;
-        }
-
-        .cart-weight-select {
-            min-height: 34px;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            padding: 4px 10px;
-            background: #fff;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        .cart-item-qty {
-            display: grid;
-            gap: 10px;
             justify-items: end;
             justify-self: end;
-            grid-area: qty;
+            grid-area: price;
         }
 
-        .cart-qty-label {
+        .favorites-item-label {
             margin: 0;
-            font-size: 12px;
+            font-size: 13px;
             color: var(--color-text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
             text-align: right;
         }
 
-        .cart-qty {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            border-radius: 999px;
-            background: #fff;
-            padding: 3px;
-        }
-
-        .cart-qty-btn {
-            width: 28px;
-            height: 28px;
-            border: none;
-            border-radius: 50%;
-            background: #efece2;
-            color: var(--color-text);
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .cart-qty-value {
-            min-width: 24px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .cart-item-unit-price,
-        .cart-item-total-price {
-            display: grid;
-            gap: 6px;
-            justify-items: end;
-            justify-self: end;
-        }
-
-        .cart-item-unit-price {
-            grid-area: unit;
-        }
-
-        .cart-item-total-price {
-            grid-area: total;
-        }
-
-        .cart-item-total {
+        .favorites-item-value {
             margin: 0;
             font-weight: 700;
             white-space: nowrap;
             text-align: right;
-            font-size: 16px;
         }
 
-        .cart-item-unit,
-        .cart-item-label {
-            margin: 0;
-            font-size: 13px;
-            color: var(--color-text-light);
-            text-align: right;
-        }
-
-        .cart-item-remove {
+        .favorites-remove {
             justify-self: end;
             grid-area: remove;
         }
 
-        .cart-remove-btn {
+        .favorites-remove-btn {
             border: 1px solid rgba(0, 0, 0, 0.15);
             background: #fff;
             color: #9c4a57;
@@ -220,7 +127,6 @@
             cursor: pointer;
         }
 
-
         .icon-trash {
             width: 18px;
             height: 18px;
@@ -229,7 +135,7 @@
             mask: url("/images/trash.svg") center / contain no-repeat;
         }
 
-        .cart-summary {
+        .favorites-summary {
             margin-top: 16px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
             padding-top: 16px;
@@ -240,162 +146,107 @@
             gap: 12px;
         }
 
-        .cart-total {
+        .favorites-total {
             margin: 0;
             font-size: 22px;
             font-weight: 700;
         }
 
-        .cart-summary-actions {
+        .favorites-summary-actions {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
         }
 
         @media (max-width: 1023px) {
-            .cart-item {
-                grid-template-columns: 80px minmax(0, 1fr) minmax(150px, 0.7fr) minmax(140px, 0.7fr);
+            .favorites-item {
+                grid-template-columns: 80px minmax(0, 1fr) minmax(140px, 0.7fr) 44px;
                 grid-template-areas:
-                    "image info info info"
-                    "image weight unit total"
-                    "image qty qty remove";
-                align-items: start;
+                    "image info info remove"
+                    "image price price remove";
             }
 
-            .cart-item-image {
+            .favorites-item-image {
                 width: 80px;
                 height: 80px;
-            }
-
-            .cart-item-info {
-                grid-area: info;
-            }
-
-            .cart-item-weight {
-                grid-area: weight;
-            }
-
-            .cart-item-qty {
-                grid-area: qty;
-            }
-
-            .cart-item-unit-price {
-                grid-area: unit;
-            }
-
-            .cart-item-total-price {
-                grid-area: total;
-            }
-
-            .cart-item-remove {
-                grid-area: remove;
-                justify-self: end;
             }
         }
 
         @media (max-width: 767px) {
-            .cart-item {
+            .favorites-item {
                 grid-template-columns: 70px minmax(0, 1fr);
-                gap: 12px;
+                gap: 10px;
                 grid-template-areas:
                     "image info"
-                    "weight weight"
-                    "unit unit"
-                    "qty qty"
-                    "total total"
+                    "price price"
                     "remove remove";
-                align-items: start;
                 padding: 12px;
             }
 
-            .cart-item-image {
+            .favorites-item-image {
                 width: 70px;
                 height: 70px;
             }
 
-            .cart-qty {
-                justify-self: center;
-            }
-
-            .cart-item-total,
-            .cart-item-unit {
+            .favorites-item-price {
                 text-align: center;
             }
 
-            .cart-item-qty,
-            .cart-item-unit-price,
-            .cart-item-total-price,
-            .cart-item-weight,
-            .cart-item-remove {
-                justify-items: center;
-                align-items: center;
+            .favorites-item-price,
+            .favorites-remove {
                 justify-self: center;
             }
 
-            .cart-item-unit-price,
-            .cart-item-total-price,
-            .cart-item-weight,
-            .cart-item-qty {
+            .favorites-item-price {
                 width: 100%;
                 padding: 8px 10px;
                 border-radius: 12px;
                 background: rgba(255, 255, 255, 0.55);
             }
 
-            .cart-item-info {
+            .favorites-item-info {
                 align-items: flex-start;
             }
 
-            .cart-item-title {
+            .favorites-item-title {
                 font-size: 16px;
             }
 
-            .cart-qty {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .cart-summary {
+            .favorites-summary {
                 flex-direction: column;
                 align-items: stretch;
             }
 
-            .cart-summary-actions .btn {
+            .favorites-summary-actions .btn {
                 width: 100%;
             }
         }
 
         @media (max-width: 520px) {
-            .cart-item {
+            .favorites-item {
                 grid-template-columns: 1fr;
                 grid-template-areas:
                     "image"
                     "info"
-                    "weight"
-                    "unit"
-                    "qty"
-                    "total"
+                    "price"
                     "remove";
                 justify-items: start;
             }
 
-            .cart-item-image {
+            .favorites-item-image {
                 width: 100%;
                 height: auto;
                 aspect-ratio: 1 / 1;
             }
 
-            .cart-item-info,
-            .cart-item-weight,
-            .cart-item-unit-price,
-            .cart-item-qty,
-            .cart-item-total-price,
-            .cart-item-remove {
+            .favorites-item-info,
+            .favorites-item-price,
+            .favorites-remove {
                 justify-self: stretch;
                 width: 100%;
             }
 
-            .cart-item-remove {
+            .favorites-remove {
                 justify-self: center;
             }
         }
@@ -471,27 +322,26 @@
 </div>
 <div class="mobile-overlay"></div>
 
-<main class="main cart-main">
+<main class="main favorites-main">
     <div class="container">
         <div class="section-header">
-            <h1 class="section-title">КОРЗИНА</h1>
+            <h1 class="section-title">ИЗБРАННОЕ</h1>
         </div>
 
         <section>
-            <div class="cart-empty" id="cart-empty" hidden>
-                <h3>Ваша корзина пуста</h3>
-                <p>Добавьте товары из каталога, чтобы оформить заказ.</p>
+            <div class="favorites-empty" id="favorites-empty" hidden>
+                <h3>В избранном пока пусто</h3>
+                <p>Добавьте товары из каталога, чтобы быстро вернуться к ним.</p>
                 <a href="/pages/site/catalogue.html" class="btn btn-primary">Перейти в каталог</a>
             </div>
 
-            <div id="cart-content">
-                <div class="cart-list" id="cart-list"></div>
+            <div id="favorites-content">
+                <div class="favorites-list" id="favorites-list"></div>
 
-                <div class="cart-summary">
-                    <p class="cart-total" id="cart-total">Итого: 0 ₽</p>
-                    <div class="cart-summary-actions">
-                        <button type="button" class="btn btn-outline" id="clear-cart-btn">Очистить корзину</button>
-                        <button type="button" class="btn btn-primary" id="checkout-btn">Оформить заказ</button>
+                <div class="favorites-summary">
+                    <p class="favorites-total" id="favorites-total">Всего товаров: 0</p>
+                    <div class="favorites-summary-actions">
+                        <button type="button" class="btn btn-outline" id="clear-favorites-btn">Очистить избранное</button>
                     </div>
                 </div>
             </div>
@@ -565,16 +415,17 @@
 <script src="/script.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const list = document.getElementById("cart-list");
-    const content = document.getElementById("cart-content");
-    const empty = document.getElementById("cart-empty");
-    const totalEl = document.getElementById("cart-total");
-    const clearBtn = document.getElementById("clear-cart-btn");
-    const checkoutBtn = document.getElementById("checkout-btn");
-    const badge = document.getElementById("cart-count-badge");
+    const list = document.getElementById("favorites-list");
+    const content = document.getElementById("favorites-content");
+    const empty = document.getElementById("favorites-empty");
+    const totalEl = document.getElementById("favorites-total");
+    const clearBtn = document.getElementById("clear-favorites-btn");
 
-    const catalogIndex = buildCatalogIndex();
-    let cart = readCart();
+    const CATALOG_STORAGE_KEY = "sokemi.catalog.v2";
+    const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><rect width='100%' height='100%' fill='%23e5e2d3'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23666' font-family='Arial' font-size='20'>No Image</text></svg>";
+
+    let favorites = readFavoriteIds();
+    let products = readCatalogProducts();
 
     list.addEventListener("click", (event) => {
         const target = event.target;
@@ -587,37 +438,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const action = String(button.dataset.action || "");
         if (!id || !action) return;
 
-        if (action === "plus") {
-            changeQuantity(id, 1);
-        } else if (action === "minus") {
-            changeQuantity(id, -1);
-        } else if (action === "remove") {
-            removeItem(id);
+        if (action === "remove") {
+            removeFavorite(id);
         }
     });
 
-    list.addEventListener("change", (event) => {
-        const target = event.target;
-        if (!(target instanceof HTMLSelectElement)) return;
-        if (target.dataset.action !== "weight") return;
-        const id = String(target.dataset.id || "");
-        if (!id) return;
-        const nextWeight = Number(target.value);
-        updateWeight(id, nextWeight);
-    });
-
     clearBtn.addEventListener("click", () => {
-        if (!cart.length) return;
-        cart = [];
-        saveCart();
-        render();
-    });
-
-    checkoutBtn.addEventListener("click", () => {
-        if (!cart.length) return;
-        alert("Заказ оформлен!");
-        cart = [];
-        saveCart();
+        if (!favorites.length) return;
+        favorites = [];
+        saveFavorites();
         render();
     });
 
@@ -626,67 +455,43 @@ document.addEventListener("DOMContentLoaded", () => {
     function render() {
         list.innerHTML = "";
 
-        if (!cart.length) {
+        if (!favorites.length) {
             content.hidden = true;
             empty.hidden = false;
-            if (badge) badge.textContent = "0";
+            totalEl.textContent = "Всего товаров: 0";
+            return;
+        }
+
+        const items = findFavoriteProducts(favorites, products);
+        if (!items.length) {
+            content.hidden = true;
+            empty.hidden = false;
+            totalEl.textContent = "Всего товаров: 0";
             return;
         }
 
         content.hidden = false;
         empty.hidden = true;
 
-        let total = 0;
-        let totalCount = 0;
-
         const fragment = document.createDocumentFragment();
 
-        cart.forEach((item) => {
-            const id = getItemKey(item);
-            const productId = getProductId(item);
-            const quantity = Math.max(1, Number(item.quantity) || 1);
-            const price = Math.max(0, Number(item.price) || 0);
-            const selectedWeight = Number(item.selectedWeight);
-            const hasWeight = Number.isFinite(selectedWeight) && selectedWeight > 0;
-            const weights = getWeightsForProduct(productId, catalogIndex);
-
-            total += price * quantity;
-            totalCount += quantity;
-
+        items.forEach((item) => {
             const article = document.createElement("article");
-            article.className = "cart-item";
-            const weightOptions = buildWeightOptions(weights, selectedWeight);
+            article.className = "favorites-item";
             article.innerHTML = `
-                <img class="cart-item-image" src="${escapeHtml(item.image || "")}" alt="${escapeHtml(item.name || "Товар")}">
-                <div class="cart-item-info">
-                    <h3 class="cart-item-title">
-                        <a class="cart-item-title-link" href="/pages/site/catalogue.html#product=${encodeURIComponent(productId)}">${escapeHtml(item.name || "Товар")}</a>
+                <img class="favorites-item-image" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}">
+                <div class="favorites-item-info">
+                    <h3 class="favorites-item-title">
+                        <a class="favorites-item-title-link" href="/pages/site/catalogue.html#product=${encodeURIComponent(item.id)}">${escapeHtml(item.name)}</a>
                     </h3>
+                    <p class="favorites-item-meta">${escapeHtml(item.meta)}</p>
                 </div>
-                <div class="cart-item-weight">
-                    <p class="cart-item-label">Вес</p>
-                    <select class="cart-weight-select" data-action="weight" data-id="${escapeHtml(id)}" ${weightOptions.disabled ? "disabled" : ""}>
-                        ${weightOptions.html}
-                    </select>
+                <div class="favorites-item-price">
+                    <p class="favorites-item-label">Цена за шт.</p>
+                    <p class="favorites-item-value">${formatPrice(item.price)}</p>
                 </div>
-                <div class="cart-item-unit-price">
-                    <p class="cart-item-label">Цена за шт.</p>
-                    <p class="cart-item-total">${formatPrice(price)}</p>
-                </div>
-                <div class="cart-item-qty">
-                    <p class="cart-qty-label">Количество</p>
-                    <div class="cart-qty">
-                        <button type="button" class="cart-qty-btn" data-action="minus" data-id="${escapeHtml(id)}" aria-label="Уменьшить">-</button>
-                        <span class="cart-qty-value">${quantity}</span>
-                        <button type="button" class="cart-qty-btn" data-action="plus" data-id="${escapeHtml(id)}" aria-label="Увеличить">+</button>
-                    </div>
-                </div>
-                <div class="cart-item-total-price">
-                    <p class="cart-item-label">Итого</p>
-                    <p class="cart-item-total">${formatPrice(price * quantity)}</p>
-                </div>
-                <div class="cart-item-remove">
-                    <button type="button" class="cart-remove-btn" data-action="remove" data-id="${escapeHtml(id)}" aria-label="Удалить">
+                <div class="favorites-remove">
+                    <button type="button" class="favorites-remove-btn" data-action="remove" data-id="${escapeHtml(item.id)}" aria-label="Удалить">
                         <span class="icon-trash" aria-hidden="true"></span>
                     </button>
                 </div>
@@ -696,140 +501,87 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         list.appendChild(fragment);
-        totalEl.textContent = `Итого: ${formatPrice(total)}`;
-        if (badge) badge.textContent = String(totalCount);
-        saveCart();
+        totalEl.textContent = `Всего товаров: ${items.length}`;
     }
 
-    function changeQuantity(id, delta) {
-        const item = cart.find((entry) => getItemKey(entry) === id);
-        if (!item) return;
-
-        item.quantity = (Number(item.quantity) || 1) + delta;
-        if (item.quantity <= 0) {
-            cart = cart.filter((entry) => getItemKey(entry) !== id);
-        }
-
+    function removeFavorite(id) {
+        favorites = favorites.filter((itemId) => itemId !== id);
+        saveFavorites();
         render();
     }
 
-    function updateWeight(id, nextWeight) {
-        const item = cart.find((entry) => getItemKey(entry) === id);
-        if (!item) return;
-
-        const productId = getProductId(item);
-        const normalizedWeight = Number.isFinite(nextWeight) && nextWeight > 0 ? nextWeight : null;
-        const nextId = makeCartItemId(productId, normalizedWeight);
-
-        const existing = cart.find((entry) => getItemKey(entry) === nextId);
-        if (existing && existing !== item) {
-            existing.quantity += Number(item.quantity) || 1;
-            cart = cart.filter((entry) => entry !== item);
-        } else {
-            item.id = nextId;
-            item.selectedWeight = normalizedWeight;
-        }
-
-        render();
-    }
-
-    function removeItem(id) {
-        cart = cart.filter((entry) => getItemKey(entry) !== id);
-        render();
-    }
-
-    function readCart() {
+    function readFavoriteIds() {
         try {
-            const raw = localStorage.getItem("cart");
+            const raw = localStorage.getItem("favorites");
             const parsed = raw ? JSON.parse(raw) : [];
-            return Array.isArray(parsed) ? parsed : [];
+            if (!Array.isArray(parsed)) return [];
+            return parsed.map((item) => String(item || "").trim()).filter(Boolean);
         } catch {
             return [];
         }
     }
 
-    function saveCart() {
-        localStorage.setItem("cart", JSON.stringify(cart));
+    function saveFavorites() {
+        localStorage.setItem("favorites", JSON.stringify(favorites));
     }
 
-    function getItemKey(item) {
-        if (item && item.id) return String(item.id);
-        if (item && item.baseId) return String(item.baseId);
-        return String(item?.name || "");
+    function findFavoriteProducts(favoriteIds, productsList) {
+        const lookup = new Map(productsList.map((item) => [item.id, item]));
+        return favoriteIds
+            .map((id) => lookup.get(id))
+            .filter(Boolean)
+            .map((item) => ({
+                id: item.id,
+                name: item.name,
+                image: item.image,
+                price: item.price,
+                meta: `${item.categoryName ? `Категория: ${item.categoryName}` : "Категория: не указана"}`
+            }));
     }
 
-    function getProductId(item) {
-        const raw = String(item?.baseId || item?.id || "").trim();
-        if (!raw) return "";
-        return raw.includes("::") ? raw.split("::")[0] : raw;
-    }
-
-    function makeCartItemId(productId, selectedWeight) {
-        if (!selectedWeight) return String(productId);
-        return `${productId}::${selectedWeight}`;
-    }
-
-    function buildCatalogIndex() {
-        const index = new Map();
+    function readCatalogProducts() {
         try {
-            const raw = localStorage.getItem("sokemi.catalog.v2");
+            const raw = localStorage.getItem(CATALOG_STORAGE_KEY);
             const parsed = raw ? JSON.parse(raw) : null;
             const categories = Array.isArray(parsed?.categories) ? parsed.categories : [];
+            const items = [];
 
             categories.forEach((category) => {
-                const products = Array.isArray(category?.products) ? category.products : [];
-                products.forEach((product) => {
-                    const id = String(product?.id || "").trim();
-                    if (!id) return;
-                    const weights = Array.isArray(product?.weights)
-                        ? product.weights.map((item) => Number(item)).filter((item) => Number.isFinite(item) && item > 0)
-                        : [];
-                    index.set(id, weights);
+                const categoryName = String(category?.name || "").trim();
+                const categoryImage = String(category?.imageUrl || "").trim();
+                const productsList = Array.isArray(category?.products) ? category.products : [];
+
+                productsList.forEach((product, index) => {
+                    const id = String(product?.id || `prod-${index + 1}`).trim();
+                    const image = pickProductImage(product, categoryImage);
+                    items.push({
+                        id,
+                        name: String(product?.name || "Товар без названия").trim(),
+                        price: Number(product?.price) || 0,
+                        categoryName,
+                        image
+                    });
                 });
             });
+
+            return items;
         } catch {
-            return index;
+            return [];
         }
-        return index;
     }
 
-    function getWeightsForProduct(productId, index) {
-        if (!productId) return [];
-        const weights = index.get(productId);
-        return Array.isArray(weights) ? weights : [];
-    }
-
-    function buildWeightOptions(weights, selectedWeight) {
-        const normalized = weights
-            .map((item) => Number(item))
-            .filter((item) => Number.isFinite(item) && item > 0)
-            .map((item) => Math.round(item));
-
-        const unique = Array.from(new Set(normalized));
-        if (selectedWeight && !unique.includes(selectedWeight)) {
-            unique.unshift(selectedWeight);
+    function pickProductImage(product, categoryImage) {
+        if (Array.isArray(product?.images) && product.images.length) {
+            const first = String(product.images[0] || "").trim();
+            if (first) return first;
         }
 
-        if (!unique.length) {
-            return {
-                disabled: true,
-                html: `<option value="">Вес не указан</option>`
-            };
-        }
-
-        const html = unique
-            .map((weight) => {
-                const selected = weight === selectedWeight ? "selected" : "";
-                return `<option value="${weight}" ${selected}>${weight} г</option>`;
-            })
-            .join("");
-
-        return { disabled: false, html };
+        return categoryImage || PLACEHOLDER_IMAGE;
     }
 
     function formatPrice(value) {
-        const numeric = Math.max(0, Number(value) || 0);
-        return `${new Intl.NumberFormat("ru-RU").format(numeric)} ₽`;
+        const safe = Math.max(0, Number(value) || 0);
+        return `${new Intl.NumberFormat("ru-RU").format(safe)} ₽`;
     }
 
     function escapeHtml(value) {
@@ -845,4 +597,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
-

@@ -54,6 +54,11 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    padding-top: 96px;
+}
+
+.home-page {
+    padding-top: 0;
 }
 
 a {
@@ -89,6 +94,8 @@ button {
 
 header {
     position: fixed;
+    top: 0;
+    left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,14 +104,12 @@ header {
 }
 .header {
     background: var(--color-cream);
-    padding: 50px 0 16px 0;
-    border-radius: var(--radius-lg);
-    margin: 16px auto;
+    padding: 14px 0;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    margin: 0 auto;
     box-shadow: var(--shadow-sm);
     position: relative;
     width: 80%;
-    transform: translateY(-50px);
-    
 }
 
 .header-container {
@@ -421,12 +426,12 @@ header {
    ======================================== */
 .main {
     background: var(--color-cream);
-    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    border-radius: var(--radius-xl);
     padding: 60px 0 80px;
     position: relative;
     z-index: 10;
     max-width: 80%;
-    margin: 0 auto;
+    margin: 24px auto 28px;
 }
 
 /* Section Header */
@@ -619,6 +624,7 @@ header {
 .footer {
     background: var(--color-footer-bg);
     padding: 60px 0 30px;
+    margin-top: 0;
 }
 
 .newsletter {
@@ -807,8 +813,9 @@ header {
 /* Tablet (768px - 1023px) */
 @media (max-width: 1023px) {
     .header {
-        margin: 12px auto;
+        margin: 0 auto;
         padding: 14px 0;
+        width: 92%;
     }
     
     .nav {
@@ -829,6 +836,8 @@ header {
     
     .main {
         padding: 50px 0 60px;
+        max-width: 92%;
+        margin: 20px auto 24px;
     }
     
     .catalog-grid {
@@ -872,9 +881,10 @@ header {
 /* Mobile Large (480px - 767px) */
 @media (max-width: 767px) {
     .header {
-        margin: 8px auto;
+        margin: 0 auto;
         padding: 12px 0;
-        border-radius: var(--radius-md);
+        border-radius: 0 0 var(--radius-md) var(--radius-md);
+        width: calc(100% - 16px);
     }
     
     .logo-text {
@@ -896,7 +906,9 @@ header {
     
     .main {
         padding: 40px 0 50px;
-        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        border-radius: var(--radius-lg);
+        max-width: calc(100% - 16px);
+        margin: 16px auto 20px;
     }
     
     .section-title {
@@ -988,13 +1000,22 @@ header {
 
 /* Mobile Small (320px - 479px) */
 @media (max-width: 479px) {
+    body {
+        padding-top: 88px;
+    }
+
+    .home-page {
+        padding-top: 0;
+    }
+
     .container {
         padding: 0 16px;
     }
     
     .header {
-        margin: 8px;
-        max-width: 100%;
+        margin: 0 auto;
+        width: calc(100% - 8px);
+        max-width: none;
     }
     
     .logo-icon {
@@ -1012,6 +1033,8 @@ header {
     
     .main {
         padding: 32px 0 40px;
+        max-width: calc(100% - 8px);
+        margin: 12px auto 16px;
     }
     
     .section-header {
@@ -1299,7 +1322,6 @@ input:focus-visible {
 .product-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
-    background: var(--color-card-hover);
 }
 
 .product-card img {
@@ -1359,10 +1381,19 @@ input:focus-visible {
     border: 1px solid rgba(0, 0, 0, 0.15);
     background: #fff;
     color: #a7a7a3;
-    font-size: 18px;
-    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: var(--transition-normal);
+}
+
+.favorite-icon {
+    width: 18px;
+    height: 18px;
+    background-color: currentColor;
+    -webkit-mask: url("/images/like.svg") center / contain no-repeat;
+    mask: url("/images/like.svg") center / contain no-repeat;
 }
 
 .favorite-btn:hover {
@@ -1374,6 +1405,14 @@ input:focus-visible {
     color: #d34d64;
     border-color: rgba(211, 77, 100, 0.45);
     background: #fff3f6;
+}
+
+.icon-like {
+    width: 20px;
+    height: 20px;
+    background-color: currentColor;
+    -webkit-mask: url("/images/like.svg") center / contain no-repeat;
+    mask: url("/images/like.svg") center / contain no-repeat;
 }
 
 .product-controls-bottom {
