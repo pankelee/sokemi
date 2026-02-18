@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Newsletter Form
     initNewsletterForm();
+
+    // Home Page Product Cards
+    initHomeProductCards();
 });
 
 /**
@@ -181,6 +184,169 @@ function initNewsletterForm() {
         showNotification('Спасибо за подписку!', 'success');
         input.value = '';
     });
+}
+
+/**
+ * Home Page Product Cards
+ */
+function initHomeProductCards() {
+    if (!document.body.classList.contains("home-page")) return;
+
+    const cards = document.querySelectorAll(".product-card");
+    if (!cards.length) return;
+
+    const favorites = readFavoritesSafe();
+
+    cards.forEach((card, index) => {
+        const product = buildHomeProductFromCard(card, index);
+        if (!product) return;
+
+        const qtyValue = card.querySelector(".card-qty-value");
+        const qtyMinus = card.querySelector(".card-qty-btn:nth-of-type(1)");
+        const qtyPlus = card.querySelector(".card-qty-btn:nth-of-type(2)");
+        const addBtn = card.querySelector(".card-add-btn");
+        const detailsBtn = card.querySelector(".card-details-btn");
+        const weightSelect = card.querySelector(".card-weight-select");
+        const favoriteBtn = card.querySelector(".favorite-btn");
+
+        if (favoriteBtn) {
+            if (favorites.has(product.id)) {
+                favoriteBtn.classList.add("is-active");
+            }
+            favoriteBtn.addEventListener("click", () => {
+                if (favorites.has(product.id)) {
+                    favorites.delete(product.id);
+                    favoriteBtn.classList.remove("is-active");
+                } else {
+                    favorites.add(product.id);
+                    favoriteBtn.classList.add("is-active");
+                }
+                saveFavoritesSafe(favorites);
+            });
+        }
+
+        if (qtyValue && qtyMinus && qtyPlus) {
+            qtyMinus.addEventListener("click", () => {
+                const next = Math.max(1, getQtyFromNode(qtyValue) - 1);
+                qtyValue.textContent = String(next);
+            });
+            qtyPlus.addEventListener("click", () => {
+                const next = Math.min(99, getQtyFromNode(qtyValue) + 1);
+                qtyValue.textContent = String(next);
+            });
+        }
+
+        if (addBtn) {
+            addBtn.addEventListener("click", () => {
+                const qty = qtyValue ? getQtyFromNode(qtyValue) : 1;
+                const selectedWeight = weightSelect ? Number(weightSelect.value) : null;
+                addHomeProductToCart(product, qty, selectedWeight);
+            });
+        }
+
+        if (detailsBtn) {
+            detailsBtn.addEventListener("click", () => {
+                window.location.href = `/pages/site/catalogue.html#product=${encodeURIComponent(product.id)}`;
+            });
+        }
+    });
+}
+
+function buildHomeProductFromCard(card, index) {
+    const nameEl = card.querySelector("h4");
+    const descEl = card.querySelector(".product-description");
+    const imgEl = card.querySelector("img");
+    const priceEl = card.querySelector(".price");
+    const weightSelect = card.querySelector(".card-weight-select");
+
+    const id = String(card.dataset.productId || "").trim() || `home-product-${index + 1}`;
+    const name = String(nameEl?.textContent || "").trim() || "Товар";
+    const description = String(descEl?.textContent || "").trim();
+    const image = String(imgEl?.getAttribute("src") || "").trim();
+
+    const priceRaw = card.dataset.productPrice || priceEl?.textContent || "0";
+    const price = Number(String(priceRaw).replace(/[^\d.]/g, "")) || 0;
+
+    const weights = [];
+    if (weightSelect) {
+        Array.from(weightSelect.options).forEach((opt) => {
+            const val = Number(opt.value);
+            if (Number.isFinite(val) && val > 0) weights.push(val);
+        });
+    }
+
+    return {
+        id,
+        baseId: id,
+        key: id,
+        name,
+        description,
+        price,
+        image,
+        weights
+    };
+}
+
+function getQtyFromNode(node) {
+    const value = Number(String(node.textContent || "").trim());
+    return Number.isFinite(value) && value > 0 ? value : 1;
+}
+
+function readFavoritesSafe() {
+    try {
+        const raw = localStorage.getItem("favorites");
+        const parsed = raw ? JSON.parse(raw) : [];
+        return new Set(Array.isArray(parsed) ? parsed.map((item) => String(item)) : []);
+    } catch {
+        return new Set();
+    }
+}
+
+function saveFavoritesSafe(favorites) {
+    localStorage.setItem("favorites", JSON.stringify([...favorites]));
+}
+
+function normalizeSelectedWeight(weights, maybeWeight) {
+    if (!weights.length) return null;
+    const numeric = Number(maybeWeight);
+    if (Number.isFinite(numeric) && weights.includes(numeric)) {
+        return numeric;
+    }
+    return weights[0];
+}
+
+function makeCartItemId(productId, selectedWeight) {
+    if (!selectedWeight) return String(productId);
+    return `${productId}::${selectedWeight}`;
+}
+
+function addHomeProductToCart(product, quantity, selectedWeight) {
+    const safeQty = Math.max(1, Math.min(99, Number(quantity) || 1));
+    const normalizedWeight = normalizeSelectedWeight(product.weights, selectedWeight);
+    const cartItemId = makeCartItemId(product.id, normalizedWeight);
+    const cart = readCartSafe();
+    const existing = cart.find((item) => item.id === cartItemId);
+
+    if (existing) {
+        existing.quantity = (Number(existing.quantity) || 0) + safeQty;
+    } else {
+        cart.push({
+            id: cartItemId,
+            baseId: product.baseId,
+            key: product.key,
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            image: product.image,
+            quantity: safeQty,
+            selectedWeight: normalizedWeight
+        });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    if (typeof updateCartBadge === "function") updateCartBadge();
+    document.dispatchEvent(new Event("cart:updated"));
+    showNotification("Товар добавлен в корзину", "success");
 }
 
 /**
