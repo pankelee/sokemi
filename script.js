@@ -345,22 +345,54 @@ function updateCartBadge() {
     const badge = document.getElementById("cart-count-badge");
     if (!badge) return;
 
-    let cart = [];
-
-    try {
-        cart = JSON.parse(localStorage.getItem("cart")) || [];
-    } catch {
-        cart = [];
-    }
-
-    const totalCount = cart.reduce((sum, item) => {
-        return sum + (Number(item.quantity) || 0);
+    const cart = readCartSafe();
+    const uniqueCount = cart.reduce((sum, item) => {
+        const qty = Number(item?.quantity) || 0;
+        return qty > 0 ? sum + 1 : sum;
     }, 0);
 
-    badge.textContent = totalCount > 0 ? totalCount : "";
+    badge.textContent = uniqueCount > 0 ? String(uniqueCount) : "";
 }
 
 /* автообновление если localStorage меняется */
 window.addEventListener("storage", updateCartBadge);
+
+initCartBadgeAutoUpdate();
+
+function readCartSafe() {
+    try {
+        const raw = localStorage.getItem("cart");
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+}
+
+function initCartBadgeAutoUpdate() {
+    if (window.__sokemiCartBadgeHooked) return;
+    window.__sokemiCartBadgeHooked = true;
+
+    const originalSetItem = localStorage.setItem.bind(localStorage);
+    const originalRemoveItem = localStorage.removeItem.bind(localStorage);
+    const originalClear = localStorage.clear.bind(localStorage);
+
+    localStorage.setItem = (key, value) => {
+        originalSetItem(key, value);
+        if (key === "cart") updateCartBadge();
+    };
+
+    localStorage.removeItem = (key) => {
+        originalRemoveItem(key);
+        if (key === "cart") updateCartBadge();
+    };
+
+    localStorage.clear = () => {
+        originalClear();
+        updateCartBadge();
+    };
+
+    document.addEventListener("cart:updated", updateCartBadge);
+}
 
 console.log('🐾 SOKEMI Pet Shop loaded successfully!');
