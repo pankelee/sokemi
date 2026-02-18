@@ -351,7 +351,7 @@ function updateCartBadge() {
         return qty > 0 ? sum + 1 : sum;
     }, 0);
 
-    badge.textContent = uniqueCount > 0 ? String(uniqueCount) : "";
+    badge.textContent = uniqueCount > 0 ? String(uniqueCount) : "0";
 }
 
 /* автообновление если localStorage меняется */

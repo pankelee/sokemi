@@ -239,6 +239,10 @@
                 content.hidden = true;
                 empty.hidden = false;
                 if (badge) badge.textContent = "0";
+                saveCart();
+                if (typeof updateCartBadge === "function") {
+                    updateCartBadge();
+                }
                 return;
             }
 
