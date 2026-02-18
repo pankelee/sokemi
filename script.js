@@ -333,6 +333,34 @@ if ('IntersectionObserver' in window) {
     document.querySelectorAll('img').forEach(img => {
         imageObserver.observe(img);
     });
+    
 }
+/* ===== UNIVERSAL CART BADGE ===== */
+
+document.addEventListener("DOMContentLoaded", () => {
+    updateCartBadge();
+});
+
+function updateCartBadge() {
+    const badge = document.getElementById("cart-count-badge");
+    if (!badge) return;
+
+    let cart = [];
+
+    try {
+        cart = JSON.parse(localStorage.getItem("cart")) || [];
+    } catch {
+        cart = [];
+    }
+
+    const totalCount = cart.reduce((sum, item) => {
+        return sum + (Number(item.quantity) || 0);
+    }, 0);
+
+    badge.textContent = totalCount > 0 ? totalCount : "";
+}
+
+/* автообновление если localStorage меняется */
+window.addEventListener("storage", updateCartBadge);
 
 console.log('🐾 SOKEMI Pet Shop loaded successfully!');

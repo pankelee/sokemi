@@ -265,6 +265,30 @@ header {
     box-shadow: var(--shadow-md);
     color: var(--color-accent);
 }
+.cart-btn {
+    position: relative;
+}
+
+.cart-count-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+
+    background: #E5A1E0;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+}
 
 /* Mobile Menu Button */
 .mobile-menu-btn {
