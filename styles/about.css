@@ -1,0 +1,185 @@
+
+:root {
+    --color-cream: #EFECDD;
+    --color-light-blue: #8BA3C5;
+    --color-mid-blue: #485B7C;
+    --color-dark-blue: #23354D;
+    --color-navy: #03122F;
+    --radius-lg: 16px;
+    --shadow-sm: 0 10px 30px rgba(3, 18, 47, 0.15);
+    --layout-width: 1000px;
+}
+
+
+.main {
+    padding: 120px 0;
+    background: none;
+
+}
+
+.main_block {
+    background: var(--color-cream);
+    border-radius: 20px;
+    padding: 50px;
+    box-shadow: var(--shadow-sm);
+}
+
+
+.section {
+    margin-bottom: 40px;
+}
+
+.section h2 {
+    color: var(--color-dark-blue);
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.section p {
+    line-height: 1.7;
+    color: var(--color-dark-blue);
+    font-size: 1.1rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: var(--color-light-blue);
+    padding: 24px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(139, 163, 197, 0.2);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(3, 18, 47, 0.2);
+    background: rgba(139, 163, 197, 0.9);
+}
+
+ul {
+    padding-left: 20px;
+    line-height: 1.7;
+    color: var(--color-dark-blue);
+    font-size: 1.05rem;
+}
+
+ul li {
+    margin-bottom: 8px;
+}
+.footer {
+    background: var(--color-cream);
+    padding: 5px 0 20px;
+    margin-top: 0 px;
+}
+
+.newsletter {
+    background: var(--color-light-blue);
+    border-radius: 15px;
+    padding: 24px;        /* было 30px */
+    display: flex;
+    gap: 20px;            /* было 30px */
+    margin-bottom: 30px;  /* было 40px */
+    align-items: center;  /* выровнять по центру */
+}
+
+.newsletter-left h3 {
+    color: var(--color-navy);
+    margin-bottom: 10px;  /* было 15px */
+    font-size: 18px;      /* было 20px */
+    margin: 0 0 10px 0;
+}
+
+.newsletter form {
+    display: flex;
+    gap: 8px;             /* было 10px */
+    margin: 0;
+}
+
+.newsletter input {
+    flex: 1;
+    padding: 10px;        /* было 12px */
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;      /* чуть меньше */
+}
+
+.newsletter button {
+    padding: 10px 16px;   /* было 12px 20px */
+    background: var(--color-navy);
+    color: white;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;      /* чуть меньше */
+    white-space: nowrap;
+}
+
+.newsletter-right h4 {
+    color: var(--color-navy);
+    margin: 0 0 4px 0;    /* было 8px */
+    font-size: 16px;
+}
+
+.newsletter-right p {
+    color: var(--color-dark-blue);
+    margin: 0;
+    font-size: 14px;
+}
+
+.footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;            /* было 30px */
+    margin-bottom: 20px;  /* было 30px */
+}
+
+.footer-column h4 {
+    color: var(--color-navy);
+    margin-bottom: 10px;  /* было 15px */
+    font-size: 15px;
+}
+
+.footer-list li {
+    margin-bottom: 6px;   /* было 8px */
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 16px;    /* было 20px */
+    border-top: 1px solid rgba(139, 163, 197, 0.3);
+    color: var(--color-mid-blue);
+    font-size: 13px;      /* чуть меньше */
+    margin-top: 10px;
+}
+
+
+/* Адаптив */
+@media (max-width: 768px) {
+
+    main {
+        margin: 90px 16px 24px;
+        padding: 30px 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .section h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    main     {
+        padding: 24px 16px;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+}

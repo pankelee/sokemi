@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>SOKEMI — Оформление заказа</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Общие стили -->
+    <link rel="stylesheet" href="/styles.css">
+    <!-- Стили только для страницы заказа -->
+    <link rel="stylesheet" href="../../styles/order.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <div class="header">
+        <div class="container header-container">
+            <a href="/index.html" class="logo">
+                <img src="/images/logo.svg" alt="Sokemi" class="logo-image">
+            </a>
+
+            <nav class="nav">
+                <a href="/pages/site/about.html" class="nav-link">О нас</a>
+                <a href="/index.html" class="nav-link">Главная</a>
+                <a href="/pages/site/catalogue.html" class="nav-link">Каталог</a>
+                <a href="/pages/site/contacts.html" class="nav-link">Контакты</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="search-wrapper">
+                    <input type="text" placeholder="Поиск..." class="search-input">
+                    <button class="search-btn" type="button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </div>
+                <a href="/pages/site/profile.html" class="header-avatar">
+                    <img src="https://basket-25.wbbasket.ru/vol4435/part443550/443550372/images/big/1.webp" alt="profile">
+                </a>
+                <a href="/pages/site/favorites.html" class="icon-btn favorites-btn" aria-label="Избранное">
+                    <span class="icon-like" aria-hidden="true"></span>
+                </a>
+                <a href="/pages/site/cart.html" class="icon-btn cart-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+
+                    <!-- ВОТ ЭТО ДОБАВИТЬ -->
+                    <span class="cart-count-badge" id="cart-count-badge">0</span>
+                </a>
+                <button class="mobile-menu-btn" aria-label="Открыть меню" type="button">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="main order-main">
+    <div class="container">
+        <div class="section-header">
+            <h1 class="section-title">ОФОРМЛЕНИЕ ЗАКАЗА</h1>
+        </div>
+
+        <div class="order-layout">
+
+            <!-- ЛЕВАЯ ЧАСТЬ -->
+            <form class="order-form" id="order-form">
+                <h3 class="order-block-title">Контактные данные</h3>
+
+                <div class="form-group">
+                    <label>ФИО<span class="required">*</span></label>
+                    <input type="text" id="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email<span class="required">*</span></label>
+                    <input type="email" id="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Телефон<span class="required">*</span></label>
+                    <input type="tel" id="phone" required inputmode="tel" placeholder="+7 (999) 123-45-67">
+                </div>
+
+                <div class="form-group">
+                    <label>Адрес<span class="required">*</span></label>
+                    <input type="text" id="address" required>
+                </div>
+
+                <h3 class="order-block-title">Способ доставки</h3>
+
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="delivery" value="pickup" checked>
+                        Самовывоз
+                    </label>
+                    <label>
+                        <input type="radio" name="delivery" value="courier">
+                        Курьер
+                    </label>
+                </div>
+
+                <h3 class="order-block-title">Способ оплаты</h3>
+
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="payment" value="card" checked>
+                        Онлайн картой
+                    </label>
+                    <label>
+                        <input type="radio" name="payment" value="cash">
+                        Наличными
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary order-submit">
+                    Подтвердить заказ
+                </button>
+            </form>
+
+
+            <!-- ПРАВАЯ ЧАСТЬ -->
+            <div class="order-summary">
+                <h3 class="order-block-title">Ваш заказ</h3>
+
+                <div id="order-items" class="order-items"></div>
+
+                <div class="order-total">
+                    <span>Итого:</span>
+                    <span id="order-total-price">0 ₽</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="newsletter">
+            <div class="newsletter-left">
+                <h3 class="newsletter-title">Готовы узнавать о новинках?</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Ваш Email" class="newsletter-input">
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
+            </div>
+            <div class="newsletter-right">
+                <h4 class="newsletter-subtitle">Товары для дома и питомцев</h4>
+                <p class="newsletter-text">Мы подберём лучшие решения для вашего любимца и создадим комфорт вместе с вами.</p>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <div class="footer-column">
+                <h4 class="footer-column-title">О компании</h4>
+                <ul class="footer-list">
+                    <li><a href="#">Блог</a></li>
+                    <li><a href="#">Наша команда</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 class="footer-column-title">Поддержка</h4>
+                <ul class="footer-list">
+                    <li><a href="#">Связаться с нами</a></li>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#">Возврат</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 class="footer-column-title">Социальные сети</h4>
+                <div class="socials">
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.673 4 8.231c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.814-.542 1.27-1.422 2.176-3.61 2.176-3.61.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/>
+                        </svg>
+                        VK
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                        Telegram
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="copyright">© 2026 SOKEMI. Все права защищены.</p>
+            <div class="legal-links">
+                <a href="#">Пользовательское соглашение</a>
+                <a href="#">Политика конфиденциальности</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<script src="/script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const container = document.getElementById("order-items");
+    const totalEl = document.getElementById("order-total-price");
+
+    const phoneInput = document.getElementById("phone");
+
+    if (phoneInput) {
+        phoneInput.addEventListener("input", () => {
+            let value = phoneInput.value || "";
+            const hasPlus = value.trim().startsWith("+");
+            const digits = value.replace(/\D/g, "");
+            phoneInput.value = (hasPlus ? "+" : "") + digits;
+        });
+    }
+
+    function readOrders() {
+        try {
+            const raw = localStorage.getItem("sokemi.orders");
+            const parsed = raw ? JSON.parse(raw) : [];
+            return Array.isArray(parsed) ? parsed : [];
+        } catch {
+            return [];
+        }
+    }
+
+    function saveOrders(orders) {
+        localStorage.setItem("sokemi.orders", JSON.stringify(orders));
+    }
+
+    function createOrderId() {
+        const ts = Date.now();
+        const random = Math.floor(Math.random() * 900 + 100);
+        return `ORD-${ts}-${random}`;
+    }
+
+    let cart = [];
+
+    try {
+        cart = JSON.parse(localStorage.getItem("cart")) || [];
+    } catch {
+        cart = [];
+    }
+
+    if (!cart.length) {
+        container.innerHTML = "<p>Корзина пуста</p>";
+        return;
+    }
+
+    let total = 0;
+
+    cart.forEach(item => {
+        const quantity = Number(item.quantity) || 1;
+        const price = Number(item.price) || 0;
+        total += price * quantity;
+
+        const div = document.createElement("div");
+        div.className = "order-item";
+        div.innerHTML = `
+            <img src="${item.image}" alt="">
+            <div class="order-item-info">
+                <p class="order-item-name">${item.name}</p>
+                <p class="order-item-qty">${quantity} × ${price} ₽</p>
+            </div>
+            <div class="order-item-price">
+                ${price * quantity} ₽
+            </div>
+        `;
+        container.appendChild(div);
+    });
+
+    totalEl.textContent = new Intl.NumberFormat("ru-RU").format(total) + " ₽";
+
+    document.getElementById("order-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phoneRaw = document.getElementById("phone").value.trim();
+        const address = document.getElementById("address").value.trim();
+        const digits = phoneRaw.replace(/\D/g, "");
+        const isValidPhone =
+            (digits.length === 11 && (digits.startsWith("7") || digits.startsWith("8"))) ||
+            digits.length === 10;
+
+        if (!name || !email || !phoneRaw || !address) {
+            if (typeof showNotification === "function") {
+                showNotification("\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u0437\u0430\u043f\u043e\u043b\u043d\u0438\u0442\u0435 \u0432\u0441\u0435 \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u043f\u043e\u043b\u044f.", "error");
+            } else {
+                alert("\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u0437\u0430\u043f\u043e\u043b\u043d\u0438\u0442\u0435 \u0432\u0441\u0435 \u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u043f\u043e\u043b\u044f.");
+            }
+            return;
+        }
+
+        if (!isValidPhone) {
+            if (typeof showNotification === "function") {
+                showNotification("\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043b\u0435\u0444\u043e\u043d \u0432 \u0444\u043e\u0440\u043c\u0430\u0442\u0435 89031111111 \u0438\u043b\u0438 +79031111111.", "error");
+            } else {
+                alert("\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0442\u0435\u043b\u0435\u0444\u043e\u043d \u0432 \u0444\u043e\u0440\u043c\u0430\u0442\u0435 89031111111 \u0438\u043b\u0438 +79031111111.");
+            }
+            return;
+        }
+
+        const orders = readOrders();
+        const order = {
+            id: createOrderId(),
+            createdAt: new Date().toISOString(),
+            status: "\u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430",
+            total,
+            items: cart.map((item) => ({
+                id: String(item.id || item.baseId || ""),
+                name: String(item.name || "\u0422\u043e\u0432\u0430\u0440"),
+                quantity: Number(item.quantity) || 1,
+                price: Number(item.price) || 0,
+                image: String(item.image || "")
+            })),
+            customer: { name, email, phone: phoneRaw, address }
+        };
+
+        orders.unshift(order);
+        saveOrders(orders);
+
+        if (typeof showNotification === "function") {
+            showNotification("\u0421\u043f\u0430\u0441\u0438\u0431\u043e \u0437\u0430 \u0437\u0430\u043a\u0430\u0437!", "success");
+        } else {
+            alert("\u0421\u043f\u0430\u0441\u0438\u0431\u043e \u0437\u0430 \u0437\u0430\u043a\u0430\u0437!");
+        }
+        localStorage.removeItem("cart");
+        setTimeout(() => {
+            window.location.href = "/index.html";
+        }, 800);
+    });
+
+});
+</script>
+
+</body>
+</html>

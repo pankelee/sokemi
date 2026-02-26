@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог - Админ-панель</title>
+  <link rel="stylesheet" href="catalog.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <h1 class="brand">Админ-панель</h1>
+
+      <section>
+        <h2 class="menu-group-title">Разделы</h2>
+        <ul class="menu">
+          <!-- <li><a href="#">Главная</a></li> -->
+          <li><a class="active" href="#" data-tab="catalog">Каталог</a></li>
+                  <li><a href="#" data-tab="orders">Заказы</a></li>
+        </ul>
+      </section>
+
+      <div class="sidebar-footer">
+        <span class="avatar" aria-hidden="true"></span>
+        <span>Администратор</span>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="content-header" id="contentTitle">Каталог</div>
+
+      <section class="admin-tab" id="tab-catalog">
+      <section class="catalog-block" aria-label="Категории">
+        <h2 class="catalog-title">Категории</h2>
+
+        <button class="add-category-btn" type="button">+ Добавить категорию</button>
+
+        <div class="category-list" id="categoryList"></div>
+      </section>
+      </section>
+
+      <section class="admin-tab hidden" id="tab-orders">
+        <h2 class="catalog-title">Заказы</h2>
+        <div class="orders-list" id="ordersList"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="deleteModal" aria-hidden="true" role="dialog" aria-labelledby="deleteModalTitle">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-card">
+      <h3 class="modal-title" id="deleteModalTitle">Удаление</h3>
+      <p id="deleteMessage" class="modal-placeholder"></p>
+      <div class="modal-actions">
+        <button class="btn" type="button" data-close-modal>Отмена</button>
+        <button class="btn btn-danger" type="button" id="confirmDeleteBtn">Удалить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="categoryModal" aria-hidden="true" role="dialog" aria-labelledby="categoryModalTitle">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-card">
+      <h3 class="modal-title" id="categoryModalTitle">Категория</h3>
+      <form id="categoryForm" class="modal-form">
+        <label for="categoryNameInput">Название категории</label>
+        <input id="categoryNameInput" type="text" required>
+
+        <div class="upload-row">
+          <label>Изображение категории (необязательно)</label>
+          <div class="upload-controls">
+            <button class="btn" type="button" id="categoryImageUploadBtn">Загрузить изображение</button>
+            <button class="btn" type="button" id="categoryImageClearBtn">Очистить изображение</button>
+          </div>
+          <div class="upload-preview" id="categoryImagePreview">Изображение не выбрано</div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn" type="button" data-close-modal>Отмена</button>
+          <button class="btn btn-primary" type="submit">Сохранить</button>
+        </div>
+      </form>
+      <input id="categoryImageFileInput" type="file" accept="image/*" hidden>
+    </div>
+  </div>
+
+  <div class="modal" id="productModal" aria-hidden="true" role="dialog" aria-labelledby="productModalTitle">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-card modal-card-large">
+      <h3 class="modal-title" id="productModalTitle">Редактор товара</h3>
+      <form id="productForm" class="modal-form">
+        <label for="productNameInput">Название</label>
+        <input id="productNameInput" type="text" required>
+
+        <label for="productDescriptionInput">Описание</label>
+        <textarea id="productDescriptionInput" rows="3"></textarea>
+
+        <label for="productTypeInput">Тип</label>
+        <input id="productTypeInput" type="text">
+
+        <label for="productFlavorInput">Вкус</label>
+        <input id="productFlavorInput" type="text">
+
+        <label for="productAgeInput">Возраст</label>
+        <input id="productAgeInput" type="text">
+
+        <label for="productPriceInput">Цена (руб)</label>
+        <input id="productPriceInput" type="number" min="0" step="1" value="0">
+
+        <div class="editor-block">
+          <div class="editor-head">
+            <span>Вес</span>
+            <button class="btn" type="button" id="openAddWeightBtn">+ Добавить вес</button>
+          </div>
+          <div id="productWeightsList" class="weights-wrap"></div>
+        </div>
+
+        <div class="editor-block">
+          <div class="editor-head">
+            <span>Изображения</span>
+            <button class="btn" type="button" id="productImageUploadBtn">+ Добавить изображение</button>
+          </div>
+          <div id="productImagesList" class="image-list"></div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn" type="button" data-close-modal>Отмена</button>
+          <button class="btn btn-primary" type="submit">Сохранить</button>
+        </div>
+      </form>
+      <input id="productImageFileInput" type="file" accept="image/*" hidden>
+    </div>
+  </div>
+
+  <div class="modal" id="addWeightModal" aria-hidden="true" role="dialog" aria-labelledby="addWeightModalTitle">
+    <div class="modal-backdrop" data-close-one="addWeight"></div>
+    <div class="modal-card">
+      <h3 class="modal-title" id="addWeightModalTitle">Добавить вес</h3>
+      <form id="addWeightForm" class="modal-form">
+        <label for="addWeightInput">Вес в граммах</label>
+        <input id="addWeightInput" type="number" min="1" step="1" required>
+        <div class="modal-actions">
+          <button class="btn" type="button" data-close-one="addWeight">Отмена</button>
+          <button class="btn btn-primary" type="submit">Добавить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="catalog.js"></script>
+</body>
+</html>

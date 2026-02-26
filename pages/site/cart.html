@@ -1,0 +1,467 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOKEMI - Корзина</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="../../styles/cart.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+
+<header>
+    <div class="header">
+        <div class="container header-container">
+            <a href="/index.html" class="logo">
+                <img src="/images/logo.svg" alt="Sokemi" class="logo-image">
+            </a>
+
+            <nav class="nav">
+                <a href="/pages/site/about.html" class="nav-link">О нас</a>
+                <a href="/index.html" class="nav-link">Главная</a>
+                <a href="/pages/site/catalogue.html" class="nav-link">Каталог</a>
+                <a href="/pages/site/contacts.html" class="nav-link">Контакты</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="search-wrapper">
+                    <input type="text" placeholder="Поиск..." class="search-input">
+                    <button class="search-btn" type="button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </div>
+                <a href="/pages/site/profile.html" class="header-avatar">
+                    <img src="https://basket-25.wbbasket.ru/vol4435/part443550/443550372/images/big/1.webp" alt="profile">
+                </a>
+                <a href="/pages/site/favorites.html" class="icon-btn favorites-btn" aria-label="Избранное">
+                    <span class="icon-like" aria-hidden="true"></span>
+                </a>
+                <a href="/pages/site/cart.html" class="icon-btn cart-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+
+                    <!-- ВОТ ЭТО ДОБАВИТЬ -->
+                    <span class="cart-count-badge" id="cart-count-badge">0</span>
+                </a>
+                <button class="mobile-menu-btn" aria-label="Открыть меню" type="button">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="mobile-menu">
+    <div class="mobile-menu-header">
+        <a href="/index.html" class="logo">
+            <img src="/images/logo.svg" alt="Sokemi" class="logo-image">
+        </a>
+        <button class="mobile-menu-close" aria-label="Закрыть меню" type="button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+            </svg>
+        </button>
+    </div>
+    <nav class="mobile-nav">
+        <a href="/pages/site/about.html" class="mobile-nav-link">О нас</a>
+        <a href="/index.html" class="mobile-nav-link">Главная</a>
+        <a href="/pages/site/catalogue.html" class="mobile-nav-link">Каталог</a>
+        <a href="/pages/site/contacts.html" class="mobile-nav-link">Контакты</a>
+    </nav>
+</div>
+<div class="mobile-overlay"></div>
+
+<main class="main cart-main">
+    <div class="container">
+        <div class="section-header">
+            <h1 class="section-title">КОРЗИНА</h1>
+        </div>
+
+        <section>
+            <div class="cart-empty" id="cart-empty" hidden>
+                <h3>Ваша корзина пуста</h3>
+                <p>Добавьте товары из каталога, чтобы оформить заказ.</p>
+                <a href="/pages/site/catalogue.html" class="btn btn-primary">Перейти в каталог</a>
+            </div>
+
+            <div id="cart-content">
+                <div class="cart-list" id="cart-list"></div>
+
+                <div class="cart-summary">
+                    <p class="cart-total" id="cart-total">Итого: 0 ₽</p>
+                    <div class="cart-summary-actions">
+                        <button type="button" class="btn btn-outline" id="clear-cart-btn">Очистить корзину</button>
+                        <button type="button" class="btn btn-primary" id="checkout-btn">Оформить заказ</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="newsletter">
+            <div class="newsletter-left">
+                <h3 class="newsletter-title">Готовы узнавать о новинках?</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Ваш Email" class="newsletter-input">
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
+            </div>
+            <div class="newsletter-right">
+                <h4 class="newsletter-subtitle">Товары для дома и питомцев</h4>
+                <p class="newsletter-text">Мы подберём лучшие решения для вашего любимца и создадим комфорт вместе с вами.</p>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <div class="footer-column">
+                <h4 class="footer-column-title">О компании</h4>
+                <ul class="footer-list">
+                    <li><a href="#">Блог</a></li>
+                    <li><a href="#">Наша команда</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 class="footer-column-title">Поддержка</h4>
+                <ul class="footer-list">
+                    <li><a href="#">Связаться с нами</a></li>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#">Возврат</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 class="footer-column-title">Социальные сети</h4>
+                <div class="socials">
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.673 4 8.231c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.814-.542 1.27-1.422 2.176-3.61 2.176-3.61.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/>
+                        </svg>
+                        VK
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                        Telegram
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="copyright">© 2026 SOKEMI. Все права защищены.</p>
+            <div class="legal-links">
+                <a href="#">Пользовательское соглашение</a>
+                <a href="#">Политика конфиденциальности</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="/script.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const list = document.getElementById("cart-list");
+        const content = document.getElementById("cart-content");
+        const empty = document.getElementById("cart-empty");
+        const totalEl = document.getElementById("cart-total");
+        const clearBtn = document.getElementById("clear-cart-btn");
+        const checkoutBtn = document.getElementById("checkout-btn");
+        const badge = document.getElementById("cart-count-badge");
+
+        const catalogIndex = buildCatalogIndex();
+        let cart = readCart();
+
+        list.addEventListener("click", (event) => {
+            const target = event.target;
+            if (!(target instanceof HTMLElement)) return;
+
+            const button = target.closest("button[data-action]");
+            if (!button) return;
+
+            const id = String(button.dataset.id || "");
+            const action = String(button.dataset.action || "");
+            if (!id || !action) return;
+
+            if (action === "plus") {
+                changeQuantity(id, 1);
+            } else if (action === "minus") {
+                changeQuantity(id, -1);
+            } else if (action === "remove") {
+                removeItem(id);
+            }
+        });
+
+        list.addEventListener("change", (event) => {
+            const target = event.target;
+            if (!(target instanceof HTMLSelectElement)) return;
+            if (target.dataset.action !== "weight") return;
+            const id = String(target.dataset.id || "");
+            if (!id) return;
+            const nextWeight = Number(target.value);
+            updateWeight(id, nextWeight);
+        });
+
+        clearBtn.addEventListener("click", () => {
+            if (!cart.length) return;
+            cart = [];
+            saveCart();
+            render();
+            if (typeof showNotification === "function") {
+            showNotification("Корзина очищена", "info");
+            }
+        });
+
+        checkoutBtn.addEventListener("click", () => {
+            if (!cart.length) return;
+            window.location.href = "/pages/site/order.html";
+        });
+
+
+        render();
+
+        function render() {
+            list.innerHTML = "";
+
+            if (!cart.length) {
+                content.hidden = true;
+                empty.hidden = false;
+                if (badge) badge.textContent = "0";
+                saveCart();
+                if (typeof updateCartBadge === "function") {
+                    updateCartBadge();
+                }
+                return;
+            }
+
+            content.hidden = false;
+            empty.hidden = true;
+
+            let total = 0;
+            let totalCount = 0;
+
+            const fragment = document.createDocumentFragment();
+
+            cart.forEach((item) => {
+                const id = getItemKey(item);
+                const productId = getProductId(item);
+                const quantity = Math.max(1, Number(item.quantity) || 1);
+                const price = Math.max(0, Number(item.price) || 0);
+                const selectedWeight = Number(item.selectedWeight);
+                const hasWeight = Number.isFinite(selectedWeight) && selectedWeight > 0;
+                const weights = getWeightsForProduct(productId, catalogIndex);
+
+                total += price * quantity;
+                totalCount += quantity;
+
+                const article = document.createElement("article");
+                article.className = "cart-item";
+                const weightOptions = buildWeightOptions(weights, selectedWeight);
+                article.innerHTML = `
+                    <img class="cart-item-image" src="${escapeHtml(item.image || "")}" alt="${escapeHtml(item.name || "Товар")}">
+                    <div class="cart-item-info">
+                        <h3 class="cart-item-title">
+                            <a class="cart-item-title-link" href="/pages/site/catalogue.html#product=${encodeURIComponent(productId)}">${escapeHtml(item.name || "Товар")}</a>
+                        </h3>
+                    </div>
+                    <div class="cart-item-weight">
+                        <p class="cart-item-label">Вес</p>
+                        <select class="cart-weight-select" data-action="weight" data-id="${escapeHtml(id)}" ${weightOptions.disabled ? "disabled" : ""}>
+                            ${weightOptions.html}
+                        </select>
+                    </div>
+                    <div class="cart-item-unit-price">
+                        <p class="cart-item-label">Цена за шт.</p>
+                        <p class="cart-item-total">${formatPrice(price)}</p>
+                    </div>
+                    <div class="cart-item-qty">
+                        <p class="cart-qty-label">Количество</p>
+                        <div class="cart-qty">
+                            <button type="button" class="cart-qty-btn" data-action="minus" data-id="${escapeHtml(id)}" aria-label="Уменьшить">-</button>
+                            <span class="cart-qty-value">${quantity}</span>
+                            <button type="button" class="cart-qty-btn" data-action="plus" data-id="${escapeHtml(id)}" aria-label="Увеличить">+</button>
+                        </div>
+                    </div>
+                    <div class="cart-item-total-price">
+                        <p class="cart-item-label">Итого</p>
+                        <p class="cart-item-total">${formatPrice(price * quantity)}</p>
+                    </div>
+                    <div class="cart-item-remove">
+                        <button type="button" class="cart-remove-btn" data-action="remove" data-id="${escapeHtml(id)}" aria-label="Удалить">
+                            <span class="icon-trash" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                `;
+
+                fragment.appendChild(article);
+            });
+
+            list.appendChild(fragment);
+            totalEl.textContent = `Итого: ${formatPrice(total)}`;
+            saveCart();
+            updateCartBadge();
+        }
+
+        function changeQuantity(id, delta) {
+            const item = cart.find((entry) => getItemKey(entry) === id);
+            if (!item) return;
+
+            item.quantity = (Number(item.quantity) || 1) + delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter((entry) => getItemKey(entry) !== id);
+            }
+
+            render();
+        }
+
+        function updateWeight(id, nextWeight) {
+            const item = cart.find((entry) => getItemKey(entry) === id);
+            if (!item) return;
+
+            const productId = getProductId(item);
+            const normalizedWeight = Number.isFinite(nextWeight) && nextWeight > 0 ? nextWeight : null;
+            const nextId = makeCartItemId(productId, normalizedWeight);
+
+            const existing = cart.find((entry) => getItemKey(entry) === nextId);
+            if (existing && existing !== item) {
+                existing.quantity += Number(item.quantity) || 1;
+                cart = cart.filter((entry) => entry !== item);
+            } else {
+                item.id = nextId;
+                item.selectedWeight = normalizedWeight;
+            }
+
+            render();
+        }
+
+        function removeItem(id) {
+            cart = cart.filter((entry) => getItemKey(entry) !== id);
+            render();
+            if (typeof showNotification === "function") {
+                showNotification("Товар удален из корзины", "info");
+            }
+        }
+
+        function readCart() {
+            try {
+                const raw = localStorage.getItem("cart");
+                const parsed = raw ? JSON.parse(raw) : [];
+                return Array.isArray(parsed) ? parsed : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveCart() {
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+
+        function getItemKey(item) {
+            if (item && item.id) return String(item.id);
+            if (item && item.baseId) return String(item.baseId);
+            return String(item?.name || "");
+        }
+
+        function getProductId(item) {
+            const raw = String(item?.baseId || item?.id || "").trim();
+            if (!raw) return "";
+            return raw.includes("::") ? raw.split("::")[0] : raw;
+        }
+
+        function makeCartItemId(productId, selectedWeight) {
+            if (!selectedWeight) return String(productId);
+            return `${productId}::${selectedWeight}`;
+        }
+
+        function buildCatalogIndex() {
+            const index = new Map();
+            try {
+                const raw = localStorage.getItem("sokemi.catalog.v2");
+                const parsed = raw ? JSON.parse(raw) : null;
+                const categories = Array.isArray(parsed?.categories) ? parsed.categories : [];
+
+                categories.forEach((category) => {
+                    const products = Array.isArray(category?.products) ? category.products : [];
+                    products.forEach((product) => {
+                        const id = String(product?.id || "").trim();
+                        if (!id) return;
+                        const weights = Array.isArray(product?.weights)
+                            ? product.weights.map((item) => Number(item)).filter((item) => Number.isFinite(item) && item > 0)
+                            : [];
+                        index.set(id, weights);
+                    });
+                });
+            } catch {
+                return index;
+            }
+            return index;
+        }
+
+        function getWeightsForProduct(productId, index) {
+            if (!productId) return [];
+            const weights = index.get(productId);
+            return Array.isArray(weights) ? weights : [];
+        }
+
+        function buildWeightOptions(weights, selectedWeight) {
+            const normalized = weights
+                .map((item) => Number(item))
+                .filter((item) => Number.isFinite(item) && item > 0)
+                .map((item) => Math.round(item));
+
+            const unique = Array.from(new Set(normalized));
+            if (selectedWeight && !unique.includes(selectedWeight)) {
+                unique.unshift(selectedWeight);
+            }
+
+            if (!unique.length) {
+                return {
+                    disabled: true,
+                    html: `<option value="">Вес не указан</option>`
+                };
+            }
+
+            const html = unique
+                .map((weight) => {
+                    const selected = weight === selectedWeight ? "selected" : "";
+                    return `<option value="${weight}" ${selected}>${weight} г</option>`;
+                })
+                .join("");
+
+            return { disabled: false, html };
+        }
+
+        function formatPrice(value) {
+            const numeric = Math.max(0, Number(value) || 0);
+            return `${new Intl.NumberFormat("ru-RU").format(numeric)} ₽`;
+        }
+
+        function escapeHtml(value) {
+            return String(value || "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#39;");
+        }
+    });
+    </script>
+
+</body>
+</html>
+

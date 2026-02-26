@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOKEMI - Избранное</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .favorites-main {
+            padding-top: 8px;
+        }
+
+        .favorites-empty {
+            text-align: center;
+            padding: 34px 18px;
+            border-radius: var(--radius-md);
+            background: rgba(139, 163, 197, 0.16);
+        }
+
+        .favorites-empty h3 {
+            margin: 0 0 10px;
+            font-family: var(--font-display);
+        }
+
+        .favorites-empty p {
+            margin: 0 0 16px;
+            color: var(--color-text-light);
+        }
+
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .favorites-product-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+            border: 1px solid rgba(139, 163, 197, 0.2);
+        }
+
+        .favorites-product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .favorites-product-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            background: #f5f3ee;
+        }
+
+        .favorites-product-title {
+            margin: 0 0 6px;
+            font-size: 18px;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+
+        .favorites-product-title-link {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .favorites-product-title-link:hover {
+            color: #8ba3c5;
+        }
+
+        .favorites-product-meta {
+            margin: 0 0 8px;
+            font-size: 13px;
+            color: var(--color-text-light);
+            line-height: 1.4;
+        }
+
+        .favorites-product-description {
+            margin: 0 0 12px;
+            font-size: 14px;
+            color: var(--color-text);
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .favorites-product-price {
+            margin: 0 0 16px;
+            font-weight: 700;
+            font-size: 20px;
+            color: #2c3e4f;
+        }
+
+        .favorites-product-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        .favorites-controls-top {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .favorites-weight-select {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid rgba(139, 163, 197, 0.3);
+            border-radius: 20px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .favorites-weight-select:hover,
+        .favorites-weight-select:focus {
+            border-color: #8ba3c5;
+        }
+
+        .favorites-favorite-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(139, 163, 197, 0.3);
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .favorites-favorite-btn:hover {
+            border-color: #e6a5a5;
+            background: #fff5f5;
+        }
+
+        .favorites-favorite-btn.is-active {
+            border-color: #e6a5a5;
+            background: #fff0f0;
+        }
+
+        .favorites-favorite-icon {
+            width: 20px;
+            height: 20px;
+            background-color: #e6a5a5;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E") center / contain no-repeat;
+        }
+
+        .favorites-favorite-btn.is-active .favorites-favorite-icon {
+            background-color: #e06b6b;
+        }
+
+        .favorites-controls-bottom {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .favorites-qty-control {
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(139, 163, 197, 0.3);
+            border-radius: 30px;
+            background: white;
+            flex-shrink: 0;
+        }
+
+        .favorites-qty-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2c3e4f;
+            transition: color 0.2s;
+        }
+
+        .favorites-qty-btn:hover {
+            color: #8ba3c5;
+        }
+
+        .favorites-qty-value {
+            min-width: 24px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .favorites-add-btn {
+            flex: 1;
+            padding: 8px 12px;
+            background: #8ba3c5;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .favorites-add-btn:hover {
+            background: #6f8ab0;
+        }
+
+        .favorites-details-btn {
+            padding: 8px 12px;
+            background: transparent;
+            color: #2c3e4f;
+            border: 1px solid rgba(139, 163, 197, 0.3);
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .favorites-details-btn:hover {
+            border-color: #8ba3c5;
+            background: rgba(139, 163, 197, 0.05);
+        }
+
+        .favorites-summary {
+            margin-top: 32px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-top: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .favorites-total {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .favorites-summary-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 767px) {
+            .favorites-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 16px;
+            }
+
+            .favorites-summary {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .favorites-summary-actions .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .favorites-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header">
+        <div class="container header-container">
+            <a href="/index.html" class="logo">
+                <img src="/images/logo.svg" alt="Sokemi" class="logo-image">
+            </a>
+
+            <nav class="nav">
+                <a href="/pages/site/about.html" class="nav-link">О нас</a>
+                <a href="/index.html" class="nav-link">Главная</a>
+                <a href="/pages/site/catalogue.html" class="nav-link">Каталог</a>
+                <a href="/pages/site/contacts.html" class="nav-link">Контакты</a>
+            </nav>
+
+            <div class="header-actions">
+                <div class="search-wrapper">
+                    <input type="text" placeholder="Поиск..." class="search-input">
+                    <button class="search-btn" type="button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </div>
+                <a href="/pages/site/profile.html" class="header-avatar">
+                    <img src="https://basket-25.wbbasket.ru/vol4435/part443550/443550372/images/big/1.webp" alt="profile">
+                </a>
+                <a href="/pages/site/favorites.html" class="icon-btn favorites-btn" aria-label="Избранное">
+                    <span class="icon-like" aria-hidden="true"></span>
+                </a>
+                <a href="/pages/site/cart.html" class="icon-btn cart-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count-badge" id="cart-count-badge">0</span>
+                </a>
+                <button class="mobile-menu-btn" aria-label="Открыть меню" type="button">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="mobile-menu">
+    <div class="mobile-menu-header">
+        <a href="/index.html" class="logo">
+            <img src="/images/logo.svg" alt="Sokemi" class="logo-image">
+        </a>
+        <button class="mobile-menu-close" aria-label="Закрыть меню" type="button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+            </svg>
+        </button>
+    </div>
+    <nav class="mobile-nav">
+        <a href="/pages/site/about.html" class="mobile-nav-link">О нас</a>
+        <a href="/index.html" class="mobile-nav-link">Главная</a>
+        <a href="/pages/site/catalogue.html" class="mobile-nav-link">Каталог</a>
+        <a href="/pages/site/contacts.html" class="mobile-nav-link">Контакты</a>
+    </nav>
+</div>
+<div class="mobile-overlay"></div>
+
+<main class="main favorites-main">
+    <div class="container">
+        <div class="section-header">
+            <h1 class="section-title">ИЗБРАННОЕ</h1>
+        </div>
+
+        <section>
+            <div class="favorites-empty" id="favorites-empty" hidden>
+                <h3>В избранном пока пусто</h3>
+                <p>Добавьте товары из каталога, чтобы быстро вернуться к ним.</p>
+                <a href="/pages/site/catalogue.html" class="btn btn-primary">Перейти в каталог</a>
+            </div>
+
+            <div id="favorites-content">
+                <div class="favorites-grid" id="favorites-grid"></div>
+
+                <div class="favorites-summary">
+                    <p class="favorites-total" id="favorites-total">Всего товаров: 0</p>
+                    <div class="favorites-summary-actions">
+                        <button type="button" class="btn btn-outline" id="clear-favorites-btn">Очистить избранное</button>
+                        <a href="/pages/site/catalogue.html" class="btn btn-primary">В каталог</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <div class="newsletter">
+            <div class="newsletter-left">
+                <h3 class="newsletter-title">Готовы узнавать о новинках?</h3>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Ваш Email" class="newsletter-input">
+                    <button type="submit" class="btn btn-primary">Отправить</button>
+                </form>
+            </div>
+            <div class="newsletter-right">
+                <h4 class="newsletter-subtitle">Товары для дома и питомцев</h4>
+                <p class="newsletter-text">Мы подберём лучшие решения для вашего любимца и создадим комфорт вместе с вами.</p>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <div class="footer-column">
+                <h4 class="footer-column-title">О компании</h4>
+                <ul class="footer-list">
+                    <li><a href="#">Блог</a></li>
+                    <li><a href="#">Наша команда</a></li>
+                    <li><a href="#">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 class="footer-column-title">Поддержка</h4>
+                <ul class="footer-list">
+                    <li><a href="#">Связаться с нами</a></li>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#">Возврат</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4 class="footer-column-title">Социальные сети</h4>
+                <div class="socials">
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.864-.525-2.05-1.727-1.033-1-1.49-1.135-1.744-1.135-.356 0-.458.102-.458.593v1.575c0 .424-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.673 4 8.231c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.203.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.814-.542 1.27-1.422 2.176-3.61 2.176-3.61.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.744-.576.744z"/>
+                        </svg>
+                        VK
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                        </svg>
+                        Telegram
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="copyright">© 2026 SOKEMI. Все права защищены.</p>
+            <div class="legal-links">
+                <a href="#">Пользовательское соглашение</a>
+                <a href="#">Политика конфиденциальности</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="/script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const grid = document.getElementById("favorites-grid");
+    const content = document.getElementById("favorites-content");
+    const empty = document.getElementById("favorites-empty");
+    const totalEl = document.getElementById("favorites-total");
+    const clearBtn = document.getElementById("clear-favorites-btn");
+
+    const CATALOG_STORAGE_KEY = "sokemi.catalog.v2";
+    const PLACEHOLDER_IMAGE = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><rect width='100%' height='100%' fill='%23e5e2d3'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23666' font-family='Arial' font-size='20'>No Image</text></svg>";
+
+    let favorites = readFavoriteIds();
+    let allProducts = readAllProducts();
+    const cardStateByKey = new Map();
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    grid.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+
+        const card = target.closest(".favorites-product-card");
+        if (!card) return;
+
+        const productId = card.dataset.id;
+        const product = allProducts.find(p => p.id === productId);
+        if (!product) return;
+
+        const actionButton = target.closest("button[data-action]");
+        if (actionButton instanceof HTMLElement) {
+            const action = String(actionButton.dataset.action || "");
+            
+            if (action === "toggle-favorite") {
+                event.preventDefault();
+                toggleFavorite(product.id);
+                render();
+                return;
+            }
+
+            if (action === "qty-minus" || action === "qty-plus") {
+                event.preventDefault();
+                const delta = action === "qty-plus" ? 1 : -1;
+                changeCardQuantity(product, delta);
+                render();
+                return;
+            }
+
+            if (action === "add-to-cart") {
+                event.preventDefault();
+                const state = ensureCardState(product);
+                addProductToCart(product, state.quantity, state.weight);
+                return;
+            }
+
+            if (action === "open-modal") {
+                event.preventDefault();
+                
+                const modal = document.getElementById('product-modal');
+                if (modal && typeof openGlobalModal === 'function') {
+                    openGlobalModal(product);
+                } else {
+                    openLocalModal(product);
+                }
+                return;
+            }
+        }
+
+        if (target.closest(".favorites-controls-top") || target.closest(".favorites-controls-bottom")) {
+            return;
+        }
+
+        window.location.href = `/pages/site/catalogue.html#product=${encodeURIComponent(product.id)}`;
+    });
+
+    grid.addEventListener("change", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLSelectElement)) return;
+        if (!target.classList.contains("favorites-weight-select")) return;
+
+        const card = target.closest(".favorites-product-card");
+        if (!card) return;
+
+        const productId = card.dataset.id;
+        const product = allProducts.find(p => p.id === productId);
+        if (!product) return;
+
+        const parsedWeight = Number(target.value);
+        const state = ensureCardState(product);
+        state.weight = Number.isFinite(parsedWeight) && parsedWeight > 0 ? parsedWeight : null;
+        cardStateByKey.set(product.key, state);
+    });
+
+    clearBtn.addEventListener("click", () => {
+        if (!favorites.length) return;
+        favorites = [];
+        saveFavorites();
+        render();
+        if (typeof showNotification === "function") {
+            showNotification("Избранное очищено", "info");
+        }
+    });
+
+    render();
+
+    function render() {
+        if (!grid) return;
+
+        if (!favorites.length) {
+            content.hidden = true;
+            empty.hidden = false;
+            totalEl.textContent = "Всего товаров: 0";
+            return;
+        }
+
+        const favoriteProducts = findFavoriteProducts(favorites, allProducts);
+        if (!favoriteProducts.length) {
+            content.hidden = true;
+            empty.hidden = false;
+            totalEl.textContent = "Всего товаров: 0";
+            return;
+        }
+
+        content.hidden = false;
+        empty.hidden = true;
+
+        const fragment = document.createDocumentFragment();
+        favoriteProducts.forEach(product => {
+            fragment.appendChild(createProductCard(product));
+        });
+
+        grid.innerHTML = "";
+        grid.appendChild(fragment);
+        totalEl.textContent = `Всего товаров: ${favoriteProducts.length}`;
+    }
+
+    function createProductCard(product) {
+        const card = document.createElement("div");
+        card.className = "favorites-product-card";
+        card.dataset.id = product.id;
+        card.dataset.key = product.key;
+        
+        const state = ensureCardState(product);
+        const isFavorite = favorites.includes(product.id);
+
+        const metaParts = [];
+        if (product.categoryName) metaParts.push(`Категория: ${product.categoryName}`);
+        if (product.brand) metaParts.push(`Бренд: ${product.brand}`);
+        if (product.type) metaParts.push(product.type);
+        const metaText = metaParts.join(" • ");
+
+        card.innerHTML = `
+            <img class="favorites-product-image" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}">
+            <h3 class="favorites-product-title">
+                <a class="favorites-product-title-link" href="/pages/site/catalogue.html#product=${encodeURIComponent(product.id)}">${escapeHtml(product.name)}</a>
+            </h3>
+            <p class="favorites-product-meta">${escapeHtml(metaText)}</p>
+            <p class="favorites-product-description">${escapeHtml(product.description || "Описание пока не добавлено.")}</p>
+            <p class="favorites-product-price">${formatPrice(product.price)}</p>
+            
+            <div class="favorites-product-controls">
+                <div class="favorites-controls-top">
+                    <select class="favorites-weight-select" aria-label="Вес товара ${escapeHtml(product.name)}">
+                        ${product.weights && product.weights.length 
+                            ? product.weights.map(w => `<option value="${w}" ${state.weight === w ? 'selected' : ''}>${w} г</option>`).join('')
+                            : '<option value="">Вес не указан</option>'
+                        }
+                    </select>
+                    
+                    <button type="button" class="favorites-favorite-btn ${isFavorite ? 'is-active' : ''}" data-action="toggle-favorite" aria-label="${isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}">
+                        <span class="favorites-favorite-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+                
+                <div class="favorites-controls-bottom">
+                    <div class="favorites-qty-control">
+                        <button type="button" class="favorites-qty-btn" data-action="qty-minus" aria-label="Уменьшить количество">-</button>
+                        <span class="favorites-qty-value">${state.quantity}</span>
+                        <button type="button" class="favorites-qty-btn" data-action="qty-plus" aria-label="Увеличить количество">+</button>
+                    </div>
+                    
+                    <button type="button" class="favorites-add-btn" data-action="add-to-cart">В корзину</button>
+                    <button type="button" class="favorites-details-btn" data-action="open-modal">Подробнее</button>
+                </div>
+            </div>
+        `;
+
+        if (!product.weights || !product.weights.length) {
+            const select = card.querySelector('.favorites-weight-select');
+            if (select) select.disabled = true;
+        }
+
+        return card;
+    }
+
+    function readFavoriteIds() {
+        try {
+            const raw = localStorage.getItem("favorites");
+            const parsed = raw ? JSON.parse(raw) : [];
+            return Array.isArray(parsed) ? parsed.map(item => String(item)).filter(Boolean) : [];
+        } catch {
+            return [];
+        }
+    }
+
+    function saveFavorites() {
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+    }
+
+    function toggleFavorite(productId) {
+        const id = String(productId || "").trim();
+        if (!id) return;
+
+        const index = favorites.indexOf(id);
+        if (index === -1) {
+            favorites.push(id);
+            if (typeof showNotification === "function") {
+                showNotification("Товар добавлен в избранное", "success");
+            }
+        } else {
+            favorites.splice(index, 1);
+            if (typeof showNotification === "function") {
+                showNotification("Товар удален из избранного", "info");
+            }
+        }
+        saveFavorites();
+    }
+
+    function readAllProducts() {
+        try {
+            const raw = localStorage.getItem(CATALOG_STORAGE_KEY);
+            const parsed = raw ? JSON.parse(raw) : null;
+            const categories = Array.isArray(parsed?.categories) ? parsed.categories : [];
+            const products = [];
+
+            categories.forEach((category, catIndex) => {
+                const categoryId = String(category.id || `cat-${catIndex + 1}`).trim();
+                const categoryName = String(category.name || "").trim();
+                const categoryImage = String(category.imageUrl || "").trim();
+                const items = Array.isArray(category.products) ? category.products : [];
+
+                items.forEach((product, prodIndex) => {
+                    const productId = String(product.id || `${categoryId}-prod-${prodIndex + 1}`).trim();
+                    const key = `${categoryId}::${productId}::${prodIndex}`;
+                    
+                    products.push({
+                        key,
+                        id: productId,
+                        name: String(product.name || "Товар без названия").trim(),
+                        description: String(product.description || "").trim(),
+                        price: Number(product.price) || 0,
+                        type: String(product.type || "").trim(),
+                        flavor: String(product.flavor || "").trim(),
+                        age: String(product.age || "").trim(),
+                        weights: Array.isArray(product.weights) ? product.weights.filter(w => Number(w) > 0).map(w => Number(w)) : [],
+                        brand: String(product.brand || "").trim(),
+                        categoryName,
+                        categoryKey: mapCategoryToFilterKey(categoryId, categoryName),
+                        image: pickImage(product, categoryImage)
+                    });
+                });
+            });
+
+            return products;
+        } catch (error) {
+            console.error("Error reading products:", error);
+            return [];
+        }
+    }
+
+    function mapCategoryToFilterKey(categoryId, categoryName) {
+        const value = `${categoryId} ${categoryName}`.toLowerCase();
+        if (value.includes("food") || value.includes("корм")) return "food";
+        if (value.includes("care") || value.includes("уход")) return "care";
+        if (value.includes("toy") || value.includes("игруш")) return "toys";
+        return "other";
+    }
+
+    function pickImage(product, categoryImage) {
+        if (product && Array.isArray(product.images) && product.images.length > 0) {
+            const first = String(product.images[0] || "").trim();
+            if (first) return first;
+        }
+        return categoryImage || PLACEHOLDER_IMAGE;
+    }
+
+    function findFavoriteProducts(favoriteIds, productsList) {
+        const lookup = new Map(productsList.map(item => [item.id, item]));
+        return favoriteIds
+            .map(id => lookup.get(id))
+            .filter(Boolean);
+    }
+
+    function formatPrice(value) {
+        const safe = Math.max(0, Number(value) || 0);
+        return `${new Intl.NumberFormat("ru-RU").format(safe)} ₽`;
+    }
+
+    function escapeHtml(value) {
+        if (value === undefined || value === null) return '';
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    function ensureCardState(product) {
+        const existing = cardStateByKey.get(product.key);
+        if (existing) return existing;
+
+        const next = {
+            quantity: 1,
+            weight: product.weights && product.weights.length ? product.weights[0] : null
+        };
+        cardStateByKey.set(product.key, next);
+        return next;
+    }
+
+    function changeCardQuantity(product, delta) {
+        const state = ensureCardState(product);
+        state.quantity = Math.max(1, Math.min(99, state.quantity + delta));
+        cardStateByKey.set(product.key, state);
+    }
+
+    function addProductToCart(product, quantity, selectedWeight) {
+        const safeQty = Math.max(1, Math.min(99, Number(quantity) || 1));
+        const normalizedWeight = selectedWeight && product.weights && product.weights.includes(selectedWeight) 
+            ? selectedWeight 
+            : (product.weights && product.weights.length ? product.weights[0] : null);
+        
+        const cartItemId = normalizedWeight ? `${product.id}::${normalizedWeight}` : String(product.id);
+        const existing = cart.find(item => item.id === cartItemId);
+
+        if (existing) {
+            existing.quantity += safeQty;
+        } else {
+            cart.push({
+                id: cartItemId,
+                baseId: product.id,
+                key: product.key,
+                name: product.name,
+                description: product.description,
+                price: product.price,
+                image: product.image,
+                quantity: safeQty,
+                selectedWeight: normalizedWeight
+            });
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        
+        const badge = document.getElementById('cart-count-badge');
+        if (badge) {
+            const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            badge.textContent = totalItems;
+            badge.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+
+        if (typeof showNotification === "function") {
+            showNotification("Товар добавлен в корзину", "success");
+        } else {
+            alert("Товар добавлен в корзину");
+        }
+    }
+
+    function updateCartBadge() {
+        const badge = document.getElementById('cart-count-badge');
+        if (badge) {
+            const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            badge.textContent = totalItems;
+            badge.style.display = totalItems > 0 ? 'flex' : 'none';
+        }
+    }
+
+    // Функция для открытия модального окна
+    function openLocalModal(product) {
+        const modal = document.getElementById('product-modal');
+        if (!modal) return;
+        
+        const modalImage = document.getElementById('modal-image');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDescription = document.getElementById('modal-description');
+        const modalMeta = document.getElementById('modal-meta');
+        const modalPrice = document.getElementById('modal-price');
+        const modalWeight = document.getElementById('modal-weight');
+        const modalQtyValue = document.getElementById('modal-qty-value');
+        const addToCartBtn = document.getElementById('add-to-cart');
+        const addToFavoritesBtn = document.getElementById('add-to-favorites');
+        
+        if (modalImage) modalImage.src = product.image;
+        if (modalTitle) modalTitle.textContent = product.name;
+        if (modalDescription) modalDescription.textContent = product.description;
+        
+        const metaParts = [];
+        if (product.categoryName) metaParts.push(`Категория: ${product.categoryName}`);
+        if (product.type) metaParts.push(`Тип: ${product.type}`);
+        if (product.flavor) metaParts.push(`Вкус: ${product.flavor}`);
+        if (product.age) metaParts.push(`Возраст: ${product.age}`);
+        if (product.brand) metaParts.push(`Бренд: ${product.brand}`);
+        
+        if (modalMeta) modalMeta.textContent = metaParts.join(" • ");
+        if (modalPrice) modalPrice.textContent = formatPrice(product.price);
+        
+        // Заполняем выбор веса
+        if (modalWeight) {
+            modalWeight.innerHTML = '';
+            if (product.weights && product.weights.length) {
+                const state = ensureCardState(product);
+                product.weights.forEach(weight => {
+                    const option = document.createElement('option');
+                    option.value = weight;
+                    option.textContent = `${weight} г`;
+                    if (state.weight === weight) option.selected = true;
+                    modalWeight.appendChild(option);
+                });
+                modalWeight.disabled = false;
+            } else {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'Вес не указан';
+                modalWeight.appendChild(option);
+                modalWeight.disabled = true;
+            }
+        }
+        
+        // Устанавливаем количество
+        const state = ensureCardState(product);
+        if (modalQtyValue) modalQtyValue.textContent = state.quantity;
+        
+        // Настраиваем кнопки
+        if (addToCartBtn) {
+            addToCartBtn.onclick = () => {
+                const weight = modalWeight ? Number(modalWeight.value) : null;
+                const qty = Number(modalQtyValue?.textContent || 1);
+                addProductToCart(product, qty, weight);
+                modal.classList.remove('active');
+            };
+        }
+        
+        if (addToFavoritesBtn) {
+            const isFavorite = favorites.includes(product.id);
+            addToFavoritesBtn.textContent = isFavorite ? 'Убрать из избранного' : 'В избранное';
+            addToFavoritesBtn.onclick = () => {
+                toggleFavorite(product.id);
+                const nowFavorite = favorites.includes(product.id);
+                addToFavoritesBtn.textContent = nowFavorite ? 'Убрать из избранного' : 'В избранное';
+                render();
+            };
+        }
+        
+        // Обработчики для +/- в модальном окне
+        const minusBtn = document.getElementById('modal-qty-minus');
+        const plusBtn = document.getElementById('modal-qty-plus');
+        const qtyDisplay = document.getElementById('modal-qty-value');
+        
+        if (minusBtn && plusBtn && qtyDisplay) {
+            const updateQty = (delta) => {
+                let val = Number(qtyDisplay.textContent) + delta;
+                val = Math.max(1, Math.min(99, val));
+                qtyDisplay.textContent = val;
+            };
+            
+            minusBtn.onclick = () => updateQty(-1);
+            plusBtn.onclick = () => updateQty(1);
+        }
+        
+        modal.classList.add('active');
+    }
+
+    updateCartBadge();
+});
+</script>
+
+</body>
+</html>
