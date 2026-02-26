@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SOKEMI Pet Shop - Interactive Scripts
  */
  
@@ -171,17 +171,17 @@ function initNewsletterForm() {
         const email = input.value.trim();
         
         if (!email) {
-            showNotification('Пожалуйста, введите email', 'error');
+            showNotification('РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРІРµРґРёС‚Рµ email', 'error');
             return;
         }
         
         if (!isValidEmail(email)) {
-            showNotification('Пожалуйста, введите корректный email', 'error');
+            showNotification('РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРІРµРґРёС‚Рµ РєРѕСЂСЂРµРєС‚РЅС‹Р№ email', 'error');
             return;
         }
         
         // Simulate form submission
-        showNotification('Спасибо за подписку!', 'success');
+        showNotification('РЎРїР°СЃРёР±Рѕ Р·Р° РїРѕРґРїРёСЃРєСѓ!', 'success');
         input.value = '';
     });
 }
@@ -228,7 +228,7 @@ function initHomeProductCards() {
                         saveFavoritesMeta(favoritesMeta);
                     }
                     if (typeof showNotification === "function") {
-                        showNotification("Удалено из избранного", "info");
+                        showNotification("РЈРґР°Р»РµРЅРѕ РёР· РёР·Р±СЂР°РЅРЅРѕРіРѕ", "info");
                     }
                 } else {
                     favorites.add(product.id);
@@ -244,7 +244,7 @@ function initHomeProductCards() {
                         saveFavoritesMeta(favoritesMeta);
                     }
                     if (typeof showNotification === "function") {
-                        showNotification("Добавлено в избранное", "success");
+                        showNotification("Р”РѕР±Р°РІР»РµРЅРѕ РІ РёР·Р±СЂР°РЅРЅРѕРµ", "success");
                     }
                 }
                 saveFavoritesSafe(favorites);
@@ -272,7 +272,7 @@ function initHomeProductCards() {
 
         if (detailsBtn) {
             detailsBtn.addEventListener("click", () => {
-                window.location.href = `/pages/site/catalogue.html#product=${encodeURIComponent(product.id)}`;
+                window.location.href = `./pages/site/catalogue.html#product=${encodeURIComponent(product.id)}`;
             });
         }
     });
@@ -287,7 +287,7 @@ function buildHomeProductFromCard(card, index, catalogProducts) {
 
     const fallbackId = `home-product-${index + 1}`;
     const cardId = String(card.dataset.productId || "").trim();
-    const cardName = String(nameEl?.textContent || "").trim() || "Товар";
+    const cardName = String(nameEl?.textContent || "").trim() || "РўРѕРІР°СЂ";
 
     const catalogMatch = resolveHomeProductFromCatalog(
         catalogProducts,
@@ -404,10 +404,10 @@ function normalizeTitle(value) {
 
 function extractCardCategory(card) {
     const meta = String(card.querySelector(".product-meta")?.textContent || "");
-    const parts = meta.split("•").map((item) => item.trim());
-    const categoryPart = parts.find((item) => item.toLowerCase().startsWith("категория"));
+    const parts = meta.split("вЂў").map((item) => item.trim());
+    const categoryPart = parts.find((item) => item.toLowerCase().startsWith("РєР°С‚РµРіРѕСЂРёСЏ"));
     if (!categoryPart) return "";
-    return categoryPart.replace(/категория\\s*:\\s*/i, "").trim();
+    return categoryPart.replace(/РєР°С‚РµРіРѕСЂРёСЏ\\s*:\\s*/i, "").trim();
 }
 
 function readWeightsFromSelect(select) {
@@ -423,14 +423,14 @@ function readWeightsFromSelect(select) {
 function normalizeImagePath(value) {
     const raw = String(value || "").trim();
     if (!raw) return "";
-    if (raw.startsWith("http") || raw.startsWith("/")) return raw;
-    if (raw.startsWith("./")) return `/${raw.slice(2)}`;
-    return `/${raw}`;
+    if (raw.startsWith("http") || raw.startsWith("data:")) return raw;
+    if (raw.startsWith("/")) return raw.slice(1);
+    return raw;
 }
 
 function buildHomeMetaText(card) {
     const meta = String(card.querySelector(".product-meta")?.textContent || "").trim();
-    return meta || "Категория: не указана";
+    return meta || "РљР°С‚РµРіРѕСЂРёСЏ: РЅРµ СѓРєР°Р·Р°РЅР°";
 }
 
 function applyHomeWeights(select, weights) {
@@ -440,7 +440,7 @@ function applyHomeWeights(select, weights) {
 
     const unique = Array.from(new Set(normalized));
     if (!unique.length) {
-        select.innerHTML = '<option value="">Вес не указан</option>';
+        select.innerHTML = '<option value="">Р’РµСЃ РЅРµ СѓРєР°Р·Р°РЅ</option>';
         select.disabled = true;
         return;
     }
@@ -448,7 +448,7 @@ function applyHomeWeights(select, weights) {
     select.innerHTML = unique
         .map((weight, index) => {
             const selected = index === 0 ? "selected" : "";
-            return `<option value="${weight}" ${selected}>${weight} г</option>`;
+            return `<option value="${weight}" ${selected}>${weight} Рі</option>`;
         })
         .join("");
     select.disabled = false;
@@ -522,7 +522,7 @@ function addHomeProductToCart(product, quantity, selectedWeight) {
     localStorage.setItem("cart", JSON.stringify(cart));
     if (typeof updateCartBadge === "function") updateCartBadge();
     document.dispatchEvent(new Event("cart:updated"));
-    showNotification("Товар добавлен в корзину", "success");
+    showNotification("РўРѕРІР°СЂ РґРѕР±Р°РІР»РµРЅ РІ РєРѕСЂР·РёРЅСѓ", "success");
 }
 
 /**
@@ -653,7 +653,7 @@ document.querySelectorAll('.catalog, .popular').forEach(section => {
  */
 document.querySelectorAll('.cart-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        showNotification('Корзина пока пуста', 'info');
+        showNotification('РљРѕСЂР·РёРЅР° РїРѕРєР° РїСѓСЃС‚Р°', 'info');
     });
 });
 
@@ -696,7 +696,7 @@ function updateCartBadge() {
     badge.textContent = uniqueCount > 0 ? String(uniqueCount) : "0";
 }
 
-/* автообновление если localStorage меняется */
+/* Р°РІС‚РѕРѕР±РЅРѕРІР»РµРЅРёРµ РµСЃР»Рё localStorage РјРµРЅСЏРµС‚СЃСЏ */
 window.addEventListener("storage", updateCartBadge);
 
 initCartBadgeAutoUpdate();
@@ -737,4 +737,5 @@ function initCartBadgeAutoUpdate() {
     document.addEventListener("cart:updated", updateCartBadge);
 }
 
-console.log('🐾 SOKEMI Pet Shop loaded successfully!');
+console.log('рџђѕ SOKEMI Pet Shop loaded successfully!');
+

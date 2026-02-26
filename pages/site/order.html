@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>SOKEMI — Оформление заказа</title>
+    <title>SOKEMI вЂ” РћС„РѕСЂРјР»РµРЅРёРµ Р·Р°РєР°Р·Р°</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Общие стили -->
-    <link rel="stylesheet" href="/styles.css">
-    <!-- Стили только для страницы заказа -->
+    <!-- РћР±С‰РёРµ СЃС‚РёР»Рё -->
+    <link rel="stylesheet" href="../../styles.css">
+    <!-- РЎС‚РёР»Рё С‚РѕР»СЊРєРѕ РґР»СЏ СЃС‚СЂР°РЅРёС†С‹ Р·Р°РєР°Р·Р° -->
     <link rel="stylesheet" href="../../styles/order.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -17,20 +17,20 @@
 <header>
     <div class="header">
         <div class="container header-container">
-            <a href="/index.html" class="logo">
-                <img src="/images/logo.svg" alt="Sokemi" class="logo-image">
+            <a href="../../index.html" class="logo">
+                <img src="../../images/logo.svg" alt="Sokemi" class="logo-image">
             </a>
 
             <nav class="nav">
-                <a href="/pages/site/about.html" class="nav-link">О нас</a>
-                <a href="/index.html" class="nav-link">Главная</a>
-                <a href="/pages/site/catalogue.html" class="nav-link">Каталог</a>
-                <a href="/pages/site/contacts.html" class="nav-link">Контакты</a>
+                <a href="./about.html" class="nav-link">Рћ РЅР°СЃ</a>
+                <a href="../../index.html" class="nav-link">Р“Р»Р°РІРЅР°СЏ</a>
+                <a href="./catalogue.html" class="nav-link">РљР°С‚Р°Р»РѕРі</a>
+                <a href="./contacts.html" class="nav-link">РљРѕРЅС‚Р°РєС‚С‹</a>
             </nav>
 
             <div class="header-actions">
                 <div class="search-wrapper">
-                    <input type="text" placeholder="Поиск..." class="search-input">
+                    <input type="text" placeholder="РџРѕРёСЃРє..." class="search-input">
                     <button class="search-btn" type="button">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"></circle>
@@ -38,23 +38,23 @@
                         </svg>
                     </button>
                 </div>
-                <a href="/pages/site/profile.html" class="header-avatar">
+                <a href="./profile.html" class="header-avatar">
                     <img src="https://basket-25.wbbasket.ru/vol4435/part443550/443550372/images/big/1.webp" alt="profile">
                 </a>
-                <a href="/pages/site/favorites.html" class="icon-btn favorites-btn" aria-label="Избранное">
+                <a href="./favorites.html" class="icon-btn favorites-btn" aria-label="РР·Р±СЂР°РЅРЅРѕРµ">
                     <span class="icon-like" aria-hidden="true"></span>
                 </a>
-                <a href="/pages/site/cart.html" class="icon-btn cart-btn">
+                <a href="./cart.html" class="icon-btn cart-btn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1"></circle>
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
 
-                    <!-- ВОТ ЭТО ДОБАВИТЬ -->
+                    <!-- Р’РћРў Р­РўРћ Р”РћР‘РђР’РРўР¬ -->
                     <span class="cart-count-badge" id="cart-count-badge">0</span>
                 </a>
-                <button class="mobile-menu-btn" aria-label="Открыть меню" type="button">
+                <button class="mobile-menu-btn" aria-label="РћС‚РєСЂС‹С‚СЊ РјРµРЅСЋ" type="button">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -67,17 +67,17 @@
 <main class="main order-main">
     <div class="container">
         <div class="section-header">
-            <h1 class="section-title">ОФОРМЛЕНИЕ ЗАКАЗА</h1>
+            <h1 class="section-title">РћР¤РћР РњР›Р•РќРР• Р—РђРљРђР—Рђ</h1>
         </div>
 
         <div class="order-layout">
 
-            <!-- ЛЕВАЯ ЧАСТЬ -->
+            <!-- Р›Р•Р’РђРЇ Р§РђРЎРўР¬ -->
             <form class="order-form" id="order-form">
-                <h3 class="order-block-title">Контактные данные</h3>
+                <h3 class="order-block-title">РљРѕРЅС‚Р°РєС‚РЅС‹Рµ РґР°РЅРЅС‹Рµ</h3>
 
                 <div class="form-group">
-                    <label>ФИО<span class="required">*</span></label>
+                    <label>Р¤РРћ<span class="required">*</span></label>
                     <input type="text" id="name" required>
                 </div>
 
@@ -87,56 +87,56 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Телефон<span class="required">*</span></label>
+                    <label>РўРµР»РµС„РѕРЅ<span class="required">*</span></label>
                     <input type="tel" id="phone" required inputmode="tel" placeholder="+7 (999) 123-45-67">
                 </div>
 
                 <div class="form-group">
-                    <label>Адрес<span class="required">*</span></label>
+                    <label>РђРґСЂРµСЃ<span class="required">*</span></label>
                     <input type="text" id="address" required>
                 </div>
 
-                <h3 class="order-block-title">Способ доставки</h3>
+                <h3 class="order-block-title">РЎРїРѕСЃРѕР± РґРѕСЃС‚Р°РІРєРё</h3>
 
                 <div class="radio-group">
                     <label>
                         <input type="radio" name="delivery" value="pickup" checked>
-                        Самовывоз
+                        РЎР°РјРѕРІС‹РІРѕР·
                     </label>
                     <label>
                         <input type="radio" name="delivery" value="courier">
-                        Курьер
+                        РљСѓСЂСЊРµСЂ
                     </label>
                 </div>
 
-                <h3 class="order-block-title">Способ оплаты</h3>
+                <h3 class="order-block-title">РЎРїРѕСЃРѕР± РѕРїР»Р°С‚С‹</h3>
 
                 <div class="radio-group">
                     <label>
                         <input type="radio" name="payment" value="card" checked>
-                        Онлайн картой
+                        РћРЅР»Р°Р№РЅ РєР°СЂС‚РѕР№
                     </label>
                     <label>
                         <input type="radio" name="payment" value="cash">
-                        Наличными
+                        РќР°Р»РёС‡РЅС‹РјРё
                     </label>
                 </div>
 
                 <button type="submit" class="btn btn-primary order-submit">
-                    Подтвердить заказ
+                    РџРѕРґС‚РІРµСЂРґРёС‚СЊ Р·Р°РєР°Р·
                 </button>
             </form>
 
 
-            <!-- ПРАВАЯ ЧАСТЬ -->
+            <!-- РџР РђР’РђРЇ Р§РђРЎРўР¬ -->
             <div class="order-summary">
-                <h3 class="order-block-title">Ваш заказ</h3>
+                <h3 class="order-block-title">Р’Р°С€ Р·Р°РєР°Р·</h3>
 
                 <div id="order-items" class="order-items"></div>
 
                 <div class="order-total">
-                    <span>Итого:</span>
-                    <span id="order-total-price">0 ₽</span>
+                    <span>РС‚РѕРіРѕ:</span>
+                    <span id="order-total-price">0 в‚Ѕ</span>
                 </div>
             </div>
 
@@ -148,38 +148,38 @@
     <div class="container">
         <div class="newsletter">
             <div class="newsletter-left">
-                <h3 class="newsletter-title">Готовы узнавать о новинках?</h3>
+                <h3 class="newsletter-title">Р“РѕС‚РѕРІС‹ СѓР·РЅР°РІР°С‚СЊ Рѕ РЅРѕРІРёРЅРєР°С…?</h3>
                 <form class="newsletter-form">
-                    <input type="email" placeholder="Ваш Email" class="newsletter-input">
-                    <button type="submit" class="btn btn-primary">Отправить</button>
+                    <input type="email" placeholder="Р’Р°С€ Email" class="newsletter-input">
+                    <button type="submit" class="btn btn-primary">РћС‚РїСЂР°РІРёС‚СЊ</button>
                 </form>
             </div>
             <div class="newsletter-right">
-                <h4 class="newsletter-subtitle">Товары для дома и питомцев</h4>
-                <p class="newsletter-text">Мы подберём лучшие решения для вашего любимца и создадим комфорт вместе с вами.</p>
+                <h4 class="newsletter-subtitle">РўРѕРІР°СЂС‹ РґР»СЏ РґРѕРјР° Рё РїРёС‚РѕРјС†РµРІ</h4>
+                <p class="newsletter-text">РњС‹ РїРѕРґР±РµСЂС‘Рј Р»СѓС‡С€РёРµ СЂРµС€РµРЅРёСЏ РґР»СЏ РІР°С€РµРіРѕ Р»СЋР±РёРјС†Р° Рё СЃРѕР·РґР°РґРёРј РєРѕРјС„РѕСЂС‚ РІРјРµСЃС‚Рµ СЃ РІР°РјРё.</p>
             </div>
         </div>
 
         <div class="footer-links">
             <div class="footer-column">
-                <h4 class="footer-column-title">О компании</h4>
+                <h4 class="footer-column-title">Рћ РєРѕРјРїР°РЅРёРё</h4>
                 <ul class="footer-list">
-                    <li><a href="#">Блог</a></li>
-                    <li><a href="#">Наша команда</a></li>
-                    <li><a href="#">Контакты</a></li>
+                    <li><a href="#">Р‘Р»РѕРі</a></li>
+                    <li><a href="#">РќР°С€Р° РєРѕРјР°РЅРґР°</a></li>
+                    <li><a href="#">РљРѕРЅС‚Р°РєС‚С‹</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h4 class="footer-column-title">Поддержка</h4>
+                <h4 class="footer-column-title">РџРѕРґРґРµСЂР¶РєР°</h4>
                 <ul class="footer-list">
-                    <li><a href="#">Связаться с нами</a></li>
-                    <li><a href="#">Доставка</a></li>
-                    <li><a href="#">Возврат</a></li>
+                    <li><a href="#">РЎРІСЏР·Р°С‚СЊСЃСЏ СЃ РЅР°РјРё</a></li>
+                    <li><a href="#">Р”РѕСЃС‚Р°РІРєР°</a></li>
+                    <li><a href="#">Р’РѕР·РІСЂР°С‚</a></li>
                     <li><a href="#">FAQ</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h4 class="footer-column-title">Социальные сети</h4>
+                <h4 class="footer-column-title">РЎРѕС†РёР°Р»СЊРЅС‹Рµ СЃРµС‚Рё</h4>
                 <div class="socials">
                     <a href="#" class="social-link">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -198,17 +198,17 @@
         </div>
 
         <div class="footer-bottom">
-            <p class="copyright">© 2026 SOKEMI. Все права защищены.</p>
+            <p class="copyright">В© 2026 SOKEMI. Р’СЃРµ РїСЂР°РІР° Р·Р°С‰РёС‰РµРЅС‹.</p>
             <div class="legal-links">
-                <a href="#">Пользовательское соглашение</a>
-                <a href="#">Политика конфиденциальности</a>
+                <a href="#">РџРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРµ СЃРѕРіР»Р°С€РµРЅРёРµ</a>
+                <a href="#">РџРѕР»РёС‚РёРєР° РєРѕРЅС„РёРґРµРЅС†РёР°Р»СЊРЅРѕСЃС‚Рё</a>
             </div>
         </div>
     </div>
 </footer>
 
 
-<script src="/script.js"></script>
+<script src="../../script.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -255,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!cart.length) {
-        container.innerHTML = "<p>Корзина пуста</p>";
+        container.innerHTML = "<p>РљРѕСЂР·РёРЅР° РїСѓСЃС‚Р°</p>";
         return;
     }
 
@@ -272,16 +272,16 @@ document.addEventListener("DOMContentLoaded", () => {
             <img src="${item.image}" alt="">
             <div class="order-item-info">
                 <p class="order-item-name">${item.name}</p>
-                <p class="order-item-qty">${quantity} × ${price} ₽</p>
+                <p class="order-item-qty">${quantity} Г— ${price} в‚Ѕ</p>
             </div>
             <div class="order-item-price">
-                ${price * quantity} ₽
+                ${price * quantity} в‚Ѕ
             </div>
         `;
         container.appendChild(div);
     });
 
-    totalEl.textContent = new Intl.NumberFormat("ru-RU").format(total) + " ₽";
+    totalEl.textContent = new Intl.NumberFormat("ru-RU").format(total) + " в‚Ѕ";
 
     document.getElementById("order-form").addEventListener("submit", (e) => {
         e.preventDefault();
@@ -339,7 +339,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         localStorage.removeItem("cart");
         setTimeout(() => {
-            window.location.href = "/index.html";
+            window.location.href = "../../index.html";
         }, 800);
     });
 
@@ -348,3 +348,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
+
