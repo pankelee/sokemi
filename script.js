@@ -423,9 +423,29 @@ function readWeightsFromSelect(select) {
 function normalizeImagePath(value) {
     const raw = String(value || "").trim();
     if (!raw) return "";
-    if (raw.startsWith("http") || raw.startsWith("data:") || raw.startsWith("blob:")) return raw;
+    if (raw.startsWith("data:") || raw.startsWith("blob:")) return raw;
 
     const normalized = raw.replace(/\\/g, "/");
+
+    try {
+        const parsed = new URL(normalized, document.baseURI);
+        if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+            // Do not rewrite truly external assets (CDN/avatar/etc).
+            if (parsed.origin !== window.location.origin) return raw;
+
+            const pathname = String(parsed.pathname || "").replace(/\\/g, "/");
+            const imageMarkerIndex = pathname.toLowerCase().indexOf("/images/");
+            if (imageMarkerIndex >= 0) {
+                const imagePath = pathname.slice(imageMarkerIndex + 1);
+                return joinAppBasePath(imagePath);
+            }
+
+            return pathname || normalized;
+        }
+    } catch {
+        // Fallback to string-based normalization below.
+    }
+
     const imageIndex = normalized.toLowerCase().indexOf("images/");
     if (imageIndex >= 0) {
         const imagePath = normalized.slice(imageIndex);
