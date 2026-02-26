@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOKEMI - РР·Р±СЂР°РЅРЅРѕРµ</title>
+    <title>SOKEMI - Избранное</title>
     <link rel="stylesheet" href="../../styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -262,15 +262,15 @@
             </a>
 
             <nav class="nav">
-                <a href="./about.html" class="nav-link">Рћ РЅР°СЃ</a>
-                <a href="../../index.html" class="nav-link">Р“Р»Р°РІРЅР°СЏ</a>
-                <a href="./catalogue.html" class="nav-link">РљР°С‚Р°Р»РѕРі</a>
-                <a href="./contacts.html" class="nav-link">РљРѕРЅС‚Р°РєС‚С‹</a>
+                <a href="./about.html" class="nav-link">О нас</a>
+                <a href="../../index.html" class="nav-link">Главная</a>
+                <a href="./catalogue.html" class="nav-link">Каталог</a>
+                <a href="./contacts.html" class="nav-link">Контакты</a>
             </nav>
 
             <div class="header-actions">
                 <div class="search-wrapper">
-                    <input type="text" placeholder="РџРѕРёСЃРє..." class="search-input">
+                    <input type="text" placeholder="Поиск..." class="search-input">
                     <button class="search-btn" type="button">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"></circle>
@@ -281,7 +281,7 @@
                 <a href="./profile.html" class="header-avatar">
                     <img src="https://basket-25.wbbasket.ru/vol4435/part443550/443550372/images/big/1.webp" alt="profile">
                 </a>
-                <a href="./favorites.html" class="icon-btn favorites-btn" aria-label="РР·Р±СЂР°РЅРЅРѕРµ">
+                <a href="./favorites.html" class="icon-btn favorites-btn" aria-label="Избранное">
                     <span class="icon-like" aria-hidden="true"></span>
                 </a>
                 <a href="./cart.html" class="icon-btn cart-btn">
@@ -291,10 +291,10 @@
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                     </svg>
 
-                    <!-- Р’РћРў Р­РўРћ Р”РћР‘РђР’РРўР¬ -->
+                    <!-- ВОТ ЭТО ДОБАВИТЬ -->
                     <span class="cart-count-badge" id="cart-count-badge">0</span>
                 </a>
-                <button class="mobile-menu-btn" aria-label="РћС‚РєСЂС‹С‚СЊ РјРµРЅСЋ" type="button">
+                <button class="mobile-menu-btn" aria-label="Открыть меню" type="button">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -309,7 +309,7 @@
         <a href="../../index.html" class="logo">
             <img src="../../images/logo.svg" alt="Sokemi" class="logo-image">
         </a>
-        <button class="mobile-menu-close" aria-label="Р—Р°РєСЂС‹С‚СЊ РјРµРЅСЋ" type="button">
+        <button class="mobile-menu-close" aria-label="Закрыть меню" type="button">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M18 6 6 18"></path>
                 <path d="m6 6 12 12"></path>
@@ -317,10 +317,10 @@
         </button>
     </div>
     <nav class="mobile-nav">
-        <a href="./about.html" class="mobile-nav-link">Рћ РЅР°СЃ</a>
-        <a href="../../index.html" class="mobile-nav-link">Р“Р»Р°РІРЅР°СЏ</a>
-        <a href="./catalogue.html" class="mobile-nav-link">РљР°С‚Р°Р»РѕРі</a>
-        <a href="./contacts.html" class="mobile-nav-link">РљРѕРЅС‚Р°РєС‚С‹</a>
+        <a href="./about.html" class="mobile-nav-link">О нас</a>
+        <a href="../../index.html" class="mobile-nav-link">Главная</a>
+        <a href="./catalogue.html" class="mobile-nav-link">Каталог</a>
+        <a href="./contacts.html" class="mobile-nav-link">Контакты</a>
     </nav>
 </div>
 <div class="mobile-overlay"></div>
@@ -328,23 +328,23 @@
 <main class="main favorites-main">
     <div class="container">
         <div class="section-header">
-            <h1 class="section-title">РР—Р‘Р РђРќРќРћР•</h1>
+            <h1 class="section-title">ИЗБРАННОЕ</h1>
         </div>
 
         <section>
             <div class="favorites-empty" id="favorites-empty" hidden>
-                <h3>Р’ РёР·Р±СЂР°РЅРЅРѕРј РїРѕРєР° РїСѓСЃС‚Рѕ</h3>
-                <p>Р”РѕР±Р°РІСЊС‚Рµ С‚РѕРІР°СЂС‹ РёР· РєР°С‚Р°Р»РѕРіР°, С‡С‚РѕР±С‹ Р±С‹СЃС‚СЂРѕ РІРµСЂРЅСѓС‚СЊСЃСЏ Рє РЅРёРј.</p>
-                <a href="./catalogue.html" class="btn btn-primary">РџРµСЂРµР№С‚Рё РІ РєР°С‚Р°Р»РѕРі</a>
+                <h3>В избранном пока пусто</h3>
+                <p>Добавьте товары из каталога, чтобы быстро вернуться к ним.</p>
+                <a href="./catalogue.html" class="btn btn-primary">Перейти в каталог</a>
             </div>
 
             <div id="favorites-content">
                 <div class="favorites-list" id="favorites-list"></div>
 
                 <div class="favorites-summary">
-                    <p class="favorites-total" id="favorites-total">Р’СЃРµРіРѕ С‚РѕРІР°СЂРѕРІ: 0</p>
+                    <p class="favorites-total" id="favorites-total">Всего товаров: 0</p>
                     <div class="favorites-summary-actions">
-                        <button type="button" class="btn btn-outline" id="clear-favorites-btn">РћС‡РёСЃС‚РёС‚СЊ РёР·Р±СЂР°РЅРЅРѕРµ</button>
+                        <button type="button" class="btn btn-outline" id="clear-favorites-btn">Очистить избранное</button>
                     </div>
                 </div>
             </div>
@@ -356,38 +356,38 @@
     <div class="container">
         <div class="newsletter">
             <div class="newsletter-left">
-                <h3 class="newsletter-title">Р“РѕС‚РѕРІС‹ СѓР·РЅР°РІР°С‚СЊ Рѕ РЅРѕРІРёРЅРєР°С…?</h3>
+                <h3 class="newsletter-title">Готовы узнавать о новинках?</h3>
                 <form class="newsletter-form">
-                    <input type="email" placeholder="Р’Р°С€ Email" class="newsletter-input">
-                    <button type="submit" class="btn btn-primary">РћС‚РїСЂР°РІРёС‚СЊ</button>
+                    <input type="email" placeholder="Ваш Email" class="newsletter-input">
+                    <button type="submit" class="btn btn-primary">Отправить</button>
                 </form>
             </div>
             <div class="newsletter-right">
-                <h4 class="newsletter-subtitle">РўРѕРІР°СЂС‹ РґР»СЏ РґРѕРјР° Рё РїРёС‚РѕРјС†РµРІ</h4>
-                <p class="newsletter-text">РњС‹ РїРѕРґР±РµСЂС‘Рј Р»СѓС‡С€РёРµ СЂРµС€РµРЅРёСЏ РґР»СЏ РІР°С€РµРіРѕ Р»СЋР±РёРјС†Р° Рё СЃРѕР·РґР°РґРёРј РєРѕРјС„РѕСЂС‚ РІРјРµСЃС‚Рµ СЃ РІР°РјРё.</p>
+                <h4 class="newsletter-subtitle">Товары для дома и питомцев</h4>
+                <p class="newsletter-text">Мы подберём лучшие решения для вашего любимца и создадим комфорт вместе с вами.</p>
             </div>
         </div>
 
         <div class="footer-links">
             <div class="footer-column">
-                <h4 class="footer-column-title">Рћ РєРѕРјРїР°РЅРёРё</h4>
+                <h4 class="footer-column-title">О компании</h4>
                 <ul class="footer-list">
-                    <li><a href="#">Р‘Р»РѕРі</a></li>
-                    <li><a href="#">РќР°С€Р° РєРѕРјР°РЅРґР°</a></li>
-                    <li><a href="#">РљРѕРЅС‚Р°РєС‚С‹</a></li>
+                    <li><a href="#">Блог</a></li>
+                    <li><a href="#">Наша команда</a></li>
+                    <li><a href="#">Контакты</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h4 class="footer-column-title">РџРѕРґРґРµСЂР¶РєР°</h4>
+                <h4 class="footer-column-title">Поддержка</h4>
                 <ul class="footer-list">
-                    <li><a href="#">РЎРІСЏР·Р°С‚СЊСЃСЏ СЃ РЅР°РјРё</a></li>
-                    <li><a href="#">Р”РѕСЃС‚Р°РІРєР°</a></li>
-                    <li><a href="#">Р’РѕР·РІСЂР°С‚</a></li>
+                    <li><a href="#">Связаться с нами</a></li>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#">Возврат</a></li>
                     <li><a href="#">FAQ</a></li>
                 </ul>
             </div>
             <div class="footer-column">
-                <h4 class="footer-column-title">РЎРѕС†РёР°Р»СЊРЅС‹Рµ СЃРµС‚Рё</h4>
+                <h4 class="footer-column-title">Социальные сети</h4>
                 <div class="socials">
                     <a href="#" class="social-link">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -406,10 +406,10 @@
         </div>
 
         <div class="footer-bottom">
-            <p class="copyright">В© 2026 SOKEMI. Р’СЃРµ РїСЂР°РІР° Р·Р°С‰РёС‰РµРЅС‹.</p>
+            <p class="copyright">© 2026 SOKEMI. Все права защищены.</p>
             <div class="legal-links">
-                <a href="#">РџРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРµ СЃРѕРіР»Р°С€РµРЅРёРµ</a>
-                <a href="#">РџРѕР»РёС‚РёРєР° РєРѕРЅС„РёРґРµРЅС†РёР°Р»СЊРЅРѕСЃС‚Рё</a>
+                <a href="#">Пользовательское соглашение</a>
+                <a href="#">Политика конфиденциальности</a>
             </div>
         </div>
     </div>
@@ -454,7 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
         saveFavoritesMeta({});
         render();
         if (typeof showNotification === "function") {
-            showNotification("РР·Р±СЂР°РЅРЅРѕРµ РѕС‡РёС‰РµРЅРѕ", "info");
+            showNotification("Избранное очищено", "info");
         }
     });
 
@@ -466,7 +466,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!favorites.length) {
             content.hidden = true;
             empty.hidden = false;
-            totalEl.textContent = "Р’СЃРµРіРѕ С‚РѕРІР°СЂРѕРІ: 0";
+            totalEl.textContent = "Всего товаров: 0";
             return;
         }
 
@@ -474,7 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!items.length) {
             content.hidden = true;
             empty.hidden = false;
-            totalEl.textContent = "Р’СЃРµРіРѕ С‚РѕРІР°СЂРѕРІ: 0";
+            totalEl.textContent = "Всего товаров: 0";
             return;
         }
 
@@ -486,8 +486,11 @@ document.addEventListener("DOMContentLoaded", () => {
         items.forEach((item) => {
             const article = document.createElement("article");
             article.className = "favorites-item";
+            const imageSrc = typeof normalizeImagePath === "function"
+                ? normalizeImagePath(item.image || "")
+                : String(item.image || "");
             article.innerHTML = `
-                <img class="favorites-item-image" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}">
+                <img class="favorites-item-image" src="${escapeHtml(imageSrc)}" alt="${escapeHtml(item.name)}">
                 <div class="favorites-item-info">
                     <h3 class="favorites-item-title">
                         <a class="favorites-item-title-link" href="./catalogue.html#product=${encodeURIComponent(item.id)}">${escapeHtml(item.name)}</a>
@@ -495,11 +498,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p class="favorites-item-meta">${escapeHtml(item.meta)}</p>
                 </div>
                 <div class="favorites-item-price">
-                    <p class="favorites-item-label">Р¦РµРЅР° Р·Р° С€С‚.</p>
+                    <p class="favorites-item-label">Цена за шт.</p>
                     <p class="favorites-item-value">${formatPrice(item.price)}</p>
                 </div>
                 <div class="favorites-remove">
-                    <button type="button" class="favorites-remove-btn" data-action="remove" data-id="${escapeHtml(item.id)}" aria-label="РЈРґР°Р»РёС‚СЊ">
+                    <button type="button" class="favorites-remove-btn" data-action="remove" data-id="${escapeHtml(item.id)}" aria-label="Удалить">
                         <span class="icon-trash" aria-hidden="true"></span>
                     </button>
                 </div>
@@ -509,7 +512,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         list.appendChild(fragment);
-        totalEl.textContent = `Р’СЃРµРіРѕ С‚РѕРІР°СЂРѕРІ: ${items.length}`;
+        totalEl.textContent = `Всего товаров: ${items.length}`;
     }
 
     function removeFavorite(id) {
@@ -521,7 +524,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         render();
         if (typeof showNotification === "function") {
-            showNotification("РЈРґР°Р»РµРЅРѕ РёР· РёР·Р±СЂР°РЅРЅРѕРіРѕ", "info");
+            showNotification("Удалено из избранного", "info");
         }
     }
 
@@ -566,7 +569,7 @@ function saveFavoritesMeta(meta) {
                 price: item.price,
                 meta: item.meta
                      ? item.meta
-                    : `${item.categoryName ? `РљР°С‚РµРіРѕСЂРёСЏ: ${item.categoryName}` : "РљР°С‚РµРіРѕСЂРёСЏ: РЅРµ СѓРєР°Р·Р°РЅР°"}`
+                    : `${item.categoryName ? `Категория: ${item.categoryName}` : "Категория: не указана"}`
             }));
     }
 
@@ -587,7 +590,7 @@ function saveFavoritesMeta(meta) {
                     const image = pickProductImage(product, categoryImage);
                     items.push({
                         id,
-                        name: String(product?.name || "РўРѕРІР°СЂ Р±РµР· РЅР°Р·РІР°РЅРёСЏ").trim(),
+                        name: String(product?.name || "Товар без названия").trim(),
                         price: Number(product?.price) || 0,
                         categoryName,
                         image
@@ -612,7 +615,7 @@ function saveFavoritesMeta(meta) {
 
     function formatPrice(value) {
         const safe = Math.max(0, Number(value) || 0);
-        return `${new Intl.NumberFormat("ru-RU").format(safe)} в‚Ѕ`;
+        return `${new Intl.NumberFormat("ru-RU").format(safe)} ₽`;
     }
 
     function escapeHtml(value) {

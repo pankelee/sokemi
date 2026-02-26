@@ -1,4 +1,4 @@
-﻿/**
+/**
  * SOKEMI Pet Shop - Interactive Scripts
  */
  
@@ -171,17 +171,17 @@ function initNewsletterForm() {
         const email = input.value.trim();
         
         if (!email) {
-            showNotification('РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРІРµРґРёС‚Рµ email', 'error');
+            showNotification('Пожалуйста, введите email', 'error');
             return;
         }
         
         if (!isValidEmail(email)) {
-            showNotification('РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІРІРµРґРёС‚Рµ РєРѕСЂСЂРµРєС‚РЅС‹Р№ email', 'error');
+            showNotification('Пожалуйста, введите корректный email', 'error');
             return;
         }
         
         // Simulate form submission
-        showNotification('РЎРїР°СЃРёР±Рѕ Р·Р° РїРѕРґРїРёСЃРєСѓ!', 'success');
+        showNotification('Спасибо за подписку!', 'success');
         input.value = '';
     });
 }
@@ -228,7 +228,7 @@ function initHomeProductCards() {
                         saveFavoritesMeta(favoritesMeta);
                     }
                     if (typeof showNotification === "function") {
-                        showNotification("РЈРґР°Р»РµРЅРѕ РёР· РёР·Р±СЂР°РЅРЅРѕРіРѕ", "info");
+                        showNotification("Удалено из избранного", "info");
                     }
                 } else {
                     favorites.add(product.id);
@@ -244,7 +244,7 @@ function initHomeProductCards() {
                         saveFavoritesMeta(favoritesMeta);
                     }
                     if (typeof showNotification === "function") {
-                        showNotification("Р”РѕР±Р°РІР»РµРЅРѕ РІ РёР·Р±СЂР°РЅРЅРѕРµ", "success");
+                        showNotification("Добавлено в избранное", "success");
                     }
                 }
                 saveFavoritesSafe(favorites);
@@ -287,7 +287,7 @@ function buildHomeProductFromCard(card, index, catalogProducts) {
 
     const fallbackId = `home-product-${index + 1}`;
     const cardId = String(card.dataset.productId || "").trim();
-    const cardName = String(nameEl?.textContent || "").trim() || "РўРѕРІР°СЂ";
+    const cardName = String(nameEl?.textContent || "").trim() || "Товар";
 
     const catalogMatch = resolveHomeProductFromCatalog(
         catalogProducts,
@@ -404,10 +404,10 @@ function normalizeTitle(value) {
 
 function extractCardCategory(card) {
     const meta = String(card.querySelector(".product-meta")?.textContent || "");
-    const parts = meta.split("вЂў").map((item) => item.trim());
-    const categoryPart = parts.find((item) => item.toLowerCase().startsWith("РєР°С‚РµРіРѕСЂРёСЏ"));
+    const parts = meta.split("•").map((item) => item.trim());
+    const categoryPart = parts.find((item) => item.toLowerCase().startsWith("категория"));
     if (!categoryPart) return "";
-    return categoryPart.replace(/РєР°С‚РµРіРѕСЂРёСЏ\\s*:\\s*/i, "").trim();
+    return categoryPart.replace(/категория\\s*:\\s*/i, "").trim();
 }
 
 function readWeightsFromSelect(select) {
@@ -423,14 +423,45 @@ function readWeightsFromSelect(select) {
 function normalizeImagePath(value) {
     const raw = String(value || "").trim();
     if (!raw) return "";
-    if (raw.startsWith("http") || raw.startsWith("data:")) return raw;
-    if (raw.startsWith("/")) return raw.slice(1);
-    return raw;
+    if (raw.startsWith("http") || raw.startsWith("data:") || raw.startsWith("blob:")) return raw;
+
+    const normalized = raw.replace(/\\/g, "/");
+    const imageIndex = normalized.toLowerCase().indexOf("images/");
+    if (imageIndex >= 0) {
+        const imagePath = normalized.slice(imageIndex);
+        return joinAppBasePath(imagePath);
+    }
+
+    try {
+        return new URL(normalized, document.baseURI).pathname;
+    } catch {
+        return normalized;
+    }
+}
+
+function joinAppBasePath(relativePath) {
+    const path = String(relativePath || "").replace(/^\/+/, "");
+    const currentPath = String(window.location.pathname || "/").replace(/\\/g, "/");
+
+    if (currentPath.includes("/pages/site/")) {
+        const base = currentPath.split("/pages/site/")[0];
+        return `${base}/${path}`.replace(/\/{2,}/g, "/");
+    }
+
+    if (currentPath.includes("/pages/admin/")) {
+        const base = currentPath.split("/pages/admin/")[0];
+        return `${base}/${path}`.replace(/\/{2,}/g, "/");
+    }
+
+    const rootDir = currentPath.endsWith("/")
+        ? currentPath
+        : currentPath.slice(0, currentPath.lastIndexOf("/") + 1);
+    return `${rootDir}${path}`.replace(/\/{2,}/g, "/");
 }
 
 function buildHomeMetaText(card) {
     const meta = String(card.querySelector(".product-meta")?.textContent || "").trim();
-    return meta || "РљР°С‚РµРіРѕСЂРёСЏ: РЅРµ СѓРєР°Р·Р°РЅР°";
+    return meta || "Категория: не указана";
 }
 
 function applyHomeWeights(select, weights) {
@@ -440,7 +471,7 @@ function applyHomeWeights(select, weights) {
 
     const unique = Array.from(new Set(normalized));
     if (!unique.length) {
-        select.innerHTML = '<option value="">Р’РµСЃ РЅРµ СѓРєР°Р·Р°РЅ</option>';
+        select.innerHTML = '<option value="">Вес не указан</option>';
         select.disabled = true;
         return;
     }
@@ -448,7 +479,7 @@ function applyHomeWeights(select, weights) {
     select.innerHTML = unique
         .map((weight, index) => {
             const selected = index === 0 ? "selected" : "";
-            return `<option value="${weight}" ${selected}>${weight} Рі</option>`;
+            return `<option value="${weight}" ${selected}>${weight} г</option>`;
         })
         .join("");
     select.disabled = false;
@@ -522,7 +553,7 @@ function addHomeProductToCart(product, quantity, selectedWeight) {
     localStorage.setItem("cart", JSON.stringify(cart));
     if (typeof updateCartBadge === "function") updateCartBadge();
     document.dispatchEvent(new Event("cart:updated"));
-    showNotification("РўРѕРІР°СЂ РґРѕР±Р°РІР»РµРЅ РІ РєРѕСЂР·РёРЅСѓ", "success");
+    showNotification("Товар добавлен в корзину", "success");
 }
 
 /**
@@ -653,7 +684,7 @@ document.querySelectorAll('.catalog, .popular').forEach(section => {
  */
 document.querySelectorAll('.cart-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-        showNotification('РљРѕСЂР·РёРЅР° РїРѕРєР° РїСѓСЃС‚Р°', 'info');
+        showNotification('Корзина пока пуста', 'info');
     });
 });
 
@@ -696,7 +727,7 @@ function updateCartBadge() {
     badge.textContent = uniqueCount > 0 ? String(uniqueCount) : "0";
 }
 
-/* Р°РІС‚РѕРѕР±РЅРѕРІР»РµРЅРёРµ РµСЃР»Рё localStorage РјРµРЅСЏРµС‚СЃСЏ */
+/* автообновление если localStorage меняется */
 window.addEventListener("storage", updateCartBadge);
 
 initCartBadgeAutoUpdate();
@@ -737,5 +768,5 @@ function initCartBadgeAutoUpdate() {
     document.addEventListener("cart:updated", updateCartBadge);
 }
 
-console.log('рџђѕ SOKEMI Pet Shop loaded successfully!');
+console.log('🐾 SOKEMI Pet Shop loaded successfully!');
 

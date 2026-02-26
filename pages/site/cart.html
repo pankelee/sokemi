@@ -272,8 +272,11 @@
                 const article = document.createElement("article");
                 article.className = "cart-item";
                 const weightOptions = buildWeightOptions(weights, selectedWeight);
+                const imageSrc = typeof normalizeImagePath === "function"
+                    ? normalizeImagePath(item.image || "")
+                    : String(item.image || "");
                 article.innerHTML = `
-                    <img class="cart-item-image" src="${escapeHtml(item.image || "")}" alt="${escapeHtml(item.name || "Товар")}">
+                    <img class="cart-item-image" src="${escapeHtml(imageSrc)}" alt="${escapeHtml(item.name || "Товар")}">
                     <div class="cart-item-info">
                         <h3 class="cart-item-title">
                             <a class="cart-item-title-link" href="./catalogue.html#product=${encodeURIComponent(productId)}">${escapeHtml(item.name || "Товар")}</a>
